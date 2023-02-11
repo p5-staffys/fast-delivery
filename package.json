@@ -1,0 +1,13 @@
+{
+  "name": "fast-delivery",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "front": "",
+    "back": "",
+    "start": "concurrently 'cd fd-backend && npm start' 'cd fd-frontend && npm run dev'"
+  },
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
