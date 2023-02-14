@@ -9,12 +9,6 @@ function createAdmin(email: string): User {
     email,
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
-    hasAssigned: [
-      createPack(100),
-      createPack(101),
-      createPack(102),
-      createPack(103),
-    ],
   };
 }
 
@@ -25,8 +19,6 @@ function createRepa(email: string): User {
     email,
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
-    delivering: [createPack(102), createPack(103), createPack(104)],
-    delivered: [createPack(100), createPack(101)],
     rating: Math.floor(Math.random() * 5),
   };
 }
@@ -38,9 +30,9 @@ async function logIn(email: string, admin: boolean) {
 
 class Pack {}
 
-function createPack(_id: number): Pack {
+function createPack(): Pack {
   return {
-    _id: _id,
+    _id: faker.datatype.uuid(),
     status: faker.helpers.arrayElement([
       "pending",
       "assigned",
@@ -59,7 +51,7 @@ function createPack(_id: number): Pack {
 async function requestPacks(cant: number) {
   let packs = [];
   for (let i = 0; i < cant; i++) {
-    packs.push(createPack(100 + i));
+    packs.push(createPack());
   }
   return packs;
 }
