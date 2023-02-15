@@ -16,6 +16,10 @@ Gabriel Penise
 
 Francisco Alvarez Raineri
 
+Para correr en development:
+
+npm run install && npm start
+
 Node v18
 
 ### Front-end
