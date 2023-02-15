@@ -5,7 +5,8 @@
   "scripts": {
     "front": "",
     "back": "",
-    "start": "concurrently 'cd fd-backend && npm start' 'cd fd-frontend && npm run dev'"
+    "start": "concurrently 'cd fd-backend && npm start' 'cd fd-frontend && npm run dev'",
+    "install": "concurrently 'cd fd-backend && npm i' 'cd fd-frontend && npm i'"
   },
   "dependencies": {
     "concurrently": "^7.6.0"
