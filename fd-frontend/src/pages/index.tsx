@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { Inter } from "@next/font/google";
 import Image from "next/image";
 import logo from "../asset/logoMoto.png";
@@ -132,3 +131,9 @@ export default function Home() {
     </>
   );
 }
+
+Home.getLayout = function getLayout(page: React.ReactElement) {
+  return <Layout>{page}</Layout>;
+};
+
+export default Home;

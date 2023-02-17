@@ -1,4 +1,6 @@
 import { faker } from "@faker-js/faker";
+import exp from "constants";
+import { type } from "os";
 
 class User {}
 
@@ -28,7 +30,13 @@ async function logIn(email: string, admin: boolean) {
   return createRepa(email);
 }
 
-class Pack {}
+export type Pack = { _id:string,
+  status: string,
+  peso: number,
+  destination: string,
+  client: string,
+  deliveryDate: Date,
+  deliveredOn: Date }
 
 function createPack(): Pack {
   return {
@@ -49,11 +57,11 @@ function createPack(): Pack {
 }
 
 async function requestPacks(cant: number) {
-  let packs = [];
+  let packs:Pack[] = [];
   for (let i = 0; i < cant; i++) {
     packs.push(createPack());
   }
   return packs;
 }
 
-export { logIn, requestPacks };
+export { logIn, requestPacks};
