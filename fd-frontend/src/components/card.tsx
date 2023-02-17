@@ -57,6 +57,7 @@ const Card: React.FC<Props> = ({ paquete }) => {
           color="black"
           component="div"
           align="right"
+          sx={{mr:1}}
         >
           {paquete.status}
         </Typography>

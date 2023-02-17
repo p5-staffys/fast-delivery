@@ -8,6 +8,7 @@ import { Layout } from "alias/components/layout";
 import Header from "alias/components/header";
 import { useEffect, useState } from "react";
 import { Pack, requestPacks } from "alias/utils/seed";
+import Link from "next/link";
 
 
 const Jornada = () => {
@@ -27,12 +28,12 @@ const Jornada = () => {
     <>
       <Header />
       <Container fixed>
-        
+        <Link href={"/repartidor/paquetes"}>
         <Button sx={{ marginY: "15px" }} variant="contained" fullWidth={true}>
           Obtener paquetes
         </Button>
-        
-
+        </Link>
+    
         <Accordion sx={{ marginY: "15px" }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
