@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
 import { IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
+import { Layout } from "alias/components/layout";
+import Header from "alias/components/header";
 
-const paquetes = () => {
+const Paquetes = () => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const [numOne, setNumOne] = useState(0);
   const [numTwo, setNumTwo] = useState(0);
@@ -48,8 +49,9 @@ const paquetes = () => {
 
   return (
     <div>
+      <Header/>
       <Box
-        sx={{ width: "100vw", height: "12vh", ml: 2 }}
+        sx={{ maxWidth:"100vw", height: "12vh", ml: 2 , mt:2}}
         display="flex"
         justifyContent="center"
         alignItems="start"
@@ -249,4 +251,8 @@ const paquetes = () => {
   );
 };
 
-export default paquetes;
+Paquetes.getLayout = function getLayout(page: React.ReactElement) {
+  return <Layout>{page}</Layout>;
+};
+
+export default Paquetes;
