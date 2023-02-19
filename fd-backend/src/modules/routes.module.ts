@@ -13,6 +13,6 @@ export const routes: Routes = [
 
 //Aca se importan los modulos exportados de modules, todos los que tengan endpoint correspondiente a la logica de negocio
 @Module({
-  imports: [RouterModule.forRoutes(routes), AuthModule],
+  imports: [RouterModule.forRoutes(routes)],
 })
 export class RoutesModule {}

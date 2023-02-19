@@ -3,11 +3,11 @@ import { AppModule } from './app.module';
 
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
-console.log('prueba');
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
 
   app.enableCors({
     origin: '*',
@@ -34,6 +34,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(8080);
+  await app.listen(process.env.PORT);
+
+  console.log(`Server is running in port ${configService.get<number>('PORT')}`);
+  // Only here you can acces to process.env, also check ConfigServices Instances
 }
 bootstrap();

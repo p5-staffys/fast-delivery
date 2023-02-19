@@ -2,6 +2,15 @@
 /dist
 /node_modules
 
+#locks
+package-lock.json
+pnpm-lock.yaml
+
+#
+.env
+
+
+
 # Logs
 logs
 *.log
