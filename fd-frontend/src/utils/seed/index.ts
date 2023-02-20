@@ -1,10 +1,14 @@
 import { faker } from "@faker-js/faker";
-import exp from "constants";
-import { type } from "os";
 
-class User {}
+export type Admin = {
+  _id: string;
+  avatar: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+};
 
-function createAdmin(email: string): User {
+function createAdmin(email: string): Admin {
   return {
     _id: faker.datatype.uuid(),
     avatar: faker.image.avatar(),
@@ -13,6 +17,19 @@ function createAdmin(email: string): User {
     lastName: faker.name.lastName(),
   };
 }
+
+async function logInAdmin(email: string) {
+  return createAdmin(email);
+}
+
+export type User = {
+  _id: string;
+  avatar: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  rating: number;
+};
 
 function createRepa(email: string): User {
   return {
@@ -25,29 +42,24 @@ function createRepa(email: string): User {
   };
 }
 
-async function logIn(email: string, admin: boolean) {
-  if (admin) return createAdmin(email);
+async function logInUser(email: string) {
   return createRepa(email);
 }
 
-export type Pack = { _id:string,
-  status: string,
-  peso: number,
-  destination: string,
-  client: string,
-  deliveryDate: Date,
-  deliveredOn: Date }
+export type Pack = {
+  _id: string;
+  status: string;
+  peso: number;
+  destination: string;
+  client: string;
+  deliveryDate: Date;
+  deliveredOn: Date;
+};
 
-function createPack(): Pack {
+function createPack(status: string): Pack {
   return {
     _id: faker.datatype.uuid(),
-    status: faker.helpers.arrayElement([
-      "pending",
-      "assigned",
-      "delivering",
-      "delivered",
-      "failed",
-    ]),
+    status: status,
     peso: faker.datatype.number({ min: 100, max: 10000, precision: 100 }),
     destination: faker.address.streetAddress(),
     client: faker.name.fullName(),
@@ -56,12 +68,24 @@ function createPack(): Pack {
   };
 }
 
-async function requestPacks(cant: number) {
-  let packs:Pack[] = [];
+async function requestPacks(cant: number, status: string) {
+  let packs: Pack[] = [];
   for (let i = 0; i < cant; i++) {
-    packs.push(createPack());
+    packs.push(createPack(status || "pending"));
   }
   return packs;
 }
 
-export { logIn, requestPacks};
+async function requestUsers(cant: number) {
+  let packs: User[] = [];
+  for (let i = 0; i < cant; i++) {
+    packs.push(createRepa("seed@seed.com"));
+  }
+  return packs;
+}
+
+async function getPercentage() {
+  return faker.datatype.number({ min: 0, max: 100, precision: 10 });
+}
+
+export { logInUser, logInAdmin, requestPacks, requestUsers, getPercentage };
