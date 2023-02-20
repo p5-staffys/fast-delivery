@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import ConfigModule from 'src/enviroment/env.config';
+import ConfigModule from './enviroment/env.config';
 import { RoutesModule } from './modules/routes.module';
 
 @Module({
