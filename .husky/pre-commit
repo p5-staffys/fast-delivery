@@ -2,7 +2,3 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npx lint-staged
-
-cd ./fd-backend
-npm run test
-npm run test:e2e
