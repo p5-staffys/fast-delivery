@@ -29,6 +29,7 @@ export type User = {
   firstName: string;
   lastName: string;
   rating: number;
+  status: string;
 };
 
 function createRepa(email: string): User {
@@ -39,6 +40,7 @@ function createRepa(email: string): User {
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     rating: Math.floor(Math.random() * 5),
+    status: faker.helpers.arrayElement(["active", "inactive", "ended"]),
   };
 }
 
@@ -56,10 +58,10 @@ export type Pack = {
   deliveredOn: Date;
 };
 
-function createPack(status: string): Pack {
+function createPack(): Pack {
   return {
     _id: faker.datatype.uuid(),
-    status: status,
+    status: faker.helpers.arrayElement(["pending", "delivered", "delivering"]),
     peso: faker.datatype.number({ min: 100, max: 10000, precision: 100 }),
     destination: faker.address.streetAddress(),
     client: faker.name.fullName(),
@@ -68,10 +70,10 @@ function createPack(status: string): Pack {
   };
 }
 
-async function requestPacks(cant: number, status: string) {
+async function requestPacks(cant: number) {
   let packs: Pack[] = [];
   for (let i = 0; i < cant; i++) {
-    packs.push(createPack(status || "pending"));
+    packs.push(createPack());
   }
   return packs;
 }
