@@ -6,7 +6,5 @@
   text-decoration: none;
   font-family: "Open Sans", sans-serif;
 }
-
-.linkLogin {
-  color: #217bce;
-}
+@import url(./addPackage.css);
+@import url(./login.css);
