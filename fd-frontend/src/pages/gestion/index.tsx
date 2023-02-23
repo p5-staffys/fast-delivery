@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logo from "../asset/logoMoto.png";
+import logo from "../../asset/logoMoto.png";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -8,7 +8,6 @@ import { logIn } from "alias/utils/seed";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Layout } from "alias/components/layout";
-import { Typography } from "@mui/material";
 
 const Home = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +27,7 @@ const Home = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     logIn("pepe@argento.com", false);
-    router.push("/repartidor/jornada");
+    router.push("/gestion/agenda");
   };
 
   return (
@@ -41,19 +40,37 @@ const Home = () => {
           alignItems="center"
           sx={{ mt: "104px", width: "100vw", mb: "100px" }}
         >
+            <Link href="/">
           <Image src={logo} alt="logo" width={149} height={94} />
+          </Link>
         </Box>
         <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit}
           sx={{width:"90vw", m: "auto"}}
         >
-          <Typography sx={{m:" 0 auto", fontSize:40}}><strong>Bienvenid@</strong></Typography>
-          <Typography sx={{m:" auto", fontSize:20}}>*Selecciona tu rol</Typography>
-                 <Link href="/repartidor">
-            <Button variant="contained" fullWidth sx={{m:" 5vh auto", fontSize:17}}><strong>Repartidor</strong> </Button>
-                 </Link>
-                 <Link href="/gestion">
-            <Button variant="contained" fullWidth sx={{fontSize:17}}><strong>Administrador</strong> </Button>
-            </Link>
+            <TextField
+                id="standard-basic"
+                label="Usuario"
+                variant="standard"
+                fullWidth
+                type="email"
+                InputLabelProps={{
+                    style: { color: "#f5bd09" },
+                  }} />
+                  <TextField
+                id="standard-basic"
+                label="Contraseña"
+                variant="standard"
+                type="password"
+                fullWidth
+                InputLabelProps={{
+                    style: { color: "#f5bd09" },
+                  }} />
+                 
+            <Button variant="contained" fullWidth type="submit"><strong>Ingresar</strong> </Button>
         </Box>
       </main>
     </>
