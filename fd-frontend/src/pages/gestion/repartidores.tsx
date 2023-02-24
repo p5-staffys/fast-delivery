@@ -9,6 +9,10 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Progress from '../../components/progress'
+import Image from 'next/image';
+import Logo1 from "../../asset/Ellipse-9.png"
+import Logo2 from "../../asset/Ellipse-92.png"
+import Logo3 from "../../asset/Ellipse93.png"
 
 const Repartidores = () => {
   return (
@@ -29,10 +33,10 @@ const Repartidores = () => {
             <Box><Progress value={60}/></Box>
             <Box>
           <Typography> Farid</Typography>
-          <Typography> Viaje en curso</Typography>
+          <Typography sx={{color: "#217bce"}}> • Viaje en curso</Typography>
           </Box>
           <Box>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <Image alt="Remy Sharp" src={Logo1} width={50} height={50}/>
           </Box>
           </Box>
         </AccordionDetails>
@@ -40,22 +44,22 @@ const Repartidores = () => {
             <Box display="flex" justifyContent="space-between" sx={{m:'0 10px'}}>
             <Box><Progress value={100}/></Box>
             <Box>
-          <Typography> Farid</Typography>
-          <Typography> Viaje en curso</Typography>
+          <Typography>Luciana</Typography>
+          <Typography sx={{color:"#96db76", mr:"50px"}}> • Finalizo</Typography>
           </Box>
           <Box>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <Image alt="Remy Sharp" src={Logo2} width={50} height={50}/>
           </Box>
           </Box>
         </AccordionDetails><AccordionDetails>
             <Box display="flex" justifyContent="space-between" sx={{m:'0 10px'}}>
             <Box><Progress value={65}/></Box>
             <Box>
-          <Typography> Farid</Typography>
-          <Typography> Viaje en curso</Typography>
+          <Typography> Santiago</Typography>
+          <Typography sx={{color:"#ff6b6b", mr:"50px"}}> • Inactivo</Typography>
           </Box>
           <Box>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <Image alt="Remy Sharp" src={Logo3} width={50} height={50}/>
           </Box>
           </Box>
         </AccordionDetails>

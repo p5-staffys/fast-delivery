@@ -8,13 +8,14 @@ import { logIn } from "alias/utils/seed";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Layout } from "alias/components/layout";
+import React from "react";
 
 const Home = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleEmail = (e: any) => {
+  const handleEmail = (e:any) => {
     e.preventDefault();
     setEmail(e.target.value);
   };

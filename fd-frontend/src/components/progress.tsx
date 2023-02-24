@@ -3,11 +3,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-const Porcentaje  = ({value}:number) => {
+const Porcentaje  = ({value}:{value: number}) => {
  const total =  value ===100? "#96db76": "#fdc93e"
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex'}}>
-    <CircularProgress variant="determinate" value={value} sx={{color:`${total}`}}/>1
+    <CircularProgress size={50} variant="determinate" value={value} sx={{color:`${total}`}}/>
     <Box
       sx={{
           top: 0,
@@ -24,6 +24,7 @@ const Porcentaje  = ({value}:number) => {
       <Typography
         variant="caption"
         component="div"
+        fontWeight={600}
         >{`${value}%`}</Typography>
     </Box>
   </Box>
@@ -31,29 +32,3 @@ const Porcentaje  = ({value}:number) => {
 }
 
 export default Porcentaje
-
-
-// export default function Porcentaje({value}:number) {
-//   const total =  value ===100? "#96db76": "#fdc93e"
-//   return <Box sx={{ position: 'relative', display: 'inline-flex'}}>
-//   <CircularProgress variant="determinate" value={value} sx={{color:`${total}`}}/>
-//   <Box
-//     sx={{
-//         top: 0,
-//         left: 0,
-//         bottom: 0,
-//         right: 0,
-//         position: 'absolute',
-//         display: 'flex',
-//         alignItems: 'center',
-//         justifyContent: 'center',
-        
-//     }}
-//     >
-//     <Typography
-//       variant="caption"
-//       component="div"
-//       >{`${value}%`}</Typography>
-//   </Box>
-// </Box>
-// }

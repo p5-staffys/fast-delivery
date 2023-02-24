@@ -9,9 +9,13 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { Layout } from "alias/components/layout";
 
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
 const Home = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [visibility, setVisibility] = useState(false);
   const router = useRouter();
 
   const handleEmail = (e: any) => {
@@ -29,6 +33,16 @@ const Home = () => {
     logIn("pepe@argento.com", false);
     router.push("/gestion/agenda");
   };
+
+  const handleVisibility=(e:any)=>{
+    e.preventDefault()
+    if(visibility){
+      setVisibility(false)
+    }else{
+      setVisibility(true)
+    }
+  }
+  const eye = visibility? "text" : "password"
 
   return (
     <>
@@ -64,11 +78,14 @@ const Home = () => {
                 id="standard-basic"
                 label="Contraseña"
                 variant="standard"
-                type="password"
+                type={eye}
                 fullWidth
                 InputLabelProps={{
                     style: { color: "#f5bd09" },
                   }} />
+                  <button style={{position:"absolute", right:20, top:380, backgroundColor:"transparent", border:"none"}} onClick={handleVisibility}>
+                  {visibility? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                  </button>
                  
             <Button variant="contained" fullWidth type="submit"><strong>Ingresar</strong> </Button>
         </Box>
