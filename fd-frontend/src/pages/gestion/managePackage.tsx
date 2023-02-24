@@ -23,7 +23,7 @@ const ManagePackage = () => {
   return (<>
     <Header />
     <Container fixed >
-      <Link href={`/repartidor/jornada`}>
+      <Link href={`/gestion/agenda`}>
         <IconButton aria-label="Example" sx={{ my: 2 }}>
           <ArrowBackIosIcon sx={{ color: "black" }} />
         </IconButton>

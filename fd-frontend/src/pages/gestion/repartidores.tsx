@@ -13,6 +13,7 @@ import Image from 'next/image';
 import Logo1 from "../../asset/Ellipse-9.png"
 import Logo2 from "../../asset/Ellipse-92.png"
 import Logo3 from "../../asset/Ellipse93.png"
+import Link from 'next/link';
 
 const Repartidores = () => {
   return (
@@ -20,7 +21,7 @@ const Repartidores = () => {
         <Header/>
         <BackBtn back="/gestion/agenda"/>
         <Box sx={{width:"90vw", m:"auto"}}>
-          <Accordion  >
+          <Accordion defaultExpanded={true} >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -28,6 +29,7 @@ const Repartidores = () => {
         >
           <Typography><strong>Repartidores</strong></Typography>
         </AccordionSummary >
+        <Link href={"/gestion/deliveryDetail"}>
         <AccordionDetails >
             <Box display="flex" justifyContent="space-between" sx={{m:'0 10px'}}>
             <Box><Progress value={60}/></Box>
@@ -40,6 +42,7 @@ const Repartidores = () => {
           </Box>
           </Box>
         </AccordionDetails>
+        </Link>
         <AccordionDetails>
             <Box display="flex" justifyContent="space-between" sx={{m:'0 10px'}}>
             <Box><Progress value={100}/></Box>

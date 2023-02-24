@@ -10,6 +10,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } fro
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Progress from 'alias/components/progress';
 import DayList from 'alias/components/carousel';
+import Link from 'next/link';
 
 const Agenda = () => {
   return (
@@ -18,7 +19,7 @@ const Agenda = () => {
       <Container>
         <Box sx={{ mt: 2, display: "flex", flexDirection: "inherit" }}>
           <Image src={logoAdmin} alt="logo" width={53} height={53} />
-          <Box sx={{ paddingX: 2 }}>
+          <Box sx={{ paddingX: 2 ,mb:3 }}>
             <Typography sx={{ fontSize: "14px" }}>Hola Admin!</Typography>
             <Typography sx={{ fontFamily: "Roboto", fontSize: "18px", fontWeight: 700 }}>Gestionar pedidos</Typography>
 
@@ -49,9 +50,11 @@ const Agenda = () => {
                 </Box>
               </AccordionDetails>
             </Box>
+            <Link href={"/gestion/repartidores"}>
             <Button sx={{my:2}} variant="contained" fullWidth size="small">
               Ver repartidores
             </Button>
+            </Link>
             <Box sx={{ width: "90vw", m: "auto" }}>
               <AccordionDetails >
                 <Box display="flex" justifyContent="space-between" >
@@ -66,9 +69,11 @@ const Agenda = () => {
                 </Box>
               </AccordionDetails>
             </Box>
+            <Link href={"/gestion/managePackage"}>
             <Button sx={{my:2}} variant="contained" fullWidth size="small">
-              Ver repartidores
+              Ver paquetes
             </Button>
+            </Link>
           </Container>
 
         </Accordion>
