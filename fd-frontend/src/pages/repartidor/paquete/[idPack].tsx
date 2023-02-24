@@ -51,9 +51,10 @@ const idPack = () => {
           </AccordionSummary>
           <Card>
             <CardMedia
-              sx={{ height: "212px", width: "287px", ml: "34px", mt: 2 }}
+              sx={{ height: "212px", width: "287px", ml: "34px", mt: 2}}
               image={mapa.src}
               title="mapa"
+              
             />
             <CardContent>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
@@ -63,7 +64,7 @@ const idPack = () => {
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Numero del paquete: </span>
                 {paquetes[0]?._id}
-              </Typography>
+              </Typography >
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Recibe: </span>
                 {paquetes[0]?.client}
