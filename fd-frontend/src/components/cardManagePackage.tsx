@@ -1,4 +1,5 @@
 import React from "react";
+
 import CardMedia from "@mui/material/CardMedia";
 import { Box, IconButton, Typography } from "@mui/material";
 import { Pack } from "alias/utils/seed";
@@ -32,7 +33,6 @@ const CardManagePackage: React.FC<Props> = ({ paquete }) => {
           flexDirection: "column",
           width: "100%",
           maxWidth: "100%",
-          
         }}
       >
         <Box
@@ -40,33 +40,23 @@ const CardManagePackage: React.FC<Props> = ({ paquete }) => {
             width: "100%",
             display: "flex",
             alignItems: "center",
-            pl: 1,
-            pb: 2,
+            ml: 2,
+            
           }}
         >
           <Typography
-            sx={{ flexGrow: 1, maxHeight: "1em", overflow: "none", font:"Open Sans", fontWeight:400, fontSize:"12px", lineHeight:"20px"  }}
+            sx={{mb:4,flexGrow: 1, maxHeight: "1em", overflow: "none", font:"Open Sans", fontWeight:400, fontSize:"12px", lineHeight:"20px"  }}
             component="div"
             variant="subtitle1"
           >
             {paquete.destination}
           </Typography>
 
-          <IconButton sx={{ textAlign: "right" }} aria-label="previous">
+          <IconButton sx={{mb:2 ,textAlign: "right" }} aria-label="previous">
             <Image alt="trash" src={trash} />
           </IconButton>
         </Box>
-         <Typography
-          variant="subtitle1"
-          color="black"
-          component="div"
-          align="right"
-          sx={{mr:1, fontSize:"12px", lineHeight:"20px"}}
-          fontFamily="Open Sans"      
-          fontWeight="700"
-        >
-          {paquete.status}
-        </Typography>
+          
 
        
       </Box>
@@ -76,3 +66,5 @@ const CardManagePackage: React.FC<Props> = ({ paquete }) => {
 };
 
 export default CardManagePackage;
+
+

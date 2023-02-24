@@ -18,7 +18,6 @@ const Porcentaje  = ({value}:{value: number}) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          
       }}
       >
       <Typography
