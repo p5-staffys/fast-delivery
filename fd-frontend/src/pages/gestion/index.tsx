@@ -84,7 +84,7 @@ const Home = () => {
                     style: { color: "#f5bd09" },
                   }} />
                   <button style={{position:"absolute", right:20, top:380, backgroundColor:"transparent", border:"none"}} onClick={handleVisibility}>
-                  {visibility? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                  {visibility? <VisibilityIcon sx={{color:"grey"}}/> : <VisibilityOffIcon sx={{color:"grey"}}/>}
                   </button>
                  
             <Button variant="contained" fullWidth type="submit"><strong>Ingresar</strong> </Button>
