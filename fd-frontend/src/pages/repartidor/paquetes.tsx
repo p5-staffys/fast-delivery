@@ -8,6 +8,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
 import { Layout } from "alias/components/layout";
 import Header from "alias/components/header";
+import BackBtn from '../../components/backBtn';
 
 const Paquetes = () => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
@@ -57,11 +58,7 @@ const Paquetes = () => {
         alignItems="start"
         flexDirection="column"
       >
-        <IconButton aria-label="Example" sx={{ my: 2 }}>
-          <Link href="/repartidor/jornada">
-            <ArrowBackIosIcon sx={{ color: "black" }} />
-          </Link>
-        </IconButton>
+        <BackBtn back="/repartidor/jornada"/>
         <h2>Obtener paquetes</h2>
         <Typography sx={{ fontSize: "0.9em" }}>
           ¿Cuántos paquetes más vas a repartir hoy?
