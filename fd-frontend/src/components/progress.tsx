@@ -18,12 +18,12 @@ const Porcentaje  = ({value}:{value: number}) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-        
       }}
       >
       <Typography
         variant="caption"
         component="div"
+        fontWeight={600}
         >{`${value}%`}</Typography>
     </Box>
   </Box>

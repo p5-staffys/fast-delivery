@@ -12,3 +12,6 @@
   color: #217bce;
 }
 
+@import url(./addPackage.css);
+@import url(./login.css);
+

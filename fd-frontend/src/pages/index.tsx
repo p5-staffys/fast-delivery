@@ -1,15 +1,14 @@
-import { Inter } from "@next/font/google";
 import Image from "next/image";
 import logo from "../asset/logoMoto.png";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Link from "next/link";
-import Grid from "@mui/material/Grid";
 import { logIn } from "alias/utils/seed";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Layout } from "alias/components/layout";
+import { Typography } from "@mui/material";
 
 const Home = () => {
   const [email, setEmail] = useState("");
@@ -45,83 +44,16 @@ const Home = () => {
           <Image src={logo} alt="logo" width={149} height={94} />
         </Box>
         <Box
-          component="form"
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit}
+          sx={{width:"90vw", m: "auto"}}
         >
-          <Grid
-            container
-            spacing={2}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid item xs={11}>
-              <TextField
-                id="standard-basic"
-                label="Usuario"
-                variant="standard"
-                fullWidth
-                onChange={handleEmail}
-                InputLabelProps={{
-                  style: { color: "#f5bd09" },
-                }}
-              />
-            </Grid>
-            <Grid item xs={11}>
-              <TextField
-                id="standard-basic"
-                label="Contraseña"
-                type="password"
-                variant="standard"
-                fullWidth
-                onChange={handlePassword}
-                InputLabelProps={{
-                  style: { color: "#f5bd09" },
-                }}
-              />
-            </Grid>
-            <Grid item xs={11}>
-              <Button variant="contained" fullWidth type="submit">
-                Ingresar
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-        <Box sx={{ flexGrow: 2 }}>
-          <Grid
-            container
-            spacing={4}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid
-              item
-              xs={7}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ mt: "5vh", fontWeight: "100" }}
-            >
-              <Link href="#" className="linkLogin">
-                Recuperar Contraseña
-              </Link>
-            </Grid>
-            <Grid
-              item
-              xs={7}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ fontWeight: "600" }}
-            >
-              <Link href="#" className="linkLogin">
-                Registrarse
-              </Link>
-            </Grid>
-          </Grid>
+          <Typography sx={{m:" 0 auto", fontSize:40}}><strong>Bienvenid@</strong></Typography>
+          <Typography sx={{m:" auto", fontSize:20}}>*Selecciona tu rol</Typography>
+                 <Link href="/repartidor">
+            <Button variant="contained" fullWidth sx={{m:" 5vh auto", fontSize:17}}><strong>Repartidor</strong> </Button>
+                 </Link>
+                 <Link href="/gestion">
+            <Button variant="contained" fullWidth sx={{fontSize:17}}><strong>Administrador</strong> </Button>
+            </Link>
         </Box>
       </main>
     </>
