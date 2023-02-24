@@ -26,7 +26,7 @@ const DeliveryDetail = () => {
     return (<>
         <Header />
         <Container fixed >
-            <Link href={`/repartidor/jornada`}>
+            <Link href={`/gestion/agenda`}>
                 <IconButton aria-label="Example" sx={{ my: 1 }}>
                     <ArrowBackIosIcon sx={{ color: "black" }} />
                 </IconButton>

@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Link from "next/link";
-import { logIn } from "alias/utils/seed";
+import { logInUser } from "alias/utils/seed";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Layout } from "alias/components/layout";
@@ -31,7 +31,7 @@ const Home = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    logIn("pepe@argento.com", false);
+    logInUser("pepe@argento.com");
     router.push("/repartidor/jornada");
   };
   const handleVisibility=(e:any)=>{
