@@ -71,7 +71,7 @@ function createPack(): Pack {
 }
 
 async function requestPacks(cant: number) {
-  let packs: Pack[] = [];
+  const packs: Pack[] = [];
   for (let i = 0; i < cant; i++) {
     packs.push(createPack());
   }
@@ -79,7 +79,7 @@ async function requestPacks(cant: number) {
 }
 
 async function requestUsers(cant: number) {
-  let packs: User[] = [];
+  const packs: User[] = [];
   for (let i = 0; i < cant; i++) {
     packs.push(createRepa("seed@seed.com"));
   }
