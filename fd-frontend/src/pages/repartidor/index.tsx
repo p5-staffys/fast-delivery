@@ -4,7 +4,9 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Link from "next/link";
-import { logInUser } from "alias/utils/seed";
+
+import axios from "axios";
+
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Layout } from "alias/components/layout";
@@ -31,8 +33,9 @@ const Home = (): JSX.Element => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    logInUser("pepe@argento.com");
-    router.push("/repartidor/jornada");
+    axios.post("http://localhost:8080/auth/signIn", { email, password }, { withCredentials: true }).then((response) => {
+      if (response.data === "user logged in") router.push("/repartidor/jornada");
+    });
   };
   const handleVisibility = (e: any) => {
     e.preventDefault();
@@ -67,6 +70,8 @@ const Home = (): JSX.Element => {
             InputLabelProps={{
               style: { color: "#f5bd09" },
             }}
+            value={email}
+            onChange={handleEmail}
           />
           <TextField
             id="standard-basic"
@@ -77,6 +82,8 @@ const Home = (): JSX.Element => {
             InputLabelProps={{
               style: { color: "#f5bd09" },
             }}
+            value={password}
+            onChange={handlePassword}
           />
           <button
             style={{ position: "absolute", right: 20, top: 380, backgroundColor: "transparent", border: "none" }}

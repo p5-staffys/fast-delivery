@@ -7,6 +7,7 @@ import {
   signIn,
   authenticate,
   getCurrentUser,
+  signOut,
 } from 'src/cognito/cognito';
 
 @Injectable()
@@ -21,6 +22,10 @@ export class AuthService {
 
   async sigIn(email: string, password: string) {
     return signIn(email, password);
+  }
+
+  async signOut(token: string) {
+    return signOut(token);
   }
 
   async authenticate(token: string) {

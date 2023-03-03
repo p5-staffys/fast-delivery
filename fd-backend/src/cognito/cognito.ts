@@ -4,6 +4,7 @@ import {
   ConfirmSignUpCommand,
   InitiateAuthCommand,
   GetUserCommand,
+  GlobalSignOutCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { verify } from './jwt';
 
@@ -55,6 +56,12 @@ export async function signIn(username: string, password: string) {
   };
   const command = new InitiateAuthCommand(input);
 
+  return client.send(command);
+}
+
+export async function signOut(token: string) {
+  const input = { AccessToken: token };
+  const command = new GlobalSignOutCommand(input);
   return client.send(command);
 }
 

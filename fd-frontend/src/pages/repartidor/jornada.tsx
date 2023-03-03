@@ -9,10 +9,16 @@ import Header from "alias/components/header";
 import { useEffect, useState } from "react";
 import { Pack, requestPacks } from "alias/utils/seed";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 const Jornada = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<Pack[]>([]);
   const [paquetesPending, setPaquetesPending] = useState<Pack[]>([]);
+  const [user, setUser] = useState<{ Name: string; Value: string }[]>([]);
+
+  const router = useRouter();
+
   useEffect(() => {
     requestPacks(5).then((packs) => {
       setPaquetes(packs);
@@ -23,10 +29,20 @@ const Jornada = (): JSX.Element => {
     });
   }, []);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/auth/current")
+      .then((response) => {
+        setUser(response.data.UserAttributes);
+      })
+      .catch(() => router.push("/"));
+  }, []);
+
   return (
     <>
       <Header />
       <Container fixed>
+        {user.length ? <Typography variant="h6">{user[2].Value} says "Hello World"</Typography> : null}
         <Link href={"/repartidor/paquetes"}>
           <Button sx={{ marginY: "15px" }} variant="contained" fullWidth={true}>
             Obtener paquetes

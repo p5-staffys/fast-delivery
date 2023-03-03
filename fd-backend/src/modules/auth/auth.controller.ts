@@ -56,6 +56,11 @@ export class AuthController {
     return this.authService.getCurrentUser(request.cookies['token']);
   }
 
+  @Get('/signOut')
+  async signOut(@Req() request: Request) {
+    return this.authService.signOut(request.cookies['token']);
+  }
+
   @Get()
   findAll(): string {
     return this.authService.findAll();
