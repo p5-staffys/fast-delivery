@@ -8,3 +8,12 @@ services:
     image: "franciscoalvarezraineri/fd-backend:0.1.1"
     ports:
       - "8080:8080"
+  db:
+    image: mongo:5
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGODB_DATABASE: FastDelivery
+    volumes:
+      - ./mongo:/data/db

@@ -1,12 +1,9 @@
-//Here Come user Interface to implements in class and dtos
+export interface IUser {
+  name: string;
+  email: string;
+  password: string;
+}
 
-// Just an example
-
-// import { Types } from 'mongoose';
-
-// export interface IUser {
-//   _id: Types.ObjectId;
-//   name: string;
-//   email: string;
-//   password: string;
-// }
+export interface IUserSchema extends IUser {
+  hashPassword(): Promise<void>;
+}

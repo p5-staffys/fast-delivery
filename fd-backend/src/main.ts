@@ -5,8 +5,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
-console.log('Hola');
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
@@ -38,7 +36,9 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT);
 
-  console.log(`Server is running in port ${configService.get<number>('PORT')}`);
+  console.info(
+    `Server is running in port ${configService.get<number>('PORT')}`,
+  );
   // Only here you can acces to process.env, also check ConfigServices Instances
 }
 bootstrap();

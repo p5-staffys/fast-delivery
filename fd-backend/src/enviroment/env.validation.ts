@@ -1,11 +1,25 @@
 import { plainToClass } from 'class-transformer';
-import { IsNotEmpty, IsNumber, Min, validateSync } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Min,
+  validateSync,
+} from 'class-validator';
 
 class EnvironmentVariables {
   @Min(1)
   @IsNumber()
   @IsNotEmpty()
   PORT: number;
+
+  @IsNotEmpty()
+  @IsString()
+  MONGODB: string;
+
+  @IsNotEmpty()
+  @IsString()
+  JWT_ACCESS_SECRET;
 }
 
 export const validate = (
