@@ -11,7 +11,7 @@ import CardManagePackage from "alias/components/cardManagePackage";
 import AddIcon from "../../asset/AddIcon.png";
 import Image from "next/image";
 
-const ManagePackage = () => {
+const ManagePackage = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<Pack[]>([]);
 
   useEffect(() => {

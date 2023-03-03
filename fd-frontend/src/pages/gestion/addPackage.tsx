@@ -4,8 +4,8 @@ import Header from "alias/components/header";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import { Layout } from "alias/components/layout";
 
-const addPackage = () => {
-  const [quantity, setQuantity] = useState(0);
+const addPackage = (): JSX.Element => {
+  const [quantity, setQuantity] = useState<number>(0);
 
   const handleAdd = () => {
     if (quantity >= 0) {

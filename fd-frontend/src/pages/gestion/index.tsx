@@ -9,13 +9,13 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { Layout } from "alias/components/layout";
 
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-const Home = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [visibility, setVisibility] = useState(false);
+const Home = (): JSX.Element => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [visibility, setVisibility] = useState<boolean>(false);
   const router = useRouter();
 
   const handleEmail = (e: any) => {
@@ -34,19 +34,18 @@ const Home = () => {
     router.push("/gestion/agenda");
   };
 
-  const handleVisibility=(e:any)=>{
-    e.preventDefault()
-    if(visibility){
-      setVisibility(false)
-    }else{
-      setVisibility(true)
+  const handleVisibility = (e: any) => {
+    e.preventDefault();
+    if (visibility) {
+      setVisibility(false);
+    } else {
+      setVisibility(true);
     }
-  }
-  const eye = visibility? "text" : "password"
+  };
+  const eye: string = visibility ? "text" : "password";
 
   return (
     <>
-     
       <main className="container-login">
         <Box
           display="flex"
@@ -54,48 +53,49 @@ const Home = () => {
           alignItems="center"
           sx={{ mt: "104px", width: "100vw", mb: "100px" }}
         >
-            <Link href="/">
-          <Image src={logo} alt="logo" width={149} height={94} />
+          <Link href="/">
+            <Image src={logo} alt="logo" width={149} height={94} />
           </Link>
         </Box>
-        <Box
-          component="form"
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit}
-          sx={{width:"90vw", m: "auto"}}
-        >
-            <TextField
-                id="standard-basic"
-                label="Usuario"
-                variant="standard"
-                fullWidth
-                type="email"
-                InputLabelProps={{
-                    style: { color: "#f5bd09" },
-                  }} />
-                  <TextField
-                id="standard-basic"
-                label="Contraseña"
-                variant="standard"
-                type={eye}
-                fullWidth
-                InputLabelProps={{
-                    style: { color: "#f5bd09" },
-                  }} />
-                  <button style={{position:"absolute", right:20, top:380, backgroundColor:"transparent", border:"none"}} onClick={handleVisibility}>
-                  {visibility? <VisibilityIcon sx={{color:"grey"}}/> : <VisibilityOffIcon sx={{color:"grey"}}/>}
-                  </button>
-                 
-            <Button variant="contained" fullWidth type="submit"><strong>Ingresar</strong> </Button>
+        <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} sx={{ width: "90vw", m: "auto" }}>
+          <TextField
+            id="standard-basic"
+            label="Usuario"
+            variant="standard"
+            fullWidth
+            type="email"
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+          />
+          <TextField
+            id="standard-basic"
+            label="Contraseña"
+            variant="standard"
+            type={eye}
+            fullWidth
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+          />
+          <button
+            style={{ position: "absolute", right: 20, top: 380, backgroundColor: "transparent", border: "none" }}
+            onClick={handleVisibility}
+          >
+            {visibility ? <VisibilityIcon sx={{ color: "grey" }} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
+          </button>
+
+          <Button variant="contained" fullWidth type="submit">
+            <strong>Ingresar</strong>{" "}
+          </Button>
         </Box>
       </main>
     </>
   );
-}
+};
 
- Home.getLayout = function getLayout(page: React.ReactElement) {
-   return <Layout>{page}</Layout>;
- };
+Home.getLayout = function getLayout(page: React.ReactElement) {
+  return <Layout>{page}</Layout>;
+};
 
 export default Home;
