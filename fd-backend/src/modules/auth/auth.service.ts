@@ -1,10 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
+// import { CreateAuthDto } from './dto/create-auth.dto';
+
+import {
+  signUp,
+  confirmRegistration,
+  signIn,
+  authenticate,
+  getCurrentUser,
+} from 'src/cognito/cognito';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto): string {
-    return `This action adds a new auth: ${createAuthDto}`;
+  async create(email: string, password: string) {
+    return signUp(email, password);
+  }
+
+  async confirm(email: string, confirmCode: string) {
+    return confirmRegistration(email, confirmCode);
+  }
+
+  async sigIn(email: string, password: string) {
+    return signIn(email, password);
+  }
+
+  async authenticate(token: string) {
+    return authenticate(token);
+  }
+
+  async getCurrentUser(token: string) {
+    return getCurrentUser(token);
   }
 
   findAll(): string {
