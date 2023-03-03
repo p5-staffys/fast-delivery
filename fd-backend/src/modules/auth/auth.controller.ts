@@ -5,7 +5,6 @@ import {
   CreateUserDto,
   ResponseUserCreateDto,
 } from '../user/dto/create-user.dto';
-import { User } from '../user/entities/user.entity';
 
 import { AuthService } from './auth.service';
 import { LoginDto, Token } from './dto/auth.dto';
