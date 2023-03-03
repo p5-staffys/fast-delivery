@@ -8,13 +8,13 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
 import { Layout } from "alias/components/layout";
 import Header from "alias/components/header";
-import BackBtn from '../../components/backBtn';
+import BackBtn from "../../components/backBtn";
 
-const Paquetes = () => {
+const Paquetes = (): JSX.Element => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
-  const [numOne, setNumOne] = useState(0);
-  const [numTwo, setNumTwo] = useState(0);
-  const [numThree, setNumThree] = useState(0);
+  const [numOne, setNumOne] = useState<number>(0);
+  const [numTwo, setNumTwo] = useState<number>(0);
+  const [numThree, setNumThree] = useState<number>(0);
   const max = 7;
 
   const handleAddOne = () => {
@@ -50,19 +50,17 @@ const Paquetes = () => {
 
   return (
     <div>
-      <Header/>
+      <Header />
       <Box
-        sx={{ maxWidth:"100vw", height: "12vh", ml: 2 , mt:2}}
+        sx={{ maxWidth: "100vw", height: "12vh", ml: 2, mt: 2 }}
         display="flex"
         justifyContent="center"
         alignItems="start"
         flexDirection="column"
       >
-        <BackBtn back="/repartidor/jornada"/>
+        <BackBtn back="/repartidor/jornada" />
         <h2>Obtener paquetes</h2>
-        <Typography sx={{ fontSize: "0.9em" }}>
-          ¿Cuántos paquetes más vas a repartir hoy?
-        </Typography>
+        <Typography sx={{ fontSize: "0.9em" }}>¿Cuántos paquetes más vas a repartir hoy?</Typography>
       </Box>
       <Box
         display="flex"
@@ -79,22 +77,9 @@ const Paquetes = () => {
         <Box>
           <Checkbox {...label} defaultChecked />
         </Box>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="start"
-          flexDirection="column"
-          sx={{ ml: 4 }}
-        >
-          <Typography sx={{ fontSize: "0.8em" }}>
-            Amenabar 2356, CABA
-          </Typography>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ mt: 1 }}
-          >
+        <Box display="flex" justifyContent="center" alignItems="start" flexDirection="column" sx={{ ml: 4 }}>
+          <Typography sx={{ fontSize: "0.8em" }}>Amenabar 2356, CABA</Typography>
+          <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
             <IconButton
               sx={{
                 width: 30,
@@ -139,22 +124,9 @@ const Paquetes = () => {
         <Box>
           <Checkbox {...label} defaultChecked />
         </Box>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="start"
-          flexDirection="column"
-          sx={{ ml: 4 }}
-        >
-          <Typography sx={{ fontSize: "0.8em" }}>
-            AV. Carabobo y Rivadavia, CABA
-          </Typography>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ mt: 1 }}
-          >
+        <Box display="flex" justifyContent="center" alignItems="start" flexDirection="column" sx={{ ml: 4 }}>
+          <Typography sx={{ fontSize: "0.8em" }}>AV. Carabobo y Rivadavia, CABA</Typography>
+          <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
             <IconButton
               sx={{
                 width: 30,
@@ -199,20 +171,9 @@ const Paquetes = () => {
         <Box>
           <Checkbox {...label} defaultChecked />
         </Box>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="start"
-          flexDirection="column"
-          sx={{ ml: 4 }}
-        >
+        <Box display="flex" justifyContent="center" alignItems="start" flexDirection="column" sx={{ ml: 4 }}>
           <Typography sx={{ fontSize: "0.8em" }}>Melian 1242, CABA</Typography>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ mt: 1 }}
-          >
+          <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
             <IconButton
               sx={{
                 width: 30,
