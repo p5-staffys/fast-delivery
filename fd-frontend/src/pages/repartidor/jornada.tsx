@@ -31,7 +31,7 @@ const Jornada = (): JSX.Element => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/auth/current")
+      .get("http://localhost:8080/auth/current", { withCredentials: true })
       .then((response) => {
         setUser(response.data.UserAttributes);
       })
