@@ -2,33 +2,85 @@ import { Injectable } from '@nestjs/common';
 // import { CreateAuthDto } from './dto/create-auth.dto';
 
 import {
-  signUp,
-  confirmRegistration,
-  signIn,
-  authenticate,
-  getCurrentUser,
-} from 'src/cognito/cognito';
+  CognitoIdentityProviderClient,
+  SignUpCommand,
+  ConfirmSignUpCommand,
+  InitiateAuthCommand,
+  GetUserCommand,
+  GlobalSignOutCommand,
+} from '@aws-sdk/client-cognito-identity-provider';
+import { CognitoJwtVerifier } from 'aws-jwt-verify';
+
+const config = {
+  credentials: {
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  },
+  region: 'sa-east-1',
+};
+
+const client = new CognitoIdentityProviderClient(config);
 
 @Injectable()
 export class AuthService {
-  async create(email: string, password: string) {
-    return signUp(email, password);
+  async create(username: string, password: string) {
+    const input = {
+      ClientId: process.env.CLIENT_ID,
+      Username: username,
+      Password: password,
+    };
+
+    const command = new SignUpCommand(input);
+
+    return client.send(command);
   }
 
-  async confirm(email: string, confirmCode: string) {
-    return confirmRegistration(email, confirmCode);
+  async confirm(username: string, confirmationCode: string) {
+    const input = {
+      ClientId: process.env.CLIENT_ID,
+      Username: username,
+      ConfirmationCode: confirmationCode,
+    };
+
+    const command = new ConfirmSignUpCommand(input);
+
+    return client.send(command);
   }
 
-  async sigIn(email: string, password: string) {
-    return signIn(email, password);
+  async signIn(username: string, password: string) {
+    const input = {
+      AuthFlow: 'USER_PASSWORD_AUTH',
+      AuthParameters: {
+        USERNAME: username,
+        PASSWORD: password,
+      },
+      ClientId: process.env.CLIENT_ID,
+    };
+    const command = new InitiateAuthCommand(input);
+
+    return client.send(command);
+  }
+
+  async signOut(token: string) {
+    const input = { AccessToken: token };
+    const command = new GlobalSignOutCommand(input);
+    return client.send(command);
   }
 
   async authenticate(token: string) {
-    return authenticate(token);
+    const verifier = CognitoJwtVerifier.create({
+      userPoolId: process.env.USER_POOL_ID,
+      tokenUse: 'access',
+      clientId: process.env.CLIENT_ID,
+    });
+
+    return verifier.verify(token);
   }
 
   async getCurrentUser(token: string) {
-    return getCurrentUser(token);
+    const input = { AccessToken: token };
+    const command = new GetUserCommand(input);
+    return client.send(command);
   }
 
   findAll(): string {

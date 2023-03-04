@@ -5,7 +5,7 @@
   "scripts": {
     "front": "",
     "back": "",
-    "start": "concurrently 'cd fd-backend && npm start' 'cd fd-frontend && npm run dev'",
+    "start": "concurrently 'cd fd-backend && npm run start:dev' 'cd fd-frontend && npm run dev'",
     "install": "concurrently 'cd fd-backend && npm i' 'cd fd-frontend && npm i'",
     "format": "prettier --write",
     "prepare": "husky install",

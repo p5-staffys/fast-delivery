@@ -40,7 +40,7 @@ export class AuthController {
     @Body('password') password: string,
     @Res() response: Response,
   ) {
-    return this.authService.sigIn(email, password).then((result) => {
+    return this.authService.signIn(email, password).then((result) => {
       const token = result.AuthenticationResult.AccessToken;
       response.cookie('token', token).send('user logged in');
     });
@@ -48,12 +48,20 @@ export class AuthController {
 
   @Get()
   async authenticate(@Req() request: Request) {
-    return this.authService.authenticate(request.cookies['token']);
+    const response = await this.authService.authenticate(
+      request.cookies['token'],
+    );
+    return response;
   }
 
   @Get('/current')
   async getCurrentUser(@Req() request: Request) {
     return this.authService.getCurrentUser(request.cookies['token']);
+  }
+
+  @Get('/signOut')
+  async signOut(@Req() request: Request) {
+    return this.authService.signOut(request.cookies['token']);
   }
 
   @Get()
