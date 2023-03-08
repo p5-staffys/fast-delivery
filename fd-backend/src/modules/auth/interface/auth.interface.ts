@@ -1,6 +1,6 @@
-export interface IUser {
-  _id: string;
+export interface IAuth {
   name: string;
   lastName: string;
   email: string;
+  password: string;
 }
