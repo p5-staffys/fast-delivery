@@ -19,7 +19,7 @@ const Home = (): JSX.Element => {
         </Box>
         <Box sx={{ width: "90vw", m: "auto" }}>
           <Typography sx={{ m: " 0 auto", fontSize: 40 }}>
-            <strong>Bienvenid@</strong>
+            <strong>Bienvenid@s</strong>
           </Typography>
           <Typography sx={{ m: " auto", fontSize: 20 }}>*Selecciona tu rol</Typography>
           <Link href="/repartidor">

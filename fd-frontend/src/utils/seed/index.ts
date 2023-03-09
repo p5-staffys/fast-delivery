@@ -18,7 +18,7 @@ function createAdmin(email: string): Admin {
   };
 }
 
-async function logInAdmin(email: string) {
+async function logInAdmin(email: string): Promise<Admin> {
   return createAdmin(email);
 }
 
@@ -44,7 +44,7 @@ function createRepa(email: string): User {
   };
 }
 
-async function logInUser(email: string) {
+async function logInUser(email: string): Promise<User> {
   return createRepa(email);
 }
 
@@ -70,7 +70,7 @@ function createPack(): Pack {
   };
 }
 
-async function requestPacks(cant: number) {
+async function requestPacks(cant: number): Promise<Pack[]> {
   const packs: Pack[] = [];
   for (let i = 0; i < cant; i++) {
     packs.push(createPack());
@@ -78,7 +78,7 @@ async function requestPacks(cant: number) {
   return packs;
 }
 
-async function requestUsers(cant: number) {
+async function requestUsers(cant: number): Promise<User[]> {
   const packs: User[] = [];
   for (let i = 0; i < cant; i++) {
     packs.push(createRepa("seed@seed.com"));
@@ -86,7 +86,7 @@ async function requestUsers(cant: number) {
   return packs;
 }
 
-async function getPercentage() {
+async function getPercentage(): Promise<number> {
   return faker.datatype.number({ min: 0, max: 100, precision: 10 });
 }
 
