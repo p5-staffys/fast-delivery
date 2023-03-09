@@ -10,20 +10,29 @@ import {
   Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-// import { CreateAuthDto } from './dto/create-auth.dto';
+import { UserService } from '../user/user.service';
 
 import { Request, Response } from 'express';
+import { CreateAuthDto } from './dto/create-auth.dto';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
-  async create(
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ) {
-    return this.authService.create(email, password);
+  async create(@Body() body: CreateAuthDto) {
+    const { email, password, name, lastName } = body;
+    const newAuth = await this.authService.create(email, password);
+    const newUser = await this.userService.create({
+      _id: newAuth.UserSub,
+      email,
+      name,
+      lastName,
+    });
+    return newUser;
   }
 
   @Post('/confirm')
