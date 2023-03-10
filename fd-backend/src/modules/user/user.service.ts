@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto, ResponseUserCreateDto } from './dto/create-user.dto';
+import { CreateUserDto, ResponseCreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -12,7 +12,7 @@ export class UserService {
     private readonly userModel: Model<UserDocument>,
   ) {}
 
-  async create(newUser: CreateUserDto): Promise<ResponseUserCreateDto> {
+  async create(newUser: CreateUserDto): Promise<ResponseCreateUserDto> {
     const uniqueMail: User = await this.userModel.findOne({
       email: newUser.email,
     });

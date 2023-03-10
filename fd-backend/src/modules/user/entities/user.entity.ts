@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-import { IUser } from '../interface/user.interface';
+import { IUser, IUserRef, UserStatus } from '../interface/user.interface';
+
+import { IPackageRef } from '../../package/interface/package.interface';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -22,6 +24,26 @@ export class User implements IUser {
     unique: true,
   })
   readonly email: string;
+
+  @Prop({ type: String, default: 'inactive' })
+  readonly status: UserStatus;
+
+  @Prop({ type: Number, default: 5 })
+  readonly rating: number;
+
+  @Prop({ type: Array, default: [] })
+  readonly packages: IPackageRef[];
 }
 
-export const userSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);
+
+@Schema()
+export class UserRef implements IUserRef {
+  @Prop({ required: true, type: String, unique: false })
+  _id: string;
+
+  @Prop({ required: true, type: String })
+  fullName: string;
+}
+
+export const UserRefSchema = SchemaFactory.createForClass(UserRef);
