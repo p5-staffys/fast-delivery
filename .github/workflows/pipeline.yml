@@ -19,8 +19,12 @@ jobs:
         with:
           node-version: '16'
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-audit --no-fund --no-optional
       - name: Lint back
         run: npm run lint:back
       - name: Lint front
         run: npm run lint:front
+      - name: Build front
+        run: npm run build
+      - name: Test back E2E
+        run: npm run test:back
