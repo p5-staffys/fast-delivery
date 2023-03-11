@@ -11,7 +11,9 @@
     "prepare": "husky install",
     "test": "exit 0",
     "lint:back": "cd fd-backend && npm run lint",
-    "lint:front": "cd fd-frontend && npm run lint"
+    "lint:front": "cd fd-frontend && npm run lint",
+    "build": "cd fd-frontend && npm run build",
+    "test:back": "cd fd-backend && npm run test:e2e"
   },
   "dependencies": {
     "concurrently": "^7.6.0"
