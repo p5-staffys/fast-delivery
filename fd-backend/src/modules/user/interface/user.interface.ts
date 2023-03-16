@@ -5,9 +5,11 @@ export interface IUser {
   name: string;
   lastName: string;
   email: string;
+  password: string;
   status: UserStatus;
   rating: number;
   packages: IPackageRef[];
+  __v: number;
 }
 
 export enum UserStatus {
@@ -23,5 +25,5 @@ export interface IUserRef {
 export interface IClientRef {
   _id: string;
   fullName: string;
-  adress: string;
+  address: string;
 }

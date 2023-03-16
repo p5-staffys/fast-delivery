@@ -63,6 +63,14 @@ export class AuthController {
     return response;
   }
 
+  @Delete()
+  async remove(@Req() request: Request) {
+    const response = await this.authService.authenticate(
+      request.cookies['token'],
+    );
+    return response;
+  }
+
   @Get('/current')
   async getCurrentUser(@Req() request: Request) {
     return this.authService.getCurrentUser(request.cookies['token']);
@@ -86,10 +94,5 @@ export class AuthController {
   @Patch(':id')
   update(@Param('id') id: string): string {
     return this.authService.update(+id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string): string {
-    return this.authService.remove(+id);
   }
 }

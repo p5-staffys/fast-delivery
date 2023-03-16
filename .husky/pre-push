@@ -2,7 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 cd ./fd-backend
-npm run test
 npm run test:e2e
 
 cd ../

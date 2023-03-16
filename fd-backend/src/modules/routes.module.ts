@@ -10,7 +10,6 @@ export const routes: Routes = [
   {
     path: 'auth',
     module: AuthModule,
-    // can put childrenModules
   },
   {
     path: 'user',

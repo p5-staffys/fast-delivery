@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto, ResponseCreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { ReponseUserDto } from './dto/response-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -12,7 +13,14 @@ export class UserService {
     private readonly userModel: Model<UserDocument>,
   ) {}
 
-  async create(newUser: CreateUserDto): Promise<ResponseCreateUserDto> {
+  async create(newUser: CreateUserDto): Promise<ReponseUserDto> {
+    const uniqueId: User = await this.userModel.findById(newUser._id);
+
+    if (uniqueId && uniqueId._id)
+      throw new BadRequestException(
+        'Un usuario ya se encuentra registrado con ese _id',
+      );
+
     const uniqueMail: User = await this.userModel.findOne({
       email: newUser.email,
     });
@@ -23,5 +31,9 @@ export class UserService {
       );
 
     return await this.userModel.create(newUser);
+  }
+
+  async remove(_id: string): Promise<ReponseUserDto> {
+    return await this.userModel.findByIdAndDelete(_id);
   }
 }

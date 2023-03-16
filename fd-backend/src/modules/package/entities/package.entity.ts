@@ -1,16 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import {
-  IUserRef,
-  IClientRef,
-} from 'src/modules/user/interface/user.interface';
+import { IUserRef, IClientRef } from '../../user/interface/user.interface';
 import {
   IPackage,
   IPackageRef,
   PackageStatus,
 } from '../interface/package.interface';
 
-import { UserRefSchema } from 'src/modules/user/entities/user.entity';
+import { UserRefSchema } from '../../user/entities/user.entity';
 
 export type PackageDocument = HydratedDocument<Package>;
 
