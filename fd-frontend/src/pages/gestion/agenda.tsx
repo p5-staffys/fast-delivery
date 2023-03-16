@@ -5,7 +5,7 @@ import Image from "next/image";
 import logoAdmin from "../../asset/ImgAdmin.png";
 import logo1 from "../../asset/logito1.png";
 import logo2 from "../../asset/logito2.jpg";
-import React from "react";
+import React, { ReactElement } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Progress from "alias/components/progress";
@@ -80,7 +80,7 @@ const Agenda = (): JSX.Element => {
   );
 };
 
-Agenda.getLayout = function getLayout(page: React.ReactElement) {
+Agenda.getLayout = function getLayout(page: ReactElement): ReactElement {
   return <Layout>{page}</Layout>;
 };
 
