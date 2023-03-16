@@ -20,10 +20,6 @@ describe('Admin Routes', () => {
     await app.close();
   });
 
-  it('mock', async () => {
-    expect(true).toBeTruthy;
-  });
-
   xit('Returns users', async () => {
     const response = await request(app.getHttpServer()).get('/admin/users');
 

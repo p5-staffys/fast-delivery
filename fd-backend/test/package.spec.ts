@@ -40,85 +40,81 @@ describe('Package Routes', () => {
       deliveredOn: date,
       status: PackageStatus.Pending,
     };
+  });
 
-    afterAll(async () => {
-      await app.close();
+  afterAll(async () => {
+    await app.close();
+  });
+
+  describe('Package Creation', () => {
+    xit('Create Package', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/package')
+        .send(newPack);
+
+      expect(response.status).toEqual(201);
+      expect(response.body.weight).toEqual(20);
+      expect(response.body.createdBy).toEqual({
+        _id: '1',
+        fullName: 'admin admin',
+      });
     });
 
-    it('mock', async () => {
-      expect(true).toBeTruthy;
+    xit('Return a package by _id', async () => {
+      const response = await request(app.getHttpServer()).get('/package/1');
+
+      expect(response.status).toEqual(200);
+      expect(response.body._id).toEqual(1);
+      expect(response.body.deliveryDate).toEqual(date);
     });
 
-    describe('Package Creation', () => {
-      xit('Create Package', async () => {
-        const response = await request(app.getHttpServer())
-          .post('/package')
-          .send(newPack);
+    xit('Assign package to user', async () => {
+      const response = await request(app.getHttpServer()).put(
+        '/package/1/assign_to/1',
+      );
 
-        expect(response.status).toEqual(201);
-        expect(response.body.weight).toEqual(20);
-        expect(response.body.createdBy).toEqual({
-          _id: '1',
-          fullName: 'admin admin',
-        });
-      });
-
-      xit('Return a package by _id', async () => {
-        const response = await request(app.getHttpServer()).get('/package/1');
-
-        expect(response.status).toEqual(200);
-        expect(response.body._id).toEqual(1);
-        expect(response.body.deliveryDate).toEqual(date);
-      });
-
-      xit('Assign package to user', async () => {
-        const response = await request(app.getHttpServer()).put(
-          '/package/1/assign_to/1',
-        );
-
-        expect(response.status).toEqual(200);
-        expect(response.body.deliveredBy).toEqual(1);
-      });
-
-      xit('Unassign package', async () => {
-        const response = await request(app.getHttpServer()).put(
-          '/package/1/unassign',
-        );
-
-        expect(response.status).toEqual(200);
-        expect(response.body.deliveredBy).toEqual({});
-      });
-
-      xit('Delete Package', async () => {
-        const response = await request(app.getHttpServer()).delete(
-          '/package/1/delete',
-        );
-
-        expect(response.status).toEqual(200);
-        expect(response.body._id).toEqual(1);
-      });
-
-      xit;
+      expect(response.status).toEqual(200);
+      expect(response.body.deliveredBy).toEqual(1);
     });
 
-    describe('Delivering a Package', () => {
-      xit('Marks package as delivered', async () => {
-        const response = await request(app.getHttpServer()).put(
-          '/package/1/delivered',
-        );
+    xit('Unassign package', async () => {
+      const response = await request(app.getHttpServer()).put(
+        '/package/1/unassign',
+      );
 
-        expect(response.status).toEqual(200);
-        expect(response.body.status).toEqual(PackageStatus.Delivered);
-      });
+      expect(response.status).toEqual(200);
+      expect(response.body.deliveredBy).toEqual({});
+    });
 
-      xit('Blocks a delivered package', async () => {
-        const response = await request(app.getHttpServer()).put(
-          '/package/1/assign_to/1',
-        );
+    xit('Delete Package', async () => {
+      const response = await request(app.getHttpServer()).delete(
+        '/package/1/delete',
+      );
 
-        expect(response.status).toEqual(200);
-        expect(response.body.deliveredBy).toEqual({});
-      });
+      expect(response.status).toEqual(200);
+      expect(response.body._id).toEqual(1);
+    });
+
+    xit;
+  });
+
+  describe('Delivering a Package', () => {
+    xit('Marks package as delivered', async () => {
+      const response = await request(app.getHttpServer()).put(
+        '/package/1/delivered',
+      );
+
+      expect(response.status).toEqual(200);
+      expect(response.body.status).toEqual(PackageStatus.Delivered);
+    });
+
+    xit('Blocks a delivered package', async () => {
+      const response = await request(app.getHttpServer()).put(
+        '/package/1/assign_to/1',
+      );
+
+      expect(response.status).toEqual(200);
+      expect(response.body.deliveredBy).toEqual({});
     });
   });
 });
