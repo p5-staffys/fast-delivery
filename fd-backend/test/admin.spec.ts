@@ -20,7 +20,7 @@ describe('Admin Routes', () => {
     await app.close();
   });
 
-  it('mock', () => {
+  it('mock', async () => {
     expect(true).toBeTruthy;
   });
 
