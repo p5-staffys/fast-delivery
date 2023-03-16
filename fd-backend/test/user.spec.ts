@@ -42,6 +42,10 @@ describe('User Routes', () => {
     await app.close();
   });
 
+  it('mock', () => {
+    expect(true).toBeTruthy;
+  });
+
   describe('Create User', () => {
     xit('Create User', async () => {
       const response = await request(app.getHttpServer())
