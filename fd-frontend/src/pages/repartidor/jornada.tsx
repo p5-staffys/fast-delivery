@@ -35,7 +35,7 @@ const Jornada = (): JSX.Element => {
       .then((response) => {
         setUser(response.data.UserAttributes);
       })
-      .catch(() => router.push("/"));
+      .catch(async () => router.push("/"));
   }, []);
 
   return (
@@ -81,7 +81,7 @@ const Jornada = (): JSX.Element => {
   );
 };
 
-Jornada.getLayout = function getLayout(page: React.ReactElement) {
+Jornada.getLayout = function getLayout(page: React.ReactElement): React.ReactElement {
   return <Layout>{page}</Layout>;
 };
 

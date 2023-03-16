@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import BackBtn from "../../components/backBtn";
 import Header from "alias/components/header";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
@@ -7,12 +7,12 @@ import { Layout } from "alias/components/layout";
 const addPackage = (): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(0);
 
-  const handleAdd = () => {
+  const handleAdd = (): void => {
     if (quantity >= 0) {
       setQuantity(quantity + 1);
     }
   };
-  const handleSubtract = () => {
+  const handleSubtract = (): void => {
     if (quantity > 0) {
       setQuantity(quantity - 1);
     }
@@ -74,7 +74,7 @@ const addPackage = (): JSX.Element => {
     </>
   );
 };
-addPackage.getLayout = function getLayout(page: React.ReactElement) {
+addPackage.getLayout = function getLayout(page: ReactElement): ReactElement {
   return <Layout>{page}</Layout>;
 };
 

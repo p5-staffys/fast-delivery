@@ -4,8 +4,7 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
 import { IconButton } from "@mui/material";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import Link from "next/link";
+
 import { Layout } from "alias/components/layout";
 import Header from "alias/components/header";
 import BackBtn from "../../components/backBtn";
@@ -17,32 +16,32 @@ const Paquetes = (): JSX.Element => {
   const [numThree, setNumThree] = useState<number>(0);
   const max = 7;
 
-  const handleAddOne = () => {
+  const handleAddOne = (): void => {
     if (numOne >= 0 && numOne < max) {
       setNumOne(numOne + 1);
     }
   };
-  const handleSubtractOne = () => {
+  const handleSubtractOne = (): void => {
     if (numOne > 0) {
       setNumOne(numOne - 1);
     }
   };
-  const handleAddTwo = () => {
+  const handleAddTwo = (): void => {
     if (numTwo >= 0 && numTwo < max) {
       setNumTwo(numTwo + 1);
     }
   };
-  const handleSubtractTwo = () => {
+  const handleSubtractTwo = (): void => {
     if (numTwo > 0) {
       setNumTwo(numTwo - 1);
     }
   };
-  const handleAddThree = () => {
+  const handleAddThree = (): void => {
     if (numThree >= 0 && numThree < max) {
       setNumThree(numThree + 1);
     }
   };
-  const handleSubtractThree = () => {
+  const handleSubtractThree = (): void => {
     if (numThree > 0) {
       setNumThree(numThree - 1);
     }
@@ -209,7 +208,7 @@ const Paquetes = (): JSX.Element => {
   );
 };
 
-Paquetes.getLayout = function getLayout(page: React.ReactElement) {
+Paquetes.getLayout = function getLayout(page: React.ReactElement): React.ReactElement {
   return <Layout>{page}</Layout>;
 };
 

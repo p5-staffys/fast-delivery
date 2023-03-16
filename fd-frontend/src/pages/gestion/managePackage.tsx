@@ -55,7 +55,7 @@ const ManagePackage = (): JSX.Element => {
   );
 };
 
-ManagePackage.getLayout = function getLayout(page: React.ReactElement) {
+ManagePackage.getLayout = function getLayout(page: React.ReactElement): React.ReactElement {
   return <Layout>{page}</Layout>;
 };
 
