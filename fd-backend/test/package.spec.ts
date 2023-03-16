@@ -45,6 +45,10 @@ describe('Package Routes', () => {
       await app.close();
     });
 
+    it('mock', () => {
+      expect(true).toBeTruthy;
+    });
+
     describe('Package Creation', () => {
       xit('Create Package', async () => {
         const response = await request(app.getHttpServer())
