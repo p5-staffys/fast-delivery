@@ -8,14 +8,14 @@ import { IPackageRef } from '../../package/interface/package.interface';
 export type UserDocument = HydratedDocument<User>;
 
 @Schema()
-export class User implements IUser {
+export class User implements Partial<IUser> {
   @Prop({ required: true, type: String, unique: true })
   readonly _id: string;
 
-  @Prop({ type: String })
+  @Prop({ required: [true, 'Please enter a name'], type: String })
   readonly name: string;
 
-  @Prop({ type: String })
+  @Prop({ required: [true, 'Please enter a lastname'], type: String })
   readonly lastName: string;
 
   @Prop({

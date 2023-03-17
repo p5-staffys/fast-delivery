@@ -8,6 +8,7 @@ import {
   InitiateAuthCommand,
   GetUserCommand,
   GlobalSignOutCommand,
+  DeleteUserCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 
@@ -83,6 +84,12 @@ export class AuthService {
     return client.send(command);
   }
 
+  async remove(token: string) {
+    const input = { AccessToken: token };
+    const command = new DeleteUserCommand(input);
+    return client.send(command);
+  }
+
   findAll(): string {
     return `This action returns all auth`;
   }
@@ -93,9 +100,5 @@ export class AuthService {
 
   update(id: number): string {
     return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number): string {
-    return `This action removes a #${id} auth`;
   }
 }

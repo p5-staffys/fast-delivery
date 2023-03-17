@@ -17,10 +17,8 @@ export class CreateUserDto implements Partial<IUser> {
   @ApiProperty({ example: 'Macanudo' })
   lastName: string;
 
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
   @ApiProperty({ example: 'test@email.com' })
   email: string;
 }
-
-export class ResponseCreateUserDto extends CreateUserDto {}

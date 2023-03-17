@@ -4,13 +4,13 @@ import { RouterModule } from 'nest-router';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PackageModule } from './package/package.module';
+import { AdminModule } from './admin/admin.module';
 
 //Aca van las rutas con sus modulos
 export const routes: Routes = [
   {
     path: 'auth',
     module: AuthModule,
-    // can put childrenModules
   },
   {
     path: 'user',
@@ -19,6 +19,10 @@ export const routes: Routes = [
   {
     path: 'package',
     module: PackageModule,
+  },
+  {
+    path: 'admin',
+    module: AdminModule,
   },
 ];
 
