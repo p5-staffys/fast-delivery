@@ -8,7 +8,7 @@ import Link from "next/link";
 import axios from "axios";
 
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 import { Layout } from "alias/components/layout";
 import React from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -21,23 +21,25 @@ const Home = (): JSX.Element => {
 
   const router = useRouter();
 
-  const handleEmail = (e: any) => {
+  const handleEmail: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    setEmail(e.target.value);
+    const inputElement = e.currentTarget as HTMLInputElement;
+    setEmail(inputElement.value);
   };
 
-  const handlePassword = (e: any) => {
+  const handlePassword: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    setPassword(e.target.value);
+    const inputElement = e.currentTarget as HTMLInputElement;
+    setPassword(inputElement.value);
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     axios.post("http://localhost:8080/auth/signIn", { email, password }, { withCredentials: true }).then((response) => {
       if (response.data === "user logged in") router.push("/repartidor/jornada");
     });
   };
-  const handleVisibility = (e: any) => {
+  const handleVisibility = (e: React.FormEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     if (visibility) {
       setVisibility(false);
@@ -109,7 +111,7 @@ const Home = (): JSX.Element => {
   );
 };
 
-Home.getLayout = function getLayout(page: React.ReactElement) {
+Home.getLayout = function getLayout(page: React.ReactElement): React.ReactElement {
   return <Layout>{page}</Layout>;
 };
 

@@ -1,28 +1,79 @@
-name: Deployment Pipeline
+name: GCP deployment workflow
 
 on:
-  push:
-    branches: [develop, main]
   pull_request:
-    branches: [develop]
-    types: [opened, synchronize]
+    branches: [ main ]
+
+env:
+  PROJECT_ID: fast-delivery
+  IMAGE_NAME_BACKEND: fast-delivery-backend
+  IMAGE_NAME_FRONTEND: fast-delivery-frontend
+  REGION: us-central1
 
 jobs:
-  deploy:
-    runs-on: ubuntu-18.04
-
+  build-and-push-backend-image:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: Install dependencies
-        run: npm ci
-      - name: Lint back
-        run: npm run lint:back
-      - name: Lint front
-        run: npm run lint:front
-      - name: Test back E2E
-        run: npm run test:back
+    - name: Checkout source code
+      uses: actions/checkout@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    - name: Log in to Google Cloud
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ env.PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+    - name: Build and push Docker image for backend
+      env:
+        PROJECT_ID: ${{ env.PROJECT_ID }}
+        IMAGE_NAME_BACKEND: ${{ env.IMAGE_NAME_BACKEND }}
+      run: |
+        docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME_BACKEND }} ./backend
+        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME_BACKEND }}
+
+  build-and-deploy-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+    - name: Set up Node.js environment
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: '16.x'
+    - name: Install dependencies and build frontend
+      working-directory: ./frontend
+      run: |
+        npm install
+        npm run build
+    - name: Deploy frontend to App Engine
+      uses: google-github-actions/app-engine-deploy@v0.4.3
+      with:
+        project_id: ${{ env.PROJECT_ID }}
+        credentials: ${{ secrets.GCP_SA_KEY }}
+        deployables: |
+          - ./frontend/build/**
+          - '--args=-q --stop-previous-version'
+
+  deploy-backend-to-cloud-run:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    - name: Log in to Google Cloud
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ env.PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+    - name: Deploy backend to Cloud Run
+      env:
+        PROJECT_ID: ${{ env.PROJECT_ID }}
+        IMAGE_NAME_BACKEND: ${{ env.IMAGE_NAME_BACKEND }}
+      run: |
+        gcloud run deploy backend \
+          --project=${{ env.PROJECT_ID }} \
+          --image=gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME_BACKEND }} \
+          --platform=managed \
+          --region=${{ env.REGION }} \
+          --allow-unauthenticated

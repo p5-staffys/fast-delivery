@@ -7,7 +7,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import faridImg from "../../asset/faridImg.png";
 import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Pack, requestPacks } from "alias/utils/seed";
 import Card from "../../components/card";
 
@@ -87,7 +87,7 @@ const DeliveryDetail = (): JSX.Element => {
   );
 };
 
-DeliveryDetail.getLayout = function getLayout(page: React.ReactElement) {
+DeliveryDetail.getLayout = function getLayout(page: ReactElement): ReactElement {
   return <Layout>{page}</Layout>;
 };
 

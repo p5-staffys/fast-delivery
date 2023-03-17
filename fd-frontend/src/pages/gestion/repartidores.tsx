@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import { Layout } from "alias/components/layout";
 import Header from "alias/components/header";
 import BackBtn from "../../components/backBtn";
@@ -76,7 +76,7 @@ const Repartidores = (): JSX.Element => {
     </>
   );
 };
-Repartidores.getLayout = function getLayout(page: React.ReactElement) {
+Repartidores.getLayout = function getLayout(page: React.ReactElement): React.ReactElement {
   return <Layout>{page}</Layout>;
 };
 
