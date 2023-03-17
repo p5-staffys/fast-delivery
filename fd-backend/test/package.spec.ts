@@ -94,8 +94,6 @@ describe('Package Routes', () => {
       expect(response.status).toEqual(200);
       expect(response.body._id).toEqual(1);
     });
-
-    xit;
   });
 
   describe('Delivering a Package', () => {

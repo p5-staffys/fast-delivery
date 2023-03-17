@@ -86,13 +86,13 @@ export class AuthController {
     return this.authService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): string {
+  @Get(':_id')
+  findOne(@Param('_id') id: string): string {
     return this.authService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string): string {
+  update(@Param('_id') id: string): string {
     return this.authService.update(+id);
   }
 }

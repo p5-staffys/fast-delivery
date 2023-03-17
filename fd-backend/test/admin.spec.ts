@@ -13,7 +13,6 @@ describe('Admin Routes', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-    //cargar la base de datos
   });
 
   afterAll(async () => {
@@ -24,19 +23,21 @@ describe('Admin Routes', () => {
     const response = await request(app.getHttpServer()).get('/admin/users');
 
     expect(response.status).toEqual(200);
-    expect(response.body[0]);
+    expect(response.body[0]._id).toEqual(
+      '9c29aa04-b1e4-4b8d-9cc0-962ea9df70f4',
+    );
   });
 
   xit('Returns packages', async () => {
     const response = await request(app.getHttpServer()).get('/admin/pacakes');
 
     expect(response.status).toEqual(200);
-    expect(response.body[0]);
+    expect(response.body[0]._id).toEqual('640a6816d1093300fb683453');
   });
 
   xit('Returns amount of active users ', async () => {
     const response = await request(app.getHttpServer()).get(
-      '/admin/activeUsers',
+      '/admin/active_users',
     );
 
     expect(response.status).toEqual(200);
@@ -45,7 +46,7 @@ describe('Admin Routes', () => {
 
   xit('Returns amount of active packages', async () => {
     const response = await request(app.getHttpServer()).get(
-      '/admin/activePackages',
+      '/admin/active_packages',
     );
 
     expect(response.status).toEqual(200);
