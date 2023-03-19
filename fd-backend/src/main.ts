@@ -2,19 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 import { ValidationPipe } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
 import * as cookieParser from 'cookie-parser';
+import { setupSwagger } from './devModules/common/swagger/swagger';
+import { setupSecurity } from './config/security/security';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  app.enableCors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  });
+  setupSecurity(app);
 
   app.use(cookieParser());
 
@@ -26,16 +24,7 @@ async function bootstrap(): Promise<void> {
     }),
   );
 
-  const config = new DocumentBuilder()
-    .setTitle('FastDelivery')
-    .setDescription('Api created by Staffy')
-    .setVersion('1.0')
-    .addTag('API FastDelivery')
-    .addBearerAuth()
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  setupSwagger(app);
 
   await app.listen(configService.get<number>('PORT'));
 

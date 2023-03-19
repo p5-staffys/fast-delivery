@@ -17,21 +17,26 @@ class EnvironmentVariables {
   @IsString()
   MONGODB: string;
 
-  @IsNotEmpty()
-  @IsString()
-  USER_POOL_ID: string;
+  // @IsNotEmpty()
+  // @IsString()
+  // USER_POOL_ID: string;
+
+  // @IsNotEmpty()
+  // @IsString()
+  // CLIENT_ID: string;
+
+  // @IsNotEmpty()
+  // @IsString()
+  // ACCESS_KEY_ID: string;
+
+  // @IsNotEmpty()
+  // @IsString()
+  // SECRET_ACCESS_KEY: string;
 
   @IsNotEmpty()
-  @IsString()
-  CLIENT_ID: string;
-
-  @IsNotEmpty()
-  @IsString()
-  ACCESS_KEY_ID: string;
-
-  @IsNotEmpty()
-  @IsString()
-  SECRET_ACCESS_KEY: string;
+  @Min(1)
+  @IsNumber()
+  REQUEST_LIMIT: number;
 }
 
 export const validate = (

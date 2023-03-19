@@ -9,6 +9,8 @@
 # testing
 /coverage
 
+/mongo
+
 # next.js
 /.next/
 /out/

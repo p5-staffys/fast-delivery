@@ -1,7 +1,7 @@
 //Here Settings for db || NOT SCHEMA
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { environments } from 'src/enviroment/env.config';
+import { environments } from '../enviroment/env.config';
 
 export const mongoModuleSetting = MongooseModule.forRootAsync({
   imports: [ConfigModule],
