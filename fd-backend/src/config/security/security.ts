@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import { env } from 'process';
 
 export const setupSecurity = (app: INestApplication): void => {
   // Set security-related HTTP headers
@@ -8,7 +9,7 @@ export const setupSecurity = (app: INestApplication): void => {
 
   // Enable Cross-origin resource sharing for a list of domains
   app.enableCors({
-    origin: 'http://localhost:3000', // Probably can change with .env
+    origin: `http://localhost:${process.env.PORT}`, // Probably can change with .env
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
