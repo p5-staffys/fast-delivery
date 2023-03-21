@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { IUserRef, IClientRef } from '../../user/interface/user.interface';
+import { IUserRef } from '../../user/interface/user.interface';
+import { IClientRef } from 'src/modules/client/interface/client.interface';
 import {
   IPackage,
   IPackageRef,

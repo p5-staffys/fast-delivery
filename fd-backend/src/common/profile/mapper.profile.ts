@@ -9,6 +9,6 @@ export class Profile extends AutomapperProfile {
   }
   //this is for dto
   override get profile(): MappingProfile {
-    return (mapper) => {};
+    return (mapper) => mapper;
   }
 }

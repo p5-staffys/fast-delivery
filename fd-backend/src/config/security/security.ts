@@ -1,7 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import { env } from 'process';
 
 export const setupSecurity = (app: INestApplication): void => {
   // Set security-related HTTP headers

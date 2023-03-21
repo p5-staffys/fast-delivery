@@ -6,10 +6,8 @@ import {
   IsString,
 } from 'class-validator';
 import { IPackage, PackageStatus } from '../interface/package.interface';
-import {
-  IClientRef,
-  IUserRef,
-} from 'src/modules/user/interface/user.interface';
+import { IUserRef } from 'src/modules/user/interface/user.interface';
+import { IClientRef } from 'src/modules/client/interface/client.interface';
 
 export class CreatePackageDto implements Partial<IPackage> {
   @IsNotEmpty()

@@ -20,6 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@automapper/core": "^8.7.7",
+    "@automapper/nestjs": "^8.7.7",
     "@aws-sdk/client-cognito-identity-provider": "^3.282.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",

@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import {
   CreatePackageDto,
   ResponseCreatePackageDto,
-} from './dto/create.package.dto';
+} from './dto/create-package.dto';
 
 import { Package, PackageDocument } from './entities/package.entity';
 

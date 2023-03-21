@@ -1,7 +1,5 @@
-import {
-  IUserRef,
-  IClientRef,
-} from 'src/modules/user/interface/user.interface';
+import { IUserRef } from 'src/modules/user/interface/user.interface';
+import { IClientRef } from 'src/modules/client/interface/client.interface';
 
 export interface IPackage {
   _id: string;
