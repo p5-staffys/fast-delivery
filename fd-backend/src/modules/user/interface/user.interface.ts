@@ -21,9 +21,3 @@ export interface IUserRef {
   _id: string;
   fullName: string;
 }
-
-export interface IClientRef {
-  _id: string;
-  fullName: string;
-  address: string;
-}

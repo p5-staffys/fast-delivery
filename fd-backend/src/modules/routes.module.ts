@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PackageModule } from './package/package.module';
 import { AdminModule } from './admin/admin.module';
+import { ClientService } from './client/client.service';
 
 //Aca van las rutas con sus modulos
 export const routes: Routes = [
@@ -33,5 +34,6 @@ const getModulesFromRoutes = (routes: Routes) => {
 //Aca se importan los modulos exportados de modules, todos los que tengan endpoint correspondiente a la logica de negocio
 @Module({
   imports: [RouterModule.forRoutes(routes), ...getModulesFromRoutes(routes)],
+  providers: [ClientService],
 })
 export class RoutesModule {}

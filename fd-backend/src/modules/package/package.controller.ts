@@ -4,7 +4,7 @@ import { PackageService } from './package.service';
 import {
   CreatePackageDto,
   ResponseCreatePackageDto,
-} from './dto/create.package.dto';
+} from './dto/create-package.dto';
 
 @Controller()
 export class PackageController {
