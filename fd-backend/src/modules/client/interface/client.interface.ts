@@ -1,4 +1,4 @@
-import { IPackageRef } from 'src/modules/package/interface/package.interface';
+import { IPackageRef } from '../../package/interface/package.interface';
 
 export interface IClient {
   fullName: string;
