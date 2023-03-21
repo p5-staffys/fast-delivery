@@ -34,7 +34,12 @@ describe('Package Routes', () => {
       client: {
         _id: '1',
         fullName: 'client client',
-        address: 'calle falsa 123',
+        adress: {
+          city: 'lezama',
+          street: 'artigas',
+          number: '3',
+          reference: '',
+        },
       },
       deliveryDate: date,
       deliveredOn: date,
