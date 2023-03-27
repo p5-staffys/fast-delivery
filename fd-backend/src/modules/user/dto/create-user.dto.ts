@@ -2,10 +2,15 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { IUser } from '../interface/user.interface';
 
-export class CreateUserDto implements Partial<IUser> {
+export class CreateDBUserDto implements Partial<IUser> {
   @IsNotEmpty()
   @IsString()
   _id: string;
+
+  @IsNotEmpty()
+  @IsEmail()
+  @ApiProperty({ example: 'test@email.com' })
+  email: string;
 
   @IsNotEmpty()
   @IsString()
@@ -16,9 +21,10 @@ export class CreateUserDto implements Partial<IUser> {
   @IsString()
   @ApiProperty({ example: 'Macanudo' })
   lastName: string;
+}
 
+export class CreateUserDto extends CreateDBUserDto {
   @IsNotEmpty()
-  @IsEmail()
-  @ApiProperty({ example: 'test@email.com' })
-  email: string;
+  @IsString()
+  password: string;
 }

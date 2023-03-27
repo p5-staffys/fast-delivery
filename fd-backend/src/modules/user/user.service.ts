@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateDBUserDto } from './dto/create-user.dto';
 import { ReponseUserDto } from './dto/response-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { User, UserDocument } from './entities/user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -13,12 +14,12 @@ export class UserService {
     private readonly userModel: Model<UserDocument>,
   ) {}
 
-  async create(newUser: CreateUserDto): Promise<ReponseUserDto> {
+  async create(newUser: CreateDBUserDto): Promise<ReponseUserDto> {
     const uniqueId: User = await this.userModel.findById(newUser._id);
 
     if (uniqueId && uniqueId._id)
       throw new BadRequestException(
-        'Un usuario ya se encuentra registrado con ese _id',
+        'Un usuario ya se encuentra registrado con ese id',
       );
 
     const uniqueMail: User = await this.userModel.findOne({
@@ -34,6 +35,20 @@ export class UserService {
   }
 
   async remove(_id: string): Promise<ReponseUserDto> {
-    return await this.userModel.findByIdAndDelete(_id);
+    return this.userModel.findByIdAndDelete(_id);
+  }
+
+  async findById(_id: string): Promise<User> {
+    return this.userModel.findById(_id);
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    return this.userModel.findOne({ where: email });
+  }
+
+  async update(_id: string, updateData: UpdateUserDto): Promise<User> {
+    const user = await this.userModel.findById(_id);
+    user.update(updateData);
+    return user;
   }
 }
