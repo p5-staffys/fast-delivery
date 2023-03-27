@@ -35,6 +35,8 @@
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
     "express-rate-limit": "^6.7.0",
+    "firebase": "^9.18.0",
+    "firebase-admin": "^11.5.0",
     "helmet": "^6.0.1",
     "mongoose": "^6.10.1",
     "nest-router": "^1.0.9",
