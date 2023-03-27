@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 
-import { initializeApp } from 'firebase-admin/app';
+import { initializeApp, ServiceAccount } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 
-import * as admin from 'firebase-admin';
+import * as firebaseAdmin from 'firebase-admin';
 import firebaseAccountCredentials from '../../../fast-delivery-uma-firebase-adminsdk-y1cvp-422b7b2779.json';
 
-const serviceAccount = firebaseAccountCredentials as admin.ServiceAccount;
+const serviceAccount = firebaseAccountCredentials as ServiceAccount;
 
 const app = initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: firebaseAdmin.credential.cert(serviceAccount),
   projectId: 'fast-delivery-uma',
 });
 
