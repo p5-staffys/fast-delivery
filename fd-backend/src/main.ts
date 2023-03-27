@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import { setupSwagger } from './devModules/common/swagger/swagger';
 import { setupSecurity } from './config/security/security';
 
