@@ -4,12 +4,12 @@ import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 
 import * as admin from 'firebase-admin';
-import serviceAccount from '../../../fast-delivery-uma-firebase-adminsdk-y1cvp-422b7b2779.json';
+import firebaseAccountCredentials from '../../../fast-delivery-uma-firebase-adminsdk-y1cvp-422b7b2779.json';
 
-const serviceAccountJSON = JSON.stringify(serviceAccount);
+const serviceAccount = firebaseAccountCredentials as admin.ServiceAccount;
 
 const app = initializeApp({
-  credential: admin.credential.cert(serviceAccountJSON),
+  credential: admin.credential.cert(serviceAccount),
   projectId: 'fast-delivery-uma',
 });
 
