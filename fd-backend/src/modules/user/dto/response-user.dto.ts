@@ -37,4 +37,8 @@ export class ReponseUserDto implements Partial<IUser> {
   @IsNotEmpty()
   @IsArray()
   packages: IPackageRef[];
+
+  @IsNotEmpty()
+  @IsArray()
+  forms: JSON[];
 }
