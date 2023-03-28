@@ -29,8 +29,7 @@ export class UserController {
   @Post()
   async create(@Body() newUser: CreateUserDto): Promise<ReponseUserDto> {
     const { password, email, name, lastName } = newUser;
-    const userCredentials = await this.authService.create(email, password);
-    const _id = userCredentials.user.uid;
+    const _id = (await this.authService.create(email, password)).user.uid;
     return this.userService.create({ email, name, lastName, _id });
   }
 
@@ -48,18 +47,14 @@ export class UserController {
     @Body('password') password: string,
     @Res({ passthrough: true }) response: Response,
   ): Promise<ReponseUserDto | unknown> {
-    try {
-      const userCredentials = await this.authService.signIn(email, password);
-      const token = await userCredentials.user.getIdToken();
-      response.cookie('idToken', token);
-      const user = await this.userService.findByEmail(email);
-      return user;
-    } catch (err: unknown) {
-      return err;
-    }
+    const userCredentials = await this.authService.signIn(email, password);
+    const token = await userCredentials.user.getIdToken();
+    response.cookie('idToken', token);
+    const user = await this.userService.findByEmail(email);
+    return user;
   }
 
-  @Get('/signOut')
+  @Post('/signOut')
   async signOut(): Promise<string> {
     const user = await this.authService.getCurrentUser();
     await this.authService.signOut();
@@ -79,13 +74,16 @@ export class UserController {
     @Body() updateData: UpdateUserDto,
     @Req() request: Request,
   ): Promise<ReponseUserDto | unknown> {
-    try {
-      const idToken = request.cookies['idToken'];
-      const _id = (await this.adminAuthService.authenticate(idToken)).uid;
-      const user = await this.userService.update(_id, updateData);
-      return user;
-    } catch (err: unknown) {
-      return err;
-    }
+    const idToken = request.cookies['idToken'];
+    const _id = (await this.adminAuthService.authenticate(idToken)).uid;
+    const user = await this.userService.update(_id, updateData);
+    return user;
+  }
+
+  @Post('/addForm')
+  async addForm(@Body() form: JSON, @Req() request: Request): Promise<unknown> {
+    const idToken = request.cookies['idToken'];
+    const _id = (await this.adminAuthService.authenticate(idToken)).uid;
+    return this.userService.addForm(_id, form);
   }
 }

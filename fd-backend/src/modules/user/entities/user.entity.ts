@@ -25,13 +25,16 @@ export class User implements Partial<IUser> {
   readonly email: string;
 
   @Prop({ type: String, default: 'inactive' })
-  readonly status: UserStatus;
+  status: UserStatus;
 
   @Prop({ type: Number, default: 5 })
-  readonly rating: number;
+  rating: number;
 
-  @Prop({ type: Array, default: [] })
-  readonly packages: IPackageRef[];
+  @Prop({ type: [], default: [] })
+  packages: IPackageRef[];
+
+  @Prop({ type: [JSON], default: [] })
+  forms: JSON[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
