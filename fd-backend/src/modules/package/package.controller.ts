@@ -1,20 +1,44 @@
-import { Post, Body, Get, Param, Put, Delete } from '@nestjs/common';
+import { Post, Body, Get, Param, Put, Delete, Query } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { PackageService } from './package.service';
+import { CreatePackageDto } from './dto/create-package.dto';
 import {
-  CreatePackageDto,
-  ResponseCreatePackageDto,
-} from './dto/create-package.dto';
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+import { Package } from './entities/package.entity';
+import { QueryPaginationDto } from 'src/common/dto/pagination.dto';
+
+@ApiTags('Package')
 @Controller()
 export class PackageController {
   constructor(private readonly packageService: PackageService) {}
 
   @Post()
-  async create(
-    @Body() newPackage: CreatePackageDto,
-  ): Promise<ResponseCreatePackageDto> {
-    return this.packageService.create(newPackage);
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 201,
+    // type: dto de rta,
+  })
+  @ApiBody({ type: CreatePackageDto })
+  @ApiOperation({ description: 'Create package' })
+  async create(@Body() newPackage: CreatePackageDto): Promise<Package> {
+    return await this.packageService.create(newPackage);
+  }
+
+  //NEW QUE NO TENGA REPARTIDOR
+
+  @Get()
+  @ApiOperation({ description: 'Package for taken without any delivery ' })
+  async getPendingPackage(
+    @Query() queryPaginateDto: QueryPaginationDto,
+  ): Promise<Package[]> {
+    const { limit, page } = queryPaginateDto;
+    return await this.packageService.getPendingPackage(page, limit);
   }
 
   @Get(':_id')
