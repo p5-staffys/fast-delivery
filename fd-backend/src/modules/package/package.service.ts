@@ -1,24 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import {
-  CreatePackageDto,
-  ResponseCreatePackageDto,
-} from './dto/create-package.dto';
 
-import { Package, PackageDocument } from './entities/package.entity';
+import { CreatePackageDto } from './dto/create-package.dto';
+import { Package } from './entities/package.entity';
+
+import { PackageRepository } from './repository/package.repository';
 
 @Injectable()
 export class PackageService {
-  constructor(
-    @InjectModel(Package.name)
-    private readonly packageModel: Model<PackageDocument>,
-  ) {}
+  constructor(private readonly packageRepository: PackageRepository) {}
 
-  async create(
-    newPackage: CreatePackageDto,
-  ): Promise<ResponseCreatePackageDto> {
-    return await this.packageModel.create(newPackage);
+  async create(newPackage: CreatePackageDto): Promise<Package> {
+    return await this.packageRepository.createEntity(newPackage);
+  }
+
+  async getPendingPackage(page?: number, limit?: number): Promise<Package[]> {
+    return await this.packageRepository.pendingPackage(page, limit);
   }
 
   async getById(_id: string) {

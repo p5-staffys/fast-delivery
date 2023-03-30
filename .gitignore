@@ -5,6 +5,8 @@
 .pnp.js
 .eslintcache
 
+pnpm-lock.yaml
+
 # Logs
 logs
 *.log

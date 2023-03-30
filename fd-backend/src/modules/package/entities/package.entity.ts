@@ -1,39 +1,42 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { IUserRef } from '../../user/interface/user.interface';
-import { IClientRef } from 'src/modules/client/interface/client.interface';
-import {
-  IPackage,
-  IPackageRef,
-  PackageStatus,
-} from '../interface/package.interface';
+
+import { IPackageRef, PackageStatus } from '../interface/package.interface';
 
 import { UserRefSchema } from '../../user/entities/user.entity';
-
+import { ClientSchema } from 'src/common/modules/client/entities/client.entity';
+import { IClient } from 'src/common/modules/client/interface/client.interface';
+import { AddressDTO } from 'src/common/modules/address/dto/Address.dto';
 export type PackageDocument = HydratedDocument<Package>;
 
-@Schema()
-export class Package implements Partial<IPackage> {
+@Schema({ timestamps: true, versionKey: false })
+export class Package {
   @Prop({ required: true, type: Number })
   readonly weight: number;
 
-  @Prop({ required: true, type: UserRefSchema })
-  readonly createdBy: IUserRef;
+  //Segun figma siempre lo crea el backoffice, verificar si es necesario
 
-  @Prop({ default: {}, type: UserRefSchema })
-  readonly deliveredBy: IUserRef;
+  // @Prop({ required: true, type: UserRefSchema })
+  // readonly createdBy: IUserRef;
 
-  @Prop({ required: true, type: Object })
-  readonly client: IClientRef;
+  @Prop({ default: null, type: UserRefSchema })
+  readonly deliveredBy: IUserRef | null;
+
+  @Prop({ required: true, type: ClientSchema })
+  readonly client: IClient;
 
   @Prop({ required: true, type: Date })
   readonly deliveryDate: Date;
 
-  @Prop({ type: Date })
-  readonly deliveredOn: Date;
+  @Prop({ type: Date, default: null })
+  readonly deliveredOn: Date | null;
 
-  @Prop({ type: String, default: PackageStatus.Pending })
+  @Prop({ type: String, default: PackageStatus.New })
   readonly status: PackageStatus;
+
+  @Prop({ type: Number, default: 1 })
+  readonly quantity: number;
 }
 
 export const PackageSchema = SchemaFactory.createForClass(Package);
@@ -43,14 +46,17 @@ export class PackageRef implements IPackageRef {
   @Prop({ required: true, type: String })
   _id: string;
 
-  @Prop({ required: true, type: String })
-  adress: string;
+  @Prop({ required: true, type: AddressDTO })
+  address: AddressDTO;
 
   @Prop({ required: true, type: String })
   deliveryDate: Date;
 
-  @Prop({ type: String, default: PackageStatus.Pending })
+  @Prop({ type: String, default: PackageStatus.New })
   readonly status: PackageStatus;
+
+  @Prop({ type: Number, default: 1 })
+  readonly quantity: number;
 }
 
 export const PackageRefSchema = SchemaFactory.createForClass(PackageRef);

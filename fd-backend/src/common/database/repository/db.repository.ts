@@ -1,3 +1,4 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
 import {
   Document,
   FilterQuery,
@@ -6,6 +7,7 @@ import {
   UpdateQuery,
   Model,
 } from 'mongoose';
+import { EntityNotFound } from 'src/common/error-handlers/exceptions';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
@@ -28,6 +30,7 @@ export abstract class EntityRepository<T extends Document> {
       .limit(limitPages)
       .exec();
 
+    if (!data.length) throw new HttpException('Empty', HttpStatus.NO_CONTENT);
     return data;
   };
 
@@ -39,6 +42,8 @@ export abstract class EntityRepository<T extends Document> {
       .findOne(filter, { __v: 0, ...projection })
       .exec();
 
+    if (!data) throw new EntityNotFound(this.entityModel.modelName);
+
     return data;
   };
 
@@ -46,9 +51,12 @@ export abstract class EntityRepository<T extends Document> {
     filter: FilterQuery<T>,
     projection?: Record<string, unknown>,
   ): Promise<HydratedDocument<T>> => {
-    return await this.entityModel
+    const data = await this.entityModel
       .findOne(filter, { __v: 0, ...projection })
       .exec();
+
+    if (!data) throw new EntityNotFound(this.entityModel.modelName);
+    return data;
   };
 
   findAndCountOrFail = async (filter: FilterQuery<T>): Promise<number> => {
@@ -58,6 +66,22 @@ export abstract class EntityRepository<T extends Document> {
   createEntity = async (createEntityData: unknown): Promise<T> => {
     const entity = new this.entityModel(createEntityData);
     return await entity.save();
+  };
+
+  findOrCreate = async (
+    filter: FilterQuery<T>,
+    projection?: Record<string, unknown>,
+  ): Promise<HydratedDocument<T>> => {
+    const data = await this.entityModel
+      .findOne(filter, { __v: 0, ...projection })
+      .exec();
+
+    if (!data) {
+      const entity = new this.entityModel(filter);
+
+      return await entity.save();
+    }
+    return data;
   };
 
   updateEntity = async (
@@ -72,6 +96,7 @@ export abstract class EntityRepository<T extends Document> {
       })
       .exec();
 
+    if (!data) throw new EntityNotFound(this.entityModel.modelName);
     return data;
   };
 }

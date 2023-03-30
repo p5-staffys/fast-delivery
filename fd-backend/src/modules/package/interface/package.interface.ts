@@ -1,25 +1,28 @@
+import { AddressDTO } from 'src/common/modules/address/dto/Address.dto';
+import { IClient } from 'src/common/modules/client/interface/client.interface';
 import { IUserRef } from 'src/modules/user/interface/user.interface';
-import { IClientRef } from 'src/modules/client/interface/client.interface';
 
 export interface IPackage {
   _id: string;
   weight: number;
-  createdBy: IUserRef;
   deliveredBy: IUserRef;
-  client: IClientRef;
+  client: IClient;
   deliveryDate: Date;
   deliveredOn: Date;
   status: PackageStatus;
+  quantity: number;
 }
 
 export interface IPackageRef {
   _id: string;
-  adress: string;
+  address: AddressDTO;
   deliveryDate: Date;
   status: PackageStatus;
+  quantity: number;
 }
 
 export enum PackageStatus {
+  New = 'new',
   Pending = 'pending',
   Delivering = 'delivering',
   Delivered = 'delivered',
