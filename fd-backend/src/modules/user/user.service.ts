@@ -51,4 +51,11 @@ export class UserService {
     user.update(updateData);
     return user;
   }
+
+  async addForm(_id: string, form: JSON) {
+    const user = await this.userModel.findById(_id);
+    user.forms.push(form);
+    const updatedUser = await user.save();
+    return updatedUser;
+  }
 }

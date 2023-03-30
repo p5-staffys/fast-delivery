@@ -9,6 +9,7 @@ export interface IUser {
   status: UserStatus;
   rating: number;
   packages: IPackageRef[];
+  forms: JSON[];
   __v: number;
 }
 
