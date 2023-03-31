@@ -2,12 +2,15 @@ import { Controller, Get, Delete } from '@nestjs/common';
 import { SeedUsersService } from './seed-users.service';
 import { SeedPackagesService } from './seed-packages.service';
 
+
+@ApiTags('Seed')
 @Controller()
 export class SeedController {
   constructor(
     private readonly seedUsersService: SeedUsersService,
     private readonly seedPackagesService: SeedPackagesService,
   ) {}
+
 
   @Get('/')
   async seed() {
@@ -52,5 +55,4 @@ export class SeedController {
   @Get('/packages')
   async seedPackages() {
     return this.seedPackagesService.createPackages();
-  }
 }
