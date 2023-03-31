@@ -17,7 +17,9 @@ import { AdminAuthService } from '../auth/admin-auth.service';
 import { ReponseUserDto } from './dto/response-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Controller()
 export class UserController {
   constructor(

@@ -6,7 +6,9 @@ import { Request } from 'express';
 
 import { User } from 'firebase/auth';
 import { DecodedIdToken } from 'firebase-admin/auth';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller()
 export class AuthController {
   constructor(
