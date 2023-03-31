@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-import { IUser, IUserRef, UserStatus } from '../interface/user.interface';
+import { IAdmin, IAdminRef, AdminType } from '../interface/admin.interface';
 import { IPackageRef } from '../../package/interface/package.interface';
 
-export type UserDocument = HydratedDocument<User>;
+export type AdminDocument = HydratedDocument<Admin>;
 
 @Schema()
-export class User implements Partial<IUser> {
+export class Admin implements Partial<IAdmin> {
   @Prop({ required: true, type: String, unique: true })
   readonly _id: string;
 
@@ -24,23 +24,17 @@ export class User implements Partial<IUser> {
   })
   readonly email: string;
 
-  @Prop({ type: String, default: 'inactive' })
-  status: UserStatus;
+  @Prop({ type: String, default: 'admin' })
+  type: AdminType;
 
-  @Prop({ type: Number, default: 5 })
-  rating: number;
-
-  @Prop({ type: Array })
+  @Prop({ type: [], default: [] })
   packages: IPackageRef[];
-
-  @Prop({ type: Array })
-  forms: JSON[];
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const AdminSchema = SchemaFactory.createForClass(Admin);
 
 @Schema()
-export class UserRef implements IUserRef {
+export class AdminRef implements IAdminRef {
   @Prop({ required: true, type: String, unique: false })
   _id: string;
 
@@ -48,4 +42,4 @@ export class UserRef implements IUserRef {
   fullName: string;
 }
 
-export const UserRefSchema = SchemaFactory.createForClass(UserRef);
+export const AdminefSchema = SchemaFactory.createForClass(AdminRef);
