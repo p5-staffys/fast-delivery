@@ -43,7 +43,7 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.userModel.findOne({ where: email });
+    return this.userModel.findOne({ where: { email } });
   }
 
   async update(_id: string, updateData: UpdateUserDto): Promise<User> {

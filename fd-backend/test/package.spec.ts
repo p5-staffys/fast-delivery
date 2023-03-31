@@ -30,15 +30,10 @@ describe('Package Routes', () => {
     newPack = {
       _id: '1',
       weight: 20,
-      createdBy: { _id: '1', fullName: 'admin admin' },
       client: {
-        _id: '1',
         fullName: 'client client',
-        adress: {
-          city: 'lezama',
+        address: {
           street: 'artigas',
-          number: '3',
-          reference: '',
         },
       },
       deliveryDate: date,

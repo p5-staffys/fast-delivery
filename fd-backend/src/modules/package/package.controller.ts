@@ -11,7 +11,7 @@ import {
 } from '@nestjs/swagger';
 
 import { Package } from './entities/package.entity';
-import { QueryPaginationDto } from 'src/common/dto/pagination.dto';
+import { QueryPaginationDto } from '../../common/dto/pagination.dto';
 
 @ApiTags('Package')
 @Controller()

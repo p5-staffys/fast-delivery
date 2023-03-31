@@ -1,6 +1,6 @@
-import { AddressDTO } from 'src/common/modules/address/dto/Address.dto';
-import { IClient } from 'src/common/modules/client/interface/client.interface';
-import { IUserRef } from 'src/modules/user/interface/user.interface';
+import { AddressDTO } from '../../../common/modules/address/dto/Address.dto';
+import { IClient } from '../../../common/modules/client/interface/client.interface';
+import { IUserRef } from '../../../modules/user/interface/user.interface';
 
 export interface IPackage {
   _id: string;

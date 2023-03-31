@@ -7,7 +7,7 @@ import {
   UpdateQuery,
   Model,
 } from 'mongoose';
-import { EntityNotFound } from 'src/common/error-handlers/exceptions';
+import { EntityNotFound } from '../../../common/error-handlers/exceptions';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}

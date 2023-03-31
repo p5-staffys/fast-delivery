@@ -5,9 +5,10 @@ import { IUserRef } from '../../user/interface/user.interface';
 import { IPackageRef, PackageStatus } from '../interface/package.interface';
 
 import { UserRefSchema } from '../../user/entities/user.entity';
-import { ClientSchema } from 'src/common/modules/client/entities/client.entity';
-import { IClient } from 'src/common/modules/client/interface/client.interface';
-import { AddressDTO } from 'src/common/modules/address/dto/Address.dto';
+import { ClientSchema } from '../../../common/modules/client/entities/client.entity';
+import { IClient } from '../../../common/modules/client/interface/client.interface';
+import { AddressDTO } from '../../../common/modules/address/dto/Address.dto';
+
 export type PackageDocument = HydratedDocument<Package>;
 
 @Schema({ timestamps: true, versionKey: false })
