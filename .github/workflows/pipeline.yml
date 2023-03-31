@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 env:
-  PROJECT_ID: fast-delivery
+  PROJECT_ID: fast-delivery-uma
   IMAGE_NAME_BACKEND: fast-delivery-backend
   IMAGE_NAME_FRONTEND: fast-delivery-frontend
   REGION: us-central1
@@ -15,11 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout source code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
     - name: Log in to Google Cloud
-      uses: google-github-actions/setup-gcloud@master
+      uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ env.PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
@@ -31,38 +31,15 @@ jobs:
         docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME_BACKEND }} ./backend
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME_BACKEND }}
 
-  build-and-deploy-frontend:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout source code
-      uses: actions/checkout@v2
-    - name: Set up Node.js environment
-      uses: actions/setup-node@v2-beta
-      with:
-        node-version: '16.x'
-    - name: Install dependencies and build frontend
-      working-directory: ./frontend
-      run: |
-        npm install
-        npm run build
-    - name: Deploy frontend to App Engine
-      uses: google-github-actions/app-engine-deploy@v0.4.3
-      with:
-        project_id: ${{ env.PROJECT_ID }}
-        credentials: ${{ secrets.GCP_SA_KEY }}
-        deployables: |
-          - ./frontend/build/**
-          - '--args=-q --stop-previous-version'
-
   deploy-backend-to-cloud-run:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout source code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
     - name: Log in to Google Cloud
-      uses: google-github-actions/setup-gcloud@master
+      uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ env.PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}

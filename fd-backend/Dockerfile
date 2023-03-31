@@ -18,4 +18,4 @@ EXPOSE 8080
 ENV PORT=8080
 
 # Running the application
-CMD ["npm", "start"]
+CMD ["npm", "start", "--", "--host", "0.0.0.0"]
