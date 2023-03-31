@@ -1,21 +1,20 @@
+"use client"
 import { Box, Container } from "@mui/system";
-import Header from "alias/components/header";
-import { Layout } from "alias/components/layout";
 import Image from "next/image";
-import logoAdmin from "../../asset/ImgAdmin.png";
-import logo1 from "../../asset/logito1.png";
-import logo2 from "../../asset/logito2.jpg";
+import logoAdmin from "../../../asset/ImgAdmin.png"
+import logo1 from "../../../asset/logito1.png";
+import logo2 from "../../../asset/logito2.jpg";
 import React from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Progress from "alias/components/progress";
-import DayList from "alias/components/carousel";
 import Link from "next/link";
+import DayList from "./components/carousel";
+import Progress from "./components/progress";
 
 const Agenda = (): JSX.Element => {
   return (
     <>
-      <Header />
+  
       <Container>
         <Box sx={{ mt: 2, display: "flex", flexDirection: "inherit" }}>
           <Image src={logoAdmin} alt="logo" width={53} height={53} />
@@ -49,7 +48,7 @@ const Agenda = (): JSX.Element => {
                 </Box>
               </AccordionDetails>
             </Box>
-            <Link href={"/gestion/repartidores"}>
+            <Link href="/management/scheduleManagement/manageDeliveryMen">
               <Button sx={{ my: 2 }} variant="contained" fullWidth size="small">
                 Ver repartidores
               </Button>
@@ -68,7 +67,7 @@ const Agenda = (): JSX.Element => {
                 </Box>
               </AccordionDetails>
             </Box>
-            <Link href={"/gestion/managePackage"}>
+            <Link href={"/management/scheduleManagement/managePackages"}>
               <Button sx={{ my: 2 }} variant="contained" fullWidth size="small">
                 Ver paquetes
               </Button>
@@ -80,8 +79,5 @@ const Agenda = (): JSX.Element => {
   );
 };
 
-Agenda.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>;
-};
 
 export default Agenda;

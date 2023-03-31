@@ -1,14 +1,12 @@
+"use client"
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
 import { IconButton } from "@mui/material";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import BackBtn from "./components/backBtn";
 import Link from "next/link";
-import { Layout } from "alias/components/layout";
-import Header from "alias/components/header";
-import BackBtn from "../../components/backBtn";
 
 const Paquetes = (): JSX.Element => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
@@ -50,7 +48,7 @@ const Paquetes = (): JSX.Element => {
 
   return (
     <div>
-      <Header />
+      
       <Box
         sx={{ maxWidth: "100vw", height: "12vh", ml: 2, mt: 2 }}
         display="flex"
@@ -58,7 +56,7 @@ const Paquetes = (): JSX.Element => {
         alignItems="start"
         flexDirection="column"
       >
-        <BackBtn back="/repartidor/jornada" />
+        <BackBtn back="deliveryMan/workingDay" />
         <h2>Obtener paquetes</h2>
         <Typography sx={{ fontSize: "0.9em" }}>¿Cuántos paquetes más vas a repartir hoy?</Typography>
       </Box>
@@ -202,15 +200,14 @@ const Paquetes = (): JSX.Element => {
           </Box>
         </Box>
       </Box>
+      <Link href="/deliveryMan/workingDay/getPackages/declaration">
       <Button variant="contained" sx={{ m: "0 2.5vw", mt: 5, width: "95vw" }}>
         Iniciar jornada
       </Button>
+      </Link>
     </div>
   );
 };
 
-Paquetes.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>;
-};
 
 export default Paquetes;

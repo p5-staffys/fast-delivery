@@ -1,8 +1,7 @@
+"use client";
 import React, { useState } from "react";
-import BackBtn from "../../components/backBtn";
-import Header from "alias/components/header";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
-import { Layout } from "alias/components/layout";
+import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/backBtn";
 
 const addPackage = (): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(0);
@@ -20,9 +19,12 @@ const addPackage = (): JSX.Element => {
   return (
     <>
       <Box>
-        <Header />
-        <BackBtn back="/gestion/managePackage" />
-        <Typography sx={{ ml: "20px", mb: "0.5vh", fontSize: "1em", fontWeight: 800 }}>Argregar paquetes</Typography>
+        <BackBtn back="management/scheduleManagement" />
+        <Typography
+          sx={{ ml: "20px", mb: "0.5vh", fontSize: "1em", fontWeight: 800 }}
+        >
+          Argregar paquetes
+        </Typography>
       </Box>
       <Box className="addPackageData">
         <TextField
@@ -62,7 +64,11 @@ const addPackage = (): JSX.Element => {
           }}
         />
       </Box>
-      <Typography sx={{ ml: "20px", mb: "0.5vh", fontSize: "0.8em", color: "#f5bd09" }}>Cantidad</Typography>
+      <Typography
+        sx={{ ml: "20px", mb: "0.5vh", fontSize: "0.8em", color: "#f5bd09" }}
+      >
+        Cantidad
+      </Typography>
       <Box className="quantity">
         <IconButton onClick={handleSubtract}>-</IconButton>
         <Typography sx={{ m: "0 12px" }}>{quantity}</Typography>
@@ -73,9 +79,6 @@ const addPackage = (): JSX.Element => {
       </Button>
     </>
   );
-};
-addPackage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>;
 };
 
 export default addPackage;

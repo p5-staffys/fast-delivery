@@ -1,16 +1,15 @@
+"use client"
 import Image from "next/image";
 import logo from "../../asset/logoMoto.png";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Link from "next/link";
-import { logInAdmin } from "alias/utils/seed";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Layout } from "alias/components/layout";
-
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { logInAdmin } from "../../utils/seed";
 
 const Home = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
@@ -82,20 +81,19 @@ const Home = (): JSX.Element => {
             style={{ position: "absolute", right: 20, top: 380, backgroundColor: "transparent", border: "none" }}
             onClick={handleVisibility}
           >
-            {visibility ? <VisibilityIcon sx={{ color: "grey" }} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
+            {visibility ? <VisibilityIcon sx={{ color: "grey"}} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
           </button>
-
-          <Button variant="contained" fullWidth type="submit">
-            <strong>Ingresar</strong>{" "}
+          <Link href="/management/scheduleManagement">
+          <Button sx={{mt:3}} variant="contained" fullWidth type="submit">
+            <strong>Ingresar</strong>
           </Button>
+          </Link>
+          
         </Box>
       </main>
     </>
   );
 };
 
-Home.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>;
-};
 
 export default Home;

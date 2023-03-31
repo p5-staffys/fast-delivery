@@ -1,15 +1,14 @@
-import { Layout } from "alias/components/layout";
+"use client"
 import React, { useEffect, useState } from "react";
-import Header from "alias/components/header";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Container } from "@mui/system";
 import { Accordion, AccordionDetails, AccordionSummary, Box, IconButton, Typography } from "@mui/material";
 import Link from "next/link";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { Pack, requestPacks } from "alias/utils/seed";
-import CardManagePackage from "alias/components/cardManagePackage";
-import AddIcon from "../../asset/AddIcon.png";
+import AddIcon from "../../../../asset/AddIcon.png";
 import Image from "next/image";
+import { Pack, requestPacks } from "../../../../utils/seed";
+import CardManagePackage from "../components/cardManagePackage";
 
 const ManagePackage = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<Pack[]>([]);
@@ -21,9 +20,9 @@ const ManagePackage = (): JSX.Element => {
   }, []);
   return (
     <>
-      <Header />
+    
       <Container fixed>
-        <Link href={`/gestion/agenda`}>
+        <Link href={`management/scheduleManagement`}>
           <IconButton aria-label="Example" sx={{ my: 2 }}>
             <ArrowBackIosIcon sx={{ color: "black" }} />
           </IconButton>
@@ -45,7 +44,7 @@ const ManagePackage = (): JSX.Element => {
             ))}
           </Accordion>
         </Box>
-        <Link href={`/gestion/addPackage`}>
+        <Link href={`/management/scheduleManagement/addPackage`}>
           <Box sx={{ display: "flex", justifyContent: "end", mt: 3 }}>
             <Image alt="trash" src={AddIcon} />
           </Box>
@@ -55,8 +54,5 @@ const ManagePackage = (): JSX.Element => {
   );
 };
 
-ManagePackage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>;
-};
 
 export default ManagePackage;

@@ -1,25 +1,20 @@
+"use client"
 import Image from "next/image";
 import logo from "../../asset/logoMoto.png";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Link from "next/link";
-
-import axios from "axios";
-
-import { useRouter } from "next/router";
 import { useState } from "react";
-import { Layout } from "alias/components/layout";
 import React from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-const Home = (): JSX.Element => {
+const DeliveryMan = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
 
-  const router = useRouter();
 
   const handleEmail = (e: any) => {
     e.preventDefault();
@@ -32,10 +27,10 @@ const Home = (): JSX.Element => {
   };
 
   const handleSubmit = (e: any) => {
-    e.preventDefault();
-    axios.post("http://localhost:8080/auth/signIn", { email, password }, { withCredentials: true }).then((response) => {
-      if (response.data === "user logged in") router.push("/repartidor/jornada");
-    });
+     e.preventDefault();
+    // axios.post("http://localhost:8080/auth/signIn", { email, password }, { withCredentials: true }).then((response) => {
+    //   if (response.data === "user logged in") router.push("/repartidor/jornada");
+    // });
   };
   const handleVisibility = (e: any) => {
     e.preventDefault();
@@ -91,10 +86,11 @@ const Home = (): JSX.Element => {
           >
             {visibility ? <VisibilityIcon sx={{ color: "grey" }} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
           </button>
-
-          <Button variant="contained" fullWidth type="submit">
+          <Link href="/deliveryMan/workingDay">
+          <Button variant="contained" fullWidth type="submit" sx={{ mt:5}}>
             <strong>Ingresar</strong>{" "}
           </Button>
+          </Link>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
           <Link href="#" className="linkLogin">
@@ -109,8 +105,5 @@ const Home = (): JSX.Element => {
   );
 };
 
-Home.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>;
-};
 
-export default Home;
+export default DeliveryMan;

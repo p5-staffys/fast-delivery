@@ -1,11 +1,13 @@
+"use client"
+
 import React from "react";
 import CardMedia from "@mui/material/CardMedia";
 import { Box, IconButton, Typography } from "@mui/material";
-import { Pack } from "alias/utils/seed";
-import imagePack from "../asset/pack.svg";
-import trash from "../asset/redTrash.svg";
+import imagePack from "../../../../asset/pack.svg";
+import trash from "../../../../asset/redTrash.svg";
 import Link from "next/link";
 import Image from "next/image";
+import { Pack } from "../../../../utils/seed";
 
 interface Props {
   paquete: Pack;
@@ -19,7 +21,7 @@ const CardManagePackage: React.FC<Props> = ({ paquete }) => {
     <Box sx={{ maxWidth:"auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0",  }} >
 
         
-      <Link href={`/repartidor/paquete/${paquete._id}`}>
+      <Link href={`/deliveryMan/workingDay/package`}>
       <CardMedia
         sx={{ height: "70px", width: "70px", flexShrink: 0 }}
         image={imagePack.src}

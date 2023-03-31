@@ -1,4 +1,5 @@
-import { useRouter } from "next/router";
+"use client"
+
 import {
   Accordion,
   AccordionSummary,
@@ -12,16 +13,15 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Header from "alias/components/header";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import mapa from "../../../asset/mapa.png";
+import mapa from "../../../../asset/mapa.png";
 import { useEffect, useState } from "react";
-import { Pack, requestPacks } from "alias/utils/seed";
-
 import Link from "next/link";
+import { Pack, requestPacks } from "../../../../utils/seed";
+
 const idPack = () => {
-  const { query } = useRouter();
-  const { idPack } = query;
+ 
+
 
   const [paquetes, setPaquetes] = useState<Pack[]>([]);
 
@@ -34,9 +34,9 @@ const idPack = () => {
   
   return (
     <>
-      <Header />
+     
       <Container>
-      <Link href={`/repartidor/jornada`}>
+      <Link href={`deliveryMan/workingDay`}>
         <IconButton aria-label="Example" sx={{ my: 2 }}>
           <ArrowBackIosIcon sx={{ color: "black" }} />
         </IconButton>
@@ -73,7 +73,7 @@ const idPack = () => {
             <CardActions
               sx={{ flexDirection: "column-reverse", alignItems: "flex-end" }}
             >
-              <Link href={`/repartidor/jornada`}>
+              <Link href={`deliveryMan/workingDay`}>
               <Button sx={{}} variant="contained" size="small">
                 Finalizar
               </Button>

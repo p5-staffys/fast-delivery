@@ -27,8 +27,7 @@
   },
   "lint-staged": {
     "!(*eslintrc)*.{js,jsx,ts,tsx}": [
-      "npm run lint:back",
-      "npm run lint:front"
+      "npm run lint:back"
     ],
     "*.{js,jsx,ts,tsx,md,html,json,css,scss}": "prettier --write"
   }

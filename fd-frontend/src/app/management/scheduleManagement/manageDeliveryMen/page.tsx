@@ -1,25 +1,24 @@
+"use client"
 import React from "react";
-import { Avatar, Box } from "@mui/material";
-import { Layout } from "alias/components/layout";
-import Header from "alias/components/header";
-import BackBtn from "../../components/backBtn";
+import { Box } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Progress from "../../components/progress";
 import Image from "next/image";
-import Logo1 from "../../asset/Ellipse-9.png";
-import Logo2 from "../../asset/Ellipse-92.png";
-import Logo3 from "../../asset/Ellipse93.png";
+import Logo1 from "../../../../asset/Ellipse-9.png";
+import Logo2 from "../../../../asset/Ellipse-92.png";
+import Logo3 from "../../../../asset/Ellipse93.png";
 import Link from "next/link";
+import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/backBtn";
+import Progress from "../components/progress";
 
 const Repartidores = (): JSX.Element => {
   return (
     <>
-      <Header />
-      <BackBtn back="/gestion/agenda" />
+    
+      <BackBtn back="management/scheduleManagement" />
       <Box sx={{ width: "90vw", m: "auto" }}>
         <Accordion defaultExpanded={true}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
@@ -27,7 +26,7 @@ const Repartidores = (): JSX.Element => {
               <strong>Repartidores</strong>
             </Typography>
           </AccordionSummary>
-          <Link href={"/gestion/deliveryDetail"}>
+          <Link href={"management/scheduleManagement/deliveryDetail"}>
             <AccordionDetails>
               <Box display="flex" justifyContent="space-between" sx={{ m: "0 10px" }}>
                 <Box>
@@ -76,8 +75,6 @@ const Repartidores = (): JSX.Element => {
     </>
   );
 };
-Repartidores.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>;
-};
+
 
 export default Repartidores;

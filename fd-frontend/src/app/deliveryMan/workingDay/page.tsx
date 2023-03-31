@@ -1,23 +1,21 @@
+"use client"
 import Button from "@mui/material/Button";
 import { Container, Accordion, AccordionSummary, CardContent } from "@mui/material";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Card from "../../components/card";
-import { Layout } from "alias/components/layout";
-import Header from "alias/components/header";
 import { useEffect, useState } from "react";
-import { Pack, requestPacks } from "alias/utils/seed";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import axios from "axios";
+import { Pack, requestPacks } from "../../../utils/seed";
+import Card from "./components/card";
 
-const Jornada = (): JSX.Element => {
+const WorkingDay = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<Pack[]>([]);
   const [paquetesPending, setPaquetesPending] = useState<Pack[]>([]);
   const [user, setUser] = useState<{ Name: string; Value: string }[]>([]);
 
-  const router = useRouter();
+
 
   useEffect(() => {
     requestPacks(5).then((packs) => {
@@ -29,21 +27,20 @@ const Jornada = (): JSX.Element => {
     });
   }, []);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/auth/current", { withCredentials: true })
-      .then((response) => {
-        setUser(response.data.UserAttributes);
-      })
-      .catch(() => router.push("/"));
-  }, []);
+//   useEffect(() => {
+//     axios
+//       .get("http://localhost:8080/auth/current", { withCredentials: true })
+//       .then((response) => {
+//         setUser(response.data.UserAttributes);
+//       })
+//       .catch((error) => console.log(error));
+//   }, []);
 
   return (
     <>
-      <Header />
       <Container fixed>
         {user.length ? <Typography variant="h6">{user[2].Value} says "Hello World"</Typography> : null}
-        <Link href={"/repartidor/paquetes"}>
+        <Link href="/deliveryMan/workingDay/getPackages">
           <Button sx={{ marginY: "15px" }} variant="contained" fullWidth={true}>
             Obtener paquetes
           </Button>
@@ -81,8 +78,5 @@ const Jornada = (): JSX.Element => {
   );
 };
 
-Jornada.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>;
-};
 
-export default Jornada;
+export default WorkingDay;

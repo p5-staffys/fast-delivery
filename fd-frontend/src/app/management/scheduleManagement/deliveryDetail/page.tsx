@@ -1,15 +1,16 @@
-import { Layout } from "alias/components/layout";
-import Header from "alias/components/header";
+"use client"
 import { Container } from "@mui/system";
 import { Accordion, AccordionDetails, AccordionSummary, Box, IconButton, Switch, Typography } from "@mui/material";
 import Link from "next/link";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import faridImg from "../../asset/faridImg.png";
+import faridImg from "../../../../asset/faridImg.png";
 import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
-import { Pack, requestPacks } from "alias/utils/seed";
-import Card from "../../components/card";
+
+
+import { Pack, requestPacks } from "../../../../utils/seed";
+import Card from "../../../deliveryMan/workingDay/components/card";
 
 const DeliveryDetail = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<Pack[]>([]);
@@ -22,7 +23,7 @@ const DeliveryDetail = (): JSX.Element => {
 
   return (
     <>
-      <Header />
+     
       <Container fixed>
         <Link href={`/gestion/agenda`}>
           <IconButton aria-label="Example" sx={{ my: 1 }}>
@@ -87,8 +88,5 @@ const DeliveryDetail = (): JSX.Element => {
   );
 };
 
-DeliveryDetail.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>;
-};
 
 export default DeliveryDetail;
