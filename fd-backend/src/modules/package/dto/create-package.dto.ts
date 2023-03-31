@@ -9,7 +9,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
 import { AutoMap } from '@automapper/classes';
-import { ClientDto } from 'src/common/modules/client/dto/client.dto';
+import { ClientDto } from '../../../common/modules/client/dto/client.dto';
 
 export class CreatePackageDto {
   @AutoMap()
