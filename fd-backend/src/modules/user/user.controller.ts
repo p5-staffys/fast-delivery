@@ -8,6 +8,7 @@ import {
   Body,
   Req,
   Res,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -17,8 +18,10 @@ import { AdminAuthService } from '../auth/admin-auth.service';
 import { ReponseUserDto } from './dto/response-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { CurrentUserInterceptor } from '../auth/current-user.interceptor';
+import { CurrentUserRequest } from '../auth/current-user.interceptor';
 
+import { ApiTags } from '@nestjs/swagger';
 @ApiTags('User')
 @Controller()
 export class UserController {
@@ -63,12 +66,13 @@ export class UserController {
     return `El usuario ${user.uid} se deslogueó`;
   }
 
+  @UseInterceptors(CurrentUserInterceptor)
   @Get()
-  async getCurrent(@Req() request: Request): Promise<ReponseUserDto> {
-    const idToken = request.cookies['idToken'];
-    const decodedIdToken = await this.adminAuthService.authenticate(idToken);
-    const user = await this.userService.findById(decodedIdToken.uid);
-    return user;
+  async getCurrent(
+    @Req() request: CurrentUserRequest,
+  ): Promise<ReponseUserDto> {
+    const currentUser = request.currentUser;
+    return currentUser;
   }
 
   @Patch()
