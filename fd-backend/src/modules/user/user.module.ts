@@ -6,6 +6,8 @@ import { AdminAuthService } from '../auth/admin-auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './entities/user.entity';
 
+import { CurrentUserInterceptor } from '../auth/current-user.interceptor';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -16,7 +18,12 @@ import { User, UserSchema } from './entities/user.entity';
     ]),
   ],
   controllers: [UserController],
-  providers: [UserService, AuthService, AdminAuthService],
+  providers: [
+    UserService,
+    AuthService,
+    AdminAuthService,
+    CurrentUserInterceptor,
+  ],
   exports: [UserService],
 })
 export class UserModule {}
