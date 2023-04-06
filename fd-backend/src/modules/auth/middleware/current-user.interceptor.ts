@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import { AdminAuthService } from './admin-auth.service';
-import { UserService } from '../user/user.service';
-import { IUser } from '../user/interface/user.interface';
+import { AdminAuthService } from '../admin-auth.service';
+import { UserService } from '../../user/user.service';
+import { IUser } from '../../user/interface/user.interface';
 
 @Injectable()
 export class CurrentUserInterceptor implements NestInterceptor {

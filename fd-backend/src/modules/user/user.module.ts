@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
+import { APP_GUARD } from '@nestjs/core';
+import { MongooseModule } from '@nestjs/mongoose';
+
 import { UserService } from './user.service';
+import { User, UserSchema } from './entities/user.entity';
+import { CurrentUserInterceptor } from '../auth/middleware/current-user.interceptor';
+
 import { AuthService } from '../auth/auth.service';
 import { AdminAuthService } from '../auth/admin-auth.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './entities/user.entity';
-
-import { CurrentUserInterceptor } from '../auth/current-user.interceptor';
+import { AuthGuard } from '../auth/middleware/auth.guard';
 
 @Module({
   imports: [
@@ -23,6 +26,10 @@ import { CurrentUserInterceptor } from '../auth/current-user.interceptor';
     AuthService,
     AdminAuthService,
     CurrentUserInterceptor,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
   exports: [UserService],
 })

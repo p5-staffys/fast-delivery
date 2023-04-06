@@ -13,7 +13,7 @@ const app = initializeApp({
   projectId: 'fast-delivery-uma',
 });
 
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
 @Injectable()
 export class AdminAuthService {
