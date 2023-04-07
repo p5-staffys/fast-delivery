@@ -3,7 +3,6 @@ import { SeedUsersService } from './seed-users.service';
 import { SeedPackagesService } from './seed-packages.service';
 import { ApiTags } from '@nestjs/swagger';
 
-
 @ApiTags('Seed')
 @Controller()
 export class SeedController {
@@ -11,7 +10,6 @@ export class SeedController {
     private readonly seedUsersService: SeedUsersService,
     private readonly seedPackagesService: SeedPackagesService,
   ) {}
-
 
   @Get('/')
   async seed() {
@@ -56,5 +54,5 @@ export class SeedController {
   @Get('/packages')
   async seedPackages() {
     return this.seedPackagesService.createPackages();
-}
+  }
 }

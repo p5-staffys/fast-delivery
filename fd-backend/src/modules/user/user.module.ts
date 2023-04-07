@@ -7,6 +7,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './entities/user.entity';
 import { UserRepository } from './repository/user.repository';
 
+import { CurrentUserInterceptor } from '../auth/current-user.interceptor';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -17,7 +19,13 @@ import { UserRepository } from './repository/user.repository';
     ]),
   ],
   controllers: [UserController],
-  providers: [UserService, AuthService, AdminAuthService,UserRepository],
+  providers: [
+    UserService,
+    AuthService,
+    AdminAuthService,
+    UserRepository,
+    CurrentUserInterceptor,
+  ],
   exports: [UserService],
 })
 export class UserModule {}
