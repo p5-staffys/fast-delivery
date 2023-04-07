@@ -17,7 +17,8 @@ import { AdminAuthService } from '../auth/admin-auth.service';
 import { ReponseUserDto } from './dto/response-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateAuthDto } from '../auth/dto/create-auth.dto';
 
 @ApiTags('User')
 @Controller()
@@ -31,6 +32,7 @@ export class UserController {
   @Post()
   async create(@Body() newUser: CreateUserDto): Promise<ReponseUserDto> {
     const { password, email, name, lastName } = newUser;
+    await this.userService.checkUserEmail(email)
     const _id = (await this.authService.create(email, password)).user.uid;
     return this.userService.create({ email, name, lastName, _id });
   }
@@ -44,16 +46,20 @@ export class UserController {
   }
 
   @Post('/signIn')
+  @ApiBody({type: CreateAuthDto})
+  @ApiOperation({description: 'Just log in '})
   async signIn(
-    @Body('email') email: string,
-    @Body('password') password: string,
+    @Body() singInDto: CreateAuthDto,
+    
     @Res({ passthrough: true }) response: Response,
   ): Promise<ReponseUserDto | unknown> {
+    const {email, password} = singInDto
     const userCredentials = await this.authService.signIn(email, password);
     const token = await userCredentials.user.getIdToken();
     response.cookie('idToken', token);
     const user = await this.userService.findByEmail(email);
-    return user;
+    
+    return { user, token};
   }
 
   @Post('/signOut')
