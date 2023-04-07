@@ -18,10 +18,12 @@ import { AdminAuthService } from '../auth/admin-auth.service';
 import { ReponseUserDto } from './dto/response-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CurrentUserInterceptor } from '../auth/current-user.interceptor';
-import { CurrentUserRequest } from '../auth/current-user.interceptor';
+import { CurrentUserInterceptor } from '../auth/middleware/current-user.interceptor';
+import { CurrentUserRequest } from '../auth/middleware/current-user.interceptor';
 
 import { ApiTags } from '@nestjs/swagger';
+import { Public } from '../auth/middleware/auth.guard';
+
 @ApiTags('User')
 @Controller()
 export class UserController {
@@ -31,6 +33,7 @@ export class UserController {
     private readonly adminAuthService: AdminAuthService,
   ) {}
 
+  @Public()
   @Post()
   async create(@Body() newUser: CreateUserDto): Promise<ReponseUserDto> {
     const { password, email, name, lastName } = newUser;
@@ -46,6 +49,7 @@ export class UserController {
     return `User ${auth.uid} deleted`;
   }
 
+  @Public()
   @Post('/signIn')
   async signIn(
     @Body('email') email: string,
