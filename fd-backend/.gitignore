@@ -11,6 +11,7 @@ pnpm-lock.yaml
 .eslintcache
 fast-delivery-uma-firebase-adminsdk-y1cvp-422b7b2779.json
 
+/run
 # Logs
 logs
 *.log
