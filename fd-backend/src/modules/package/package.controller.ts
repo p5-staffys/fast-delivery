@@ -50,6 +50,7 @@ export class PackageController {
     return this.packageService.getById(_id);
   }
 
+  //TODO: Change userid param to current user interceptor, and with this only current user can assignToPackage
   @Put(':_id/assign_to/:user_id')
   async assignToUser(@Param('_id') _id, @Param('user_id') user_id) {
     return this.packageService.assignToUser(_id, user_id);
