@@ -6,12 +6,14 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
 import { Package } from './entities/package.entity';
 import { QueryPaginationDto } from '../../common/dto/pagination.dto';
+import { ValidateMongoId } from 'src/common/pipe/validate-mongoid.pipe';
 
 @ApiTags('Package')
 @Controller()
@@ -33,7 +35,7 @@ export class PackageController {
   //NEW QUE NO TENGA REPARTIDOR
 
   @Get()
-  @ApiOperation({ description: 'Package for taken without any delivery ' })
+  @ApiOperation({ description: 'Package are wating for taken but dont have any delivery ' })
   async getPendingPackage(
     @Query() queryPaginateDto: QueryPaginationDto,
   ): Promise<Package[]> {
@@ -42,10 +44,13 @@ export class PackageController {
   }
 
   @Get(':_id')
-  async getById(@Param('_id') _id) {
+  @ApiParam({ name: '_id', required: true, type: String })
+  @ApiOperation({description: 'Get Package by id'})
+  async getById(@Param('_id',ValidateMongoId) _id) {
     return this.packageService.getById(_id);
   }
 
+  //TODO: Change userid param to current user interceptor, and with this only current user can assignToPackage
   @Put(':_id/assign_to/:user_id')
   async assignToUser(@Param('_id') _id, @Param('user_id') user_id) {
     return this.packageService.assignToUser(_id, user_id);

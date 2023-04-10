@@ -9,6 +9,7 @@ import { CurrentUserInterceptor } from '../auth/middleware/current-user.intercep
 
 import { AuthService } from '../auth/auth.service';
 import { AdminAuthService } from '../auth/admin-auth.service';
+import { UserRepository } from './repository/user.repository';
 import { AuthGuard } from '../auth/middleware/auth.guard';
 
 @Module({
@@ -25,6 +26,7 @@ import { AuthGuard } from '../auth/middleware/auth.guard';
     UserService,
     AuthService,
     AdminAuthService,
+    UserRepository,
     CurrentUserInterceptor,
     {
       provide: APP_GUARD,

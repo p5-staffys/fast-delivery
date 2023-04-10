@@ -84,6 +84,30 @@ export abstract class EntityRepository<T extends Document> {
     return data;
   };
 
+  findById = async (
+    _id: FilterQuery<T>,
+    projection?: Record<string, unknown>,
+  ): Promise<HydratedDocument<T>> => {
+    const data = await this.entityModel
+      .findById(_id, { __v: 0, ...projection })
+      .exec();
+
+    if (!data) throw new EntityNotFound(this.entityModel.modelName);
+    return data;
+  };
+
+  findByIdAndDelete = async (
+    _id: FilterQuery<T>,
+    projection?: Record<string, unknown>,
+  ): Promise<HydratedDocument<T>> => {
+    const data = await this.entityModel
+      .findByIdAndDelete(_id, { __v: 0, ...projection })
+      .exec();
+
+    if (!data) throw new EntityNotFound(this.entityModel.modelName);
+    return data;
+  };
+
   updateEntity = async (
     filter: FilterQuery<T>,
     updateEntityData: UpdateQuery<unknown>,
@@ -98,5 +122,5 @@ export abstract class EntityRepository<T extends Document> {
 
     if (!data) throw new EntityNotFound(this.entityModel.modelName);
     return data;
-  };
+  }
 }

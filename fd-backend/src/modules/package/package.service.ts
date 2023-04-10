@@ -4,6 +4,7 @@ import { CreatePackageDto } from './dto/create-package.dto';
 import { Package } from './entities/package.entity';
 
 import { PackageRepository } from './repository/package.repository';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class PackageService {
@@ -17,8 +18,9 @@ export class PackageService {
     return await this.packageRepository.pendingPackage(page, limit);
   }
 
-  async getById(_id: string) {
-    return `returns one package by Id. id: ${_id}`;
+  
+  async getById(_id: Types.ObjectId):Promise<Package> {
+    return await this.packageRepository.getPackageById(_id)
   }
 
   async assignToUser(_id: string, user_id: string) {

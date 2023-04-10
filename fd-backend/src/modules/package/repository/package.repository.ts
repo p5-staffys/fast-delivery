@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { EntityRepository } from '../../../common/database/repository/db.repository';
 import { Package, PackageDocument } from '../entities/package.entity';
 import { PackageStatus } from '../interface/package.interface';
@@ -32,5 +32,11 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
       page,
       limit,
     );
+  }
+
+  async getPackageById(_id: Types.ObjectId):Promise<Package>{
+    return await this.findOne(
+    {_id}
+    )
   }
 }
