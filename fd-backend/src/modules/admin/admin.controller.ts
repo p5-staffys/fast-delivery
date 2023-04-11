@@ -12,6 +12,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { AdminAuthService } from '../auth/admin-auth.service';
 import { Public } from '../auth/middleware/auth.guard';
 import { AdminGuard } from '../auth/middleware/admin.guard';
+import { IAdmin } from './interface/admin.interface';
+import { GeneralError } from '../../common/error-handlers/exceptions';
 
 @ApiTags('Admin')
 @Controller()
@@ -23,12 +25,16 @@ export class AdminController {
 
   @Public()
   @Post()
-  async create(@Body() newAdmin) {
-    const { email, password } = newAdmin;
-    const newAdminAuth = await this.adminAuthService.create(email, password);
-    const _id = newAdminAuth.uid;
-    const newAdminUser = await this.adminService.create({ ...newAdmin, _id });
-    return newAdminUser;
+  async create(@Body() newAdmin: IAdmin) {
+    try {
+      const { email, password } = newAdmin;
+      const newAdminAuth = await this.adminAuthService.create(email, password);
+      const _id = newAdminAuth.uid;
+      const newAdminUser = await this.adminService.create({ ...newAdmin, _id });
+      return newAdminUser;
+    } catch (error: unknown) {
+      throw new GeneralError('No se pudo crear el usuario');
+    }
   }
 
   @UseGuards(AdminGuard)

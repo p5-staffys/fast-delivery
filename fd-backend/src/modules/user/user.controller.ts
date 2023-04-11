@@ -27,7 +27,7 @@ import { CreateAuthDto } from '../auth/dto/create-auth.dto';
 import { Public } from '../auth/middleware/auth.guard';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import { User } from './entities/user.entity';
-import { GeneralError } from 'src/common/error-handlers/exceptions';
+import { GeneralError } from '../../common/error-handlers/exceptions';
 
 @ApiTags('User')
 @Controller()
@@ -41,18 +41,29 @@ export class UserController {
   @Public()
   @Post()
   async create(@Body() newUser: CreateUserDto): Promise<ReponseUserDto> {
-    const { password, email, name, lastName } = newUser;
-    await this.userService.checkUserEmail(email);
-    const _id = (await this.authService.create(email, password)).user.uid;
-    return this.userService.create({ email, name, lastName, _id });
+    try {
+      const { password, email, name, lastName } = newUser;
+      await this.userService.checkUserEmail(email);
+      const _id = (await this.authService.create(email, password)).user.uid;
+      return this.userService.create({ email, name, lastName, _id });
+    } catch {
+      throw new GeneralError(
+        'Email o password incorrecto',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
   }
 
   @Delete()
   async remove(): Promise<string> {
-    const auth = await this.authService.getCurrentUser();
-    await this.authService.delete(auth);
-    await this.userService.remove(auth.uid);
-    return `User ${auth.uid} deleted`;
+    try {
+      const auth = await this.authService.getCurrentUser();
+      await this.authService.delete(auth);
+      await this.userService.remove(auth.uid);
+      return `User ${auth.uid} deleted`;
+    } catch {
+      throw new GeneralError('No se pudo eliminar el usuario');
+    }
   }
 
   @Public()
@@ -61,7 +72,6 @@ export class UserController {
   @ApiOperation({ description: 'Just log in ' })
   async signIn(
     @Body() singInDto: CreateAuthDto,
-
     @Res({ passthrough: true }) response: Response,
   ): Promise<ReponseUserDto | unknown> {
     const { email, password } = singInDto;
@@ -71,7 +81,7 @@ export class UserController {
       response.cookie('idToken', token);
       const user = await this.userService.findByEmail(email);
       return { user, token };
-    } catch (err) {
+    } catch {
       throw new GeneralError(
         'Email o password incorrecto',
         HttpStatus.UNAUTHORIZED,
@@ -81,9 +91,13 @@ export class UserController {
 
   @Post('/signOut')
   async signOut(): Promise<string> {
-    const user = await this.authService.getCurrentUser();
-    await this.authService.signOut();
-    return `El usuario ${user.uid} se deslogueó`;
+    try {
+      const user = await this.authService.getCurrentUser();
+      await this.authService.signOut();
+      return `El usuario ${user.uid} se deslogueó`;
+    } catch {
+      throw new GeneralError('No se pudo desloguear el usuario');
+    }
   }
 
   @UseInterceptors(CurrentUserInterceptor)
@@ -91,8 +105,12 @@ export class UserController {
   async getCurrent(
     @Req() request: CurrentUserRequest,
   ): Promise<ReponseUserDto> {
-    const currentUser = request.currentUser;
-    return currentUser;
+    try {
+      const currentUser = request.currentUser;
+      return currentUser;
+    } catch {
+      throw new GeneralError('No se pudo devolver el usuario');
+    }
   }
 
   @Patch()
@@ -100,10 +118,14 @@ export class UserController {
     @Body() updateData: UpdateUserDto,
     @Req() request: Request,
   ): Promise<ReponseUserDto | unknown> {
-    const idToken = request.cookies['idToken'];
-    const _id = (await this.adminAuthService.authenticate(idToken)).uid;
-    const user = await this.userService.update(_id, updateData);
-    return user;
+    try {
+      const idToken = request.cookies['idToken'];
+      const _id = (await this.adminAuthService.authenticate(idToken)).uid;
+      const user = await this.userService.update(_id, updateData);
+      return user;
+    } catch {
+      throw new GeneralError('No se pudo actualizar el usuario');
+    }
   }
 
   @Post('/addForm')
@@ -113,6 +135,11 @@ export class UserController {
     @Body() form: FormAplyDto,
     @Req() { currentUser }: CurrentUserRequest,
   ): Promise<User> {
-    return await this.userService.addForm(currentUser._id, form);
+    try {
+      const updatedUser = await this.userService.addForm(currentUser._id, form);
+      return updatedUser;
+    } catch {
+      throw new GeneralError('No se pudo agregar el formulario al usuario');
+    }
   }
 }

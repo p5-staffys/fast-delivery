@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { PackageService } from './package.service';
-import { CreatePackageDto } from './dto/create-package.dto';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -21,14 +20,17 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { Package } from './entities/package.entity';
+import { Types } from 'mongoose';
+import { CreatePackageDto } from './dto/create-package.dto';
 import { QueryPaginationDto } from '../../common/dto/pagination.dto';
-import { ValidateMongoId } from 'src/common/pipe/validate-mongoid.pipe';
+import { ValidateMongoId } from '../../common/pipe/validate-mongoid.pipe';
+import { GeneralError } from '../../common/error-handlers/exceptions';
+
+import { Package } from './entities/package.entity';
 import {
   CurrentUserInterceptor,
   CurrentUserRequest,
 } from '../auth/middleware/current-user.interceptor';
-import { Types } from 'mongoose';
 
 @ApiTags('Package')
 @Controller()
@@ -44,7 +46,12 @@ export class PackageController {
   @ApiBody({ type: CreatePackageDto })
   @ApiOperation({ description: 'Create package' })
   async create(@Body() newPackage: CreatePackageDto): Promise<Package> {
-    return await this.packageService.create(newPackage);
+    try {
+      const createdPackage = await this.packageService.create(newPackage);
+      return createdPackage;
+    } catch {
+      throw new GeneralError('No se pudo crear el paquete');
+    }
   }
 
   //NEW QUE NO TENGA REPARTIDOR
@@ -56,15 +63,28 @@ export class PackageController {
   async getPendingPackage(
     @Query() queryPaginateDto: QueryPaginationDto,
   ): Promise<Package[]> {
-    const { limit, page } = queryPaginateDto;
-    return await this.packageService.getPendingPackage(page, limit);
+    try {
+      const { limit, page } = queryPaginateDto;
+      const pendingPackages = await this.packageService.getPendingPackage(
+        page,
+        limit,
+      );
+      return pendingPackages;
+    } catch {
+      throw new GeneralError('No se pudo acceder a los paquetes');
+    }
   }
 
   @Get(':_id')
   @ApiParam({ name: '_id', required: true, type: String })
   @ApiOperation({ description: 'Get Package by id' })
   async getById(@Param('_id', ValidateMongoId) _id): Promise<Package> {
-    return this.packageService.getById(_id);
+    try {
+      const pack = await this.packageService.getById(_id);
+      return pack;
+    } catch {
+      throw new GeneralError('No se pudo acceder al paquete');
+    }
   }
 
   @Put(':_id/assign/')
@@ -75,7 +95,15 @@ export class PackageController {
     @Param('_id', ValidateMongoId) _id: Types.ObjectId,
     @Req() { currentUser }: CurrentUserRequest,
   ): Promise<Package> {
-    return await this.packageService.assignToUser(_id, currentUser);
+    try {
+      const assignedPackage = await this.packageService.assignToUser(
+        _id,
+        currentUser,
+      );
+      return assignedPackage;
+    } catch {
+      throw new GeneralError('No se pudo asignar el paquete al usuario');
+    }
   }
 
   @Put(':_id/unassign')
