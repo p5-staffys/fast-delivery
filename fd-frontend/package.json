@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p $PORT",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.tsx\" --cache --fix --max-warnings=0",
+    "start": "next start",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --cache --fix --max-warnings=0",
     "test": "jest"
   },
   "dependencies": {
