@@ -7,7 +7,7 @@ import { Request } from 'express';
 import { User } from 'firebase/auth';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { ApiTags } from '@nestjs/swagger';
-import { GeneralError } from 'src/common/error-handlers/exceptions';
+import { GeneralError } from '../../common/error-handlers/exceptions';
 
 @ApiTags('Auth')
 @Controller()
