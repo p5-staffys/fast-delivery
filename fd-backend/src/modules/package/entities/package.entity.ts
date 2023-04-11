@@ -22,7 +22,7 @@ export class Package {
   // readonly createdBy: IUserRef;
 
   @Prop({ default: null, type: UserRefSchema })
-  readonly deliveredBy: IUserRef | null;
+  deliveredBy: IUserRef | null;
 
   @Prop({ required: true, type: ClientSchema })
   readonly client: IClient;

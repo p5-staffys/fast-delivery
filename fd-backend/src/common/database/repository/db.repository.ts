@@ -122,5 +122,21 @@ export abstract class EntityRepository<T extends Document> {
 
     if (!data) throw new EntityNotFound(this.entityModel.modelName);
     return data;
-  }
+  };
+
+  //To Test
+  updateEntityOrFail = async (
+    filter: FilterQuery<T>,
+    updateEntityData: UpdateQuery<unknown>,
+    options?: QueryOptions,
+  ): Promise<T> => {
+    const data = await this.entityModel
+      .findOneAndUpdate(filter, updateEntityData, {
+        new: true,
+        ...options,
+      })
+      .exec();
+    if (!data) throw new EntityNotFound(this.entityModel.modelName);
+    return data;
+  };
 }

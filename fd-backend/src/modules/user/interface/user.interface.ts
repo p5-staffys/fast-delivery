@@ -1,4 +1,5 @@
 import { IPackageRef } from '../../package/interface/package.interface';
+import { IFormApply } from 'src/common/modules/formApply/interface/form-apply.interface';
 
 export interface IUser {
   _id: string;
@@ -9,7 +10,7 @@ export interface IUser {
   status: UserStatus;
   rating: number;
   packages: IPackageRef[];
-  forms: JSON[];
+  forms: IFormApply[];
   __v: number;
 }
 
@@ -20,5 +21,6 @@ export enum UserStatus {
 
 export interface IUserRef {
   _id: string;
-  fullName: string;
+  name: string;
+  lastName: string;
 }

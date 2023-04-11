@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { EntityRepository } from '../../../common/database/repository/db.repository';
@@ -14,7 +14,7 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
     super(packageModel);
   }
 
-  async pendingPackage(page?: number, limit?: number): Promise<Package[]> {
+  async findPendingPackages(page?: number, limit?: number): Promise<Package[]> {
     return await this.find(
       {
         $and: [
@@ -34,9 +34,31 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
     );
   }
 
-  async getPackageById(_id: Types.ObjectId):Promise<Package>{
-    return await this.findOne(
-    {_id}
-    )
+  async getPackageById(_id: Types.ObjectId): Promise<Package> {
+    return await this.findOne({ _id });
+  }
+
+  async findPendingPackageById(_id: Types.ObjectId): Promise<Package> {
+    const packages = await this.packageModel.findOne({
+      $and: [
+        { _id },
+        {
+          $or: [
+            { status: PackageStatus.New },
+            { status: PackageStatus.Pending },
+          ],
+        },
+        {
+          deliveredBy: { $eq: null },
+        },
+      ],
+    });
+
+    if (!packages)
+      throw new BadRequestException(
+        'El paquete no se encuentra o ya tiene un repartidor asignado.',
+      );
+
+    return packages;
   }
 }
