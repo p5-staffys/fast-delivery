@@ -18,9 +18,8 @@ export class PackageService {
     return await this.packageRepository.pendingPackage(page, limit);
   }
 
-  
-  async getById(_id: Types.ObjectId):Promise<Package> {
-    return await this.packageRepository.getPackageById(_id)
+  async getById(_id: Types.ObjectId): Promise<Package> {
+    return await this.packageRepository.getPackageById(_id);
   }
 
   async assignToUser(_id: string, user_id: string) {

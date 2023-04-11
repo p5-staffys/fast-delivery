@@ -122,5 +122,5 @@ export abstract class EntityRepository<T extends Document> {
 
     if (!data) throw new EntityNotFound(this.entityModel.modelName);
     return data;
-  }
+  };
 }

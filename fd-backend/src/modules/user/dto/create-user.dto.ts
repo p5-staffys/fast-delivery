@@ -20,7 +20,7 @@ export class CreateUserDto implements Partial<IUser> {
 
   @IsNotEmpty()
   @IsString()
-  @ApiProperty({example: '123123'})
+  @ApiProperty({ example: '123123' })
   password: string;
 }
 

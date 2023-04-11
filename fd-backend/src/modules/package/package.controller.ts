@@ -13,7 +13,7 @@ import {
 
 import { Package } from './entities/package.entity';
 import { QueryPaginationDto } from '../../common/dto/pagination.dto';
-import { ValidateMongoId } from 'src/common/pipe/validate-mongoid.pipe';
+import { ValidateMongoId } from '../../common/pipe/validate-mongoid.pipe';
 
 @ApiTags('Package')
 @Controller()
@@ -35,7 +35,9 @@ export class PackageController {
   //NEW QUE NO TENGA REPARTIDOR
 
   @Get()
-  @ApiOperation({ description: 'Package are wating for taken but dont have any delivery ' })
+  @ApiOperation({
+    description: 'Package are wating for taken but dont have any delivery ',
+  })
   async getPendingPackage(
     @Query() queryPaginateDto: QueryPaginationDto,
   ): Promise<Package[]> {
@@ -45,8 +47,8 @@ export class PackageController {
 
   @Get(':_id')
   @ApiParam({ name: '_id', required: true, type: String })
-  @ApiOperation({description: 'Get Package by id'})
-  async getById(@Param('_id',ValidateMongoId) _id) {
+  @ApiOperation({ description: 'Get Package by id' })
+  async getById(@Param('_id', ValidateMongoId) _id) {
     return this.packageService.getById(_id);
   }
 

@@ -34,9 +34,7 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
     );
   }
 
-  async getPackageById(_id: Types.ObjectId):Promise<Package>{
-    return await this.findOne(
-    {_id}
-    )
+  async getPackageById(_id: Types.ObjectId): Promise<Package> {
+    return await this.findOne({ _id });
   }
 }
