@@ -33,6 +33,11 @@ import { AuthGuard } from '../auth/middleware/auth.guard';
       useClass: AuthGuard,
     },
   ],
-  exports: [UserService],
+  exports: [
+    UserService,
+    CurrentUserInterceptor,
+    AdminAuthService,
+    UserRepository,
+  ],
 })
 export class UserModule {}

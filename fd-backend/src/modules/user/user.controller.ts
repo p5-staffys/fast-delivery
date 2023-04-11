@@ -9,6 +9,7 @@ import {
   Req,
   Res,
   UseInterceptors,
+  HttpStatus,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -21,11 +22,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { CurrentUserInterceptor } from '../auth/middleware/current-user.interceptor';
 import { CurrentUserRequest } from '../auth/middleware/current-user.interceptor';
 
-
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateAuthDto } from '../auth/dto/create-auth.dto';
 import { Public } from '../auth/middleware/auth.guard';
-
+import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
+import { User } from './entities/user.entity';
+import { GeneralError } from 'src/common/error-handlers/exceptions';
 
 @ApiTags('User')
 @Controller()
@@ -40,7 +42,7 @@ export class UserController {
   @Post()
   async create(@Body() newUser: CreateUserDto): Promise<ReponseUserDto> {
     const { password, email, name, lastName } = newUser;
-    await this.userService.checkUserEmail(email)
+    await this.userService.checkUserEmail(email);
     const _id = (await this.authService.create(email, password)).user.uid;
     return this.userService.create({ email, name, lastName, _id });
   }
@@ -55,20 +57,26 @@ export class UserController {
 
   @Public()
   @Post('/signIn')
-  @ApiBody({type: CreateAuthDto})
-  @ApiOperation({description: 'Just log in '})
+  @ApiBody({ type: CreateAuthDto })
+  @ApiOperation({ description: 'Just log in ' })
   async signIn(
     @Body() singInDto: CreateAuthDto,
-    
+
     @Res({ passthrough: true }) response: Response,
   ): Promise<ReponseUserDto | unknown> {
-    const {email, password} = singInDto
-    const userCredentials = await this.authService.signIn(email, password);
-    const token = await userCredentials.user.getIdToken();
-    response.cookie('idToken', token);
-    const user = await this.userService.findByEmail(email);
-    
-    return { user, token};
+    const { email, password } = singInDto;
+    try {
+      const userCredentials = await this.authService.signIn(email, password);
+      const token = await userCredentials.user.getIdToken();
+      response.cookie('idToken', token);
+      const user = await this.userService.findByEmail(email);
+      return { user, token };
+    } catch (err) {
+      throw new GeneralError(
+        'Email o password incorrecto',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
   }
 
   @Post('/signOut')
@@ -99,9 +107,12 @@ export class UserController {
   }
 
   @Post('/addForm')
-  async addForm(@Body() form: JSON, @Req() request: Request): Promise<unknown> {
-    const idToken = request.cookies['idToken'];
-    const _id = (await this.adminAuthService.authenticate(idToken)).uid;
-    return this.userService.addForm(_id, form);
+  @UseInterceptors(CurrentUserInterceptor)
+  @ApiBody({ type: FormAplyDto })
+  async addForm(
+    @Body() form: FormAplyDto,
+    @Req() { currentUser }: CurrentUserRequest,
+  ): Promise<User> {
+    return await this.userService.addForm(currentUser._id, form);
   }
 }

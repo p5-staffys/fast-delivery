@@ -1,4 +1,14 @@
-import { Post, Body, Get, Param, Put, Delete, Query } from '@nestjs/common';
+import {
+  Post,
+  Body,
+  Get,
+  Param,
+  Put,
+  Delete,
+  Query,
+  UseInterceptors,
+  Req,
+} from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { PackageService } from './package.service';
 import { CreatePackageDto } from './dto/create-package.dto';
@@ -14,6 +24,11 @@ import {
 import { Package } from './entities/package.entity';
 import { QueryPaginationDto } from '../../common/dto/pagination.dto';
 import { ValidateMongoId } from 'src/common/pipe/validate-mongoid.pipe';
+import {
+  CurrentUserInterceptor,
+  CurrentUserRequest,
+} from '../auth/middleware/current-user.interceptor';
+import { Types } from 'mongoose';
 
 @ApiTags('Package')
 @Controller()
@@ -35,7 +50,9 @@ export class PackageController {
   //NEW QUE NO TENGA REPARTIDOR
 
   @Get()
-  @ApiOperation({ description: 'Package are wating for taken but dont have any delivery ' })
+  @ApiOperation({
+    description: 'Package are wating for taken but dont have any delivery ',
+  })
   async getPendingPackage(
     @Query() queryPaginateDto: QueryPaginationDto,
   ): Promise<Package[]> {
@@ -45,15 +62,20 @@ export class PackageController {
 
   @Get(':_id')
   @ApiParam({ name: '_id', required: true, type: String })
-  @ApiOperation({description: 'Get Package by id'})
-  async getById(@Param('_id',ValidateMongoId) _id) {
+  @ApiOperation({ description: 'Get Package by id' })
+  async getById(@Param('_id', ValidateMongoId) _id): Promise<Package> {
     return this.packageService.getById(_id);
   }
 
-  //TODO: Change userid param to current user interceptor, and with this only current user can assignToPackage
-  @Put(':_id/assign_to/:user_id')
-  async assignToUser(@Param('_id') _id, @Param('user_id') user_id) {
-    return this.packageService.assignToUser(_id, user_id);
+  @Put(':_id/assign/')
+  @ApiBearerAuth()
+  @ApiParam({ name: '_id', required: true, type: String })
+  @UseInterceptors(CurrentUserInterceptor)
+  async assignToUser(
+    @Param('_id', ValidateMongoId) _id: Types.ObjectId,
+    @Req() { currentUser }: CurrentUserRequest,
+  ): Promise<Package> {
+    return await this.packageService.assignToUser(_id, currentUser);
   }
 
   @Put(':_id/unassign')

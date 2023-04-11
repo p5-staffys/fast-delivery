@@ -13,5 +13,10 @@ export class UserRefDTO implements IUserRef {
   @AutoMap()
   @IsString()
   @ApiProperty({ type: String, example: 'Juan Carlos' })
-  fullName: string;
+  name: string;
+
+  @AutoMap()
+  @IsString()
+  @ApiProperty({ type: String, example: 'Macanudo' })
+  lastName: string;
 }

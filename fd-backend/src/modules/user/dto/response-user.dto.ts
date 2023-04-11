@@ -8,6 +8,7 @@ import {
 import { IUser } from '../interface/user.interface';
 import { IPackageRef } from '../../package/interface/package.interface';
 import { UserStatus } from '../interface/user.interface';
+import { IFormApply } from 'src/common/modules/formApply/interface/form-apply.interface';
 
 export class ReponseUserDto implements Partial<IUser> {
   @IsNotEmpty()
@@ -40,5 +41,5 @@ export class ReponseUserDto implements Partial<IUser> {
 
   @IsNotEmpty()
   @IsArray()
-  forms: JSON[];
+  forms: IFormApply[];
 }

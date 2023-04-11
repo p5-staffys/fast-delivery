@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   CallHandler,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { Request } from 'express';
 
@@ -21,8 +22,14 @@ export class CurrentUserInterceptor implements NestInterceptor {
     const idToken = request.cookies['idToken'];
     const _id = (await this.adminAuthService.authenticate(idToken)).uid;
     if (_id) {
-      const user = await this.userService.findById(_id);
-      request.currentUser = user;
+      try {
+        const user = await this.userService.findById(_id);
+        request.currentUser = user;
+      } catch (err) {
+        throw new NotFoundException(
+          'Por favor ingresa tu email y password nuevamente',
+        );
+      }
     }
     return handler.handle();
   }
