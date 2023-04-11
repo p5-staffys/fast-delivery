@@ -21,7 +21,7 @@ export class AdminAuthService {
     return auth.verifyIdToken(idToken);
   }
 
-  async create(email, password) {
+  async create(email: string, password: string) {
     const newAdminAuth = await auth.createUser({ email, password });
     const uid = newAdminAuth.uid;
     await auth.setCustomUserClaims(uid, { admin: true });

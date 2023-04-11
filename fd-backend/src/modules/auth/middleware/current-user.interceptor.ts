@@ -25,7 +25,7 @@ export class CurrentUserInterceptor implements NestInterceptor {
       try {
         const user = await this.userService.findById(_id);
         request.currentUser = user;
-      } catch (err) {
+      } catch {
         throw new NotFoundException(
           'Por favor ingresa tu email y password nuevamente',
         );

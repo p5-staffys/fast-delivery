@@ -7,6 +7,7 @@ import { Request } from 'express';
 import { User } from 'firebase/auth';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { ApiTags } from '@nestjs/swagger';
+import { GeneralError } from 'src/common/error-handlers/exceptions';
 
 @ApiTags('Auth')
 @Controller()
@@ -18,29 +19,45 @@ export class AuthController {
 
   @Get()
   async authenticate(@Req() request: Request): Promise<DecodedIdToken> {
-    const idToken = request.cookies['idToken'];
-    const decodedIdToken = await this.adminAuthService.authenticate(idToken);
-    return decodedIdToken;
+    try {
+      const idToken = request.cookies['idToken'];
+      const decodedIdToken = await this.adminAuthService.authenticate(idToken);
+      return decodedIdToken;
+    } catch (error: unknown) {
+      throw new GeneralError('No se pudo autenticar el usuario');
+    }
   }
 
   @Get('/current')
   async getCurrentUser(): Promise<User> {
-    const user = await this.authService.getCurrentUser();
-    return user;
+    try {
+      const user = await this.authService.getCurrentUser();
+      return user;
+    } catch (error: unknown) {
+      throw new GeneralError('No se pudo devolver el usuario');
+    }
   }
 
   @Delete()
   async delete(): Promise<string> {
-    const user = await this.authService.getCurrentUser();
-    await this.authService.delete(user);
-    return `User ${user.uid} deleted`;
+    try {
+      const user = await this.authService.getCurrentUser();
+      await this.authService.delete(user);
+      return `User ${user.uid} deleted`;
+    } catch (error: unknown) {
+      throw new GeneralError('No se pudo actualizar el usuario');
+    }
   }
 
   @Get('/signOut')
   async signOut(): Promise<string> {
-    const user = await this.authService.getCurrentUser();
-    await this.authService.signOut();
-    return `User ${user.uid} hsa been signed out`;
+    try {
+      const user = await this.authService.getCurrentUser();
+      await this.authService.signOut();
+      return `User ${user.uid} hsa been signed out`;
+    } catch (error: unknown) {
+      throw new GeneralError('No se pudo hacer un sign out');
+    }
   }
 
   @Patch()
@@ -54,8 +71,8 @@ export class AuthController {
       if (photoURL) await this.authService.updatePhotoURL(user, photoURL);
       const updatedUser = await this.authService.getCurrentUser();
       return updatedUser;
-    } catch (err: unknown) {
-      return err;
+    } catch (error: unknown) {
+      throw new GeneralError('No se pudo actualizar el usuario');
     }
   }
 }
