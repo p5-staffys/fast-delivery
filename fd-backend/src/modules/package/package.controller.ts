@@ -63,28 +63,15 @@ export class PackageController {
   async getPendingPackage(
     @Query() queryPaginateDto: QueryPaginationDto,
   ): Promise<Package[]> {
-    try {
-      const { limit, page } = queryPaginateDto;
-      const pendingPackages = await this.packageService.getPendingPackage(
-        page,
-        limit,
-      );
-      return pendingPackages;
-    } catch {
-      throw new GeneralError('No se pudo acceder a los paquetes');
-    }
+    const { limit, page } = queryPaginateDto;
+    return await this.packageService.getPendingPackage(page, limit);
   }
 
   @Get(':_id')
   @ApiParam({ name: '_id', required: true, type: String })
   @ApiOperation({ description: 'Get Package by id' })
   async getById(@Param('_id', ValidateMongoId) _id): Promise<Package> {
-    try {
-      const pack = await this.packageService.getById(_id);
-      return pack;
-    } catch {
-      throw new GeneralError('No se pudo acceder al paquete');
-    }
+    return await this.packageService.getById(_id);
   }
 
   @Put(':_id/assign/')
@@ -95,15 +82,7 @@ export class PackageController {
     @Param('_id', ValidateMongoId) _id: Types.ObjectId,
     @Req() { currentUser }: CurrentUserRequest,
   ): Promise<Package> {
-    try {
-      const assignedPackage = await this.packageService.assignToUser(
-        _id,
-        currentUser,
-      );
-      return assignedPackage;
-    } catch {
-      throw new GeneralError('No se pudo asignar el paquete al usuario');
-    }
+    return await this.packageService.assignToUser(_id, currentUser);
   }
 
   @Put(':_id/unassign')
@@ -122,7 +101,9 @@ export class PackageController {
   }
 
   @Put(':_id/delivered')
-  async delivered(@Param('_id') _id) {
-    return this.packageService.delivered(_id);
+  @ApiBearerAuth()
+  @ApiParam({ name: '_id', required: true, type: String })
+  async delivered(@Param('_id', ValidateMongoId) _id: Types.ObjectId) {
+    return await this.packageService.delivered(_id);
   }
 }

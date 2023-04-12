@@ -7,6 +7,7 @@ import { PackageRepository } from './repository/package.repository';
 import { Types } from 'mongoose';
 import { IUser } from '../user/interface/user.interface';
 import { UserRepository } from '../user/repository/user.repository';
+import { PackageStatus } from './interface/package.interface';
 
 @Injectable()
 export class PackageService {
@@ -28,9 +29,6 @@ export class PackageService {
   }
 
   async assignToUser(_id: Types.ObjectId, user: IUser): Promise<Package> {
-    const { name, lastName } = user;
-    const pack = await this.packageRepository.findPendingPackageById(_id);
-    pack.deliveredBy = { name, lastName, _id: user._id };
     const form = await this.userRepository.foundUserAndValidateForm(user._id);
     const { bebidasAlcoholicas, medicamentosPsicoactivos, problemaEmocional } =
       form.forms[0];
@@ -38,8 +36,28 @@ export class PackageService {
       throw new BadRequestException(
         'No cumplis los requisitos minimos para trabajar durante el dia de hoy, proba nuevamente en 24hs',
       );
+    const { name, lastName } = user;
+    const updatePack = {
+      deliverBy: {
+        name,
+        lastName,
+        _id: user._id,
+      },
+      status: PackageStatus.Delivering,
+    };
 
-    return await this.packageRepository.updateEntityOrFail(_id, pack);
+    const actualPackageFilter = {
+      _id,
+      status: PackageStatus.New,
+      deliveredBy: null,
+    };
+
+    return await this.packageRepository.updateEntityOrFail(
+      { ...actualPackageFilter },
+      { ...updatePack },
+      null,
+      'Package ID o Status invalido, solo puede ser "new" y no tener ningun repartidor asignado',
+    );
   }
 
   async unassignFromUser(_id: string) {
@@ -54,7 +72,22 @@ export class PackageService {
     return `Delete package by id. id: ${_id}`;
   }
 
-  async delivered(_id: string) {
-    return `Package has been delivered. id: ${_id}`;
+  async delivered(_id: Types.ObjectId): Promise<Package> {
+    const actualPackage = {
+      _id,
+      status: PackageStatus.Delivering,
+    };
+
+    const update = {
+      status: PackageStatus.Delivered,
+      deliveredOn: new Date(),
+    };
+
+    return await this.packageRepository.updateEntityOrFail(
+      { ...actualPackage },
+      { ...update },
+      null,
+      'ID o Status invalido, solo puede ser "delivering"',
+    );
   }
 }
