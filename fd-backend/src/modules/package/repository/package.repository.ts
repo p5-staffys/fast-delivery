@@ -19,10 +19,7 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
       {
         $and: [
           {
-            $or: [
-              { status: PackageStatus.New },
-              { status: PackageStatus.Pending },
-            ],
+            $or: [{ status: PackageStatus.New }],
           },
           {
             deliveredBy: null,
@@ -43,10 +40,7 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
       $and: [
         { _id },
         {
-          $or: [
-            { status: PackageStatus.New },
-            { status: PackageStatus.Pending },
-          ],
+          $or: [{ status: PackageStatus.New }],
         },
         {
           deliveredBy: { $eq: null },
