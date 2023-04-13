@@ -2,6 +2,16 @@
 /dist
 /node_modules
 
+#locks
+package-lock.json
+pnpm-lock.yaml
+
+#
+.env
+.eslintcache
+fast-delivery-uma-firebase-adminsdk-y1cvp-422b7b2779.json
+
+/run
 # Logs
 logs
 *.log

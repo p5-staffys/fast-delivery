@@ -1,25 +1,71 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
+// import { CreateAuthDto } from './dto/create-auth.dto';
+
+import { initializeApp } from 'firebase/app';
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  sendEmailVerification,
+  deleteUser,
+  updateProfile,
+  User,
+} from 'firebase/auth';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyDXtf7ajb2ib8NaqfDf0--2orNRYC7jZ6Y',
+  authDomain: 'fast-delivery-uma.firebaseapp.com',
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  async create(email: string, password: string) {
+    return createUserWithEmailAndPassword(auth, email, password);
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async sendEmailVerification(user: User) {
+    return sendEmailVerification(user);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async signIn(email: string, password: string) {
+    return signInWithEmailAndPassword(auth, email, password);
   }
 
-  update(id: number) {
-    return `This action updates a #${id} auth`;
+  async signOut() {
+    return signOut(auth);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async getCurrentUser() {
+    const user = auth.currentUser;
+    return user;
+  }
+
+  async updateName(user: User, displayName: string): Promise<void> {
+    return await updateProfile(user, { displayName });
+  }
+
+  async updatePhotoURL(user: User, photoURL: string): Promise<void> {
+    return updateProfile(user, { photoURL });
+  }
+
+  async delete(user: User) {
+    return deleteUser(user);
   }
 }
+
+/*
+const firebaseConfig = {
+  apiKey: "AIzaSyBoALIZQuxDRiAk48VjH610uVuqFr3aBH8",
+  authDomain: "fast-delivery-97f7c.firebaseapp.com",
+  projectId: "fast-delivery-97f7c",
+  storageBucket: "fast-delivery-97f7c.appspot.com",
+  messagingSenderId: "241051791820",
+  appId: "1:241051791820:web:8d2c09974e4c20a7756d69",
+  measurementId: "G-0YB89DTM7G"
+};
+*/

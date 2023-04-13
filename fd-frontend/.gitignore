@@ -4,9 +4,12 @@
 /node_modules
 /.pnp
 .pnp.js
+.eslintcache
 
 # testing
 /coverage
+
+/mongo
 
 # next.js
 /.next/

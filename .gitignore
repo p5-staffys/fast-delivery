@@ -3,6 +3,9 @@
 /node_modules
 /.pnp
 .pnp.js
+.eslintcache
+
+pnpm-lock.yaml
 
 # Logs
 logs
@@ -47,6 +50,7 @@ lerna-debug.log*
 
 # local env files
 .env*.local
+fast-delivery-uma-firebase-adminsdk-y1cvp-422b7b2779.json
 
 # vercel
 .vercel

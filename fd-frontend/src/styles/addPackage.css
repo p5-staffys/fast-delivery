@@ -1,0 +1,31 @@
+.addPackageData{
+    width: 90vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 2vh auto;
+}
+.addPackageData input{
+    margin-bottom: 1vh;
+}
+.MuiInputBase-root{
+    margin-bottom: 2vh;
+}
+.addPackageData label{
+    font-size: 0.9rem;
+}
+
+.quantity{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 5vw;
+}
+.quantity button{
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    border: 1px solid #b2bcca;
+    padding: 0
+}

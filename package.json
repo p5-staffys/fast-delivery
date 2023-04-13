@@ -5,9 +5,33 @@
   "scripts": {
     "front": "",
     "back": "",
-    "start": "concurrently 'cd fd-backend && npm start' 'cd fd-frontend && npm run dev'"
+    "start": "concurrently 'cd fd-backend && npm run start:dev' 'cd fd-frontend && npm run dev'",
+    "install": "concurrently 'cd fd-backend && npm i' 'cd fd-frontend && npm i'",
+    "format": "prettier --write",
+    "prepare": "husky install",
+    "test": "exit 0",
+    "lint:back": "cd fd-backend && npm run lint",
+    "lint:front": "cd fd-frontend && npm run lint",
+    "build": "cd fd-frontend && npm run build",
+    "test:back": "cd fd-backend && npm run test:e2e"
   },
   "dependencies": {
     "concurrently": "^7.6.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.4.3",
+    "@commitlint/config-conventional": "^17.4.3",
+    "eslint-config-prettier": "^8.6.0",
+    "husky": "^8.0.3",
+    "jest-environment-jsdom": "^29.4.3",
+    "lint-staged": "^13.1.2",
+    "prettier": "^2.8.4"
+  },
+  "lint-staged": {
+    "!(*eslintrc)*.{js,jsx,ts,tsx}": [
+      "npm run lint:back",
+      "npm run lint:front"
+    ],
+    "*.{js,jsx,ts,tsx,md,html,json,css,scss}": "prettier --write"
   }
 }
