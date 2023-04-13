@@ -41,15 +41,15 @@ export class UserController {
   @Public()
   @Post()
   async create(@Body() newUser: CreateUserDto): Promise<ReponseUserDto> {
+    const { password, email, name, lastName } = newUser;
+    await this.userService.checkUserEmail(email);
     try {
-      const { password, email, name, lastName } = newUser;
-      await this.userService.checkUserEmail(email);
       const _id = (await this.authService.create(email, password)).user.uid;
       return this.userService.create({ email, name, lastName, _id });
     } catch {
       throw new GeneralError(
-        'Email o password incorrecto',
-        HttpStatus.UNAUTHORIZED,
+        'No fue posible registrarse',
+        HttpStatus.BAD_REQUEST,
       );
     }
   }
@@ -135,11 +135,6 @@ export class UserController {
     @Body() form: FormAplyDto,
     @Req() { currentUser }: CurrentUserRequest,
   ): Promise<User> {
-    try {
-      const updatedUser = await this.userService.addForm(currentUser._id, form);
-      return updatedUser;
-    } catch {
-      throw new GeneralError('No se pudo agregar el formulario al usuario');
-    }
+    return await this.userService.addForm(currentUser._id, form);
   }
 }

@@ -14,17 +14,15 @@ export class UserRepository extends EntityRepository<UserDocument> {
   }
 
   async findOneById(_id: string) {
-    return await this.findOneOrFail({ _id });
+    return await this.userModel.findOne({ _id });
   }
 
   async findOneByIdAndDelete(_id: string) {
     return await this.findByIdAndDelete({ _id });
   }
 
-  async checkUserEmail(email): Promise<boolean> {
-    const uniqueMail = await this.userModel.findOne({ email });
-    if (uniqueMail && uniqueMail.email) return true;
-    return false;
+  async checkUserEmail(email: string): Promise<boolean> {
+    return await this.userModel.findOne({ email });
   }
 
   async foundUserAndValidateForm(_id) {
