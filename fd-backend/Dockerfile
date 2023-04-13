@@ -11,6 +11,9 @@ COPY . .
 # Install dependencies
 RUN npm install
 
+# Build
+RUN npm run build
+
 # Exposing the port
 EXPOSE 8080
 
@@ -18,4 +21,4 @@ EXPOSE 8080
 ENV PORT=8080
 
 # Running the application
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:prod"]
