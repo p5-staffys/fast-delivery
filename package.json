@@ -12,7 +12,8 @@
     "test": "exit 0",
     "lint:back": "cd fd-backend && npm run lint",
     "lint:front": "cd fd-frontend && npm run lint",
-    "build": "cd fd-frontend && npm run build",
+    "build:front": "cd fd-frontend && npm run build",
+    "build:back": "cd fd-backend && npm run build",
     "test:back": "cd fd-backend && npm run test:e2e"
   },
   "dependencies": {
