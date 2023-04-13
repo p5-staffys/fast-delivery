@@ -10,7 +10,10 @@ import {
 import { EntityNotFound } from '../../../common/error-handlers/exceptions';
 
 export abstract class EntityRepository<T extends Document> {
-  constructor(protected readonly entityModel: Model<T>) {}
+  constructor(
+    protected readonly entityModel: Model<T>,
+    private readonly customMessage?: string,
+  ) {}
 
   find = async (
     filter: FilterQuery<T>,
@@ -129,6 +132,7 @@ export abstract class EntityRepository<T extends Document> {
     filter: FilterQuery<T>,
     updateEntityData: UpdateQuery<unknown>,
     options?: QueryOptions,
+    customMessage?: String,
   ): Promise<T> => {
     const data = await this.entityModel
       .findOneAndUpdate(filter, updateEntityData, {
@@ -136,7 +140,11 @@ export abstract class EntityRepository<T extends Document> {
         ...options,
       })
       .exec();
-    if (!data) throw new EntityNotFound(this.entityModel.modelName);
+    customMessage = customMessage ?? '';
+    if (!data)
+      throw new EntityNotFound(
+        `${customMessage}, ${this.entityModel.modelName}`,
+      );
     return data;
   };
 }

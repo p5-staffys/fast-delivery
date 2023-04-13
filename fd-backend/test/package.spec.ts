@@ -38,7 +38,7 @@ describe('Package Routes', () => {
       },
       deliveryDate: date,
       deliveredOn: date,
-      status: PackageStatus.Pending,
+      status: PackageStatus.New,
     };
   });
 

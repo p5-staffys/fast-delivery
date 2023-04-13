@@ -34,7 +34,7 @@ export class Package {
   readonly deliveredOn: Date | null;
 
   @Prop({ type: String, default: PackageStatus.New })
-  readonly status: PackageStatus;
+  status: PackageStatus;
 
   @Prop({ type: Number, default: 1 })
   readonly quantity: number;
