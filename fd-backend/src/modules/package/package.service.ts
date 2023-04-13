@@ -30,15 +30,21 @@ export class PackageService {
 
   async assignToUser(_id: Types.ObjectId, user: IUser): Promise<Package> {
     const form = await this.userRepository.foundUserAndValidateForm(user._id);
+    if (!form)
+      throw new BadRequestException(
+        'No hiciste tu formulario de hoy, tenes que hacerlo para poder continuar',
+      );
+
     const { bebidasAlcoholicas, medicamentosPsicoactivos, problemaEmocional } =
-      form.forms[0];
-    if (!bebidasAlcoholicas && medicamentosPsicoactivos && problemaEmocional)
+      form.forms[form.forms.length - 1];
+
+    if (bebidasAlcoholicas || medicamentosPsicoactivos || problemaEmocional)
       throw new BadRequestException(
         'No cumplis los requisitos minimos para trabajar durante el dia de hoy, proba nuevamente en 24hs',
       );
     const { name, lastName } = user;
     const updatePack = {
-      deliverBy: {
+      deliveredBy: {
         name,
         lastName,
         _id: user._id,
@@ -87,7 +93,7 @@ export class PackageService {
       { ...actualPackage },
       { ...update },
       null,
-      'ID o Status invalido, solo puede ser "delivering"',
+      `ID o Status invalido, solo puede ser "${PackageStatus.Delivering}"`,
     );
   }
 }
