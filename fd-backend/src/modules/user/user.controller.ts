@@ -79,7 +79,8 @@ export class UserController {
       const userCredentials = await this.authService.signIn(email, password);
       const token = await userCredentials.user.getIdToken();
       response.cookie('idToken', token);
-      const user = await this.userService.findByEmail(email);
+      const _id = userCredentials.user.uid;
+      const user = await this.userService.findById(_id);
       return { user, token };
     } catch {
       throw new GeneralError(
