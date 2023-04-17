@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Button from "@mui/material/Button";
 import { Container, Accordion, AccordionSummary, CardContent } from "@mui/material";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -15,8 +15,6 @@ const WorkingDay = (): JSX.Element => {
   const [paquetesPending, setPaquetesPending] = useState<Pack[]>([]);
   const [user, setUser] = useState<{ Name: string; Value: string }[]>([]);
 
-
-
   useEffect(() => {
     requestPacks(5).then((packs) => {
       setPaquetes(packs);
@@ -27,14 +25,14 @@ const WorkingDay = (): JSX.Element => {
     });
   }, []);
 
-//   useEffect(() => {
-//     axios
-//       .get("http://localhost:8080/auth/current", { withCredentials: true })
-//       .then((response) => {
-//         setUser(response.data.UserAttributes);
-//       })
-//       .catch((error) => console.log(error));
-//   }, []);
+  //   useEffect(() => {
+  //     axios
+  //       .get("http://localhost:8080/auth/current", { withCredentials: true })
+  //       .then((response) => {
+  //         setUser(response.data.UserAttributes);
+  //       })
+  //       .catch((error) => console.log(error));
+  //   }, []);
 
   return (
     <>
@@ -77,6 +75,5 @@ const WorkingDay = (): JSX.Element => {
     </>
   );
 };
-
 
 export default WorkingDay;

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import logo from "../../asset/logoMoto.png";
 import Button from "@mui/material/Button";
@@ -81,19 +81,17 @@ const Home = (): JSX.Element => {
             style={{ position: "absolute", right: 20, top: 380, backgroundColor: "transparent", border: "none" }}
             onClick={handleVisibility}
           >
-            {visibility ? <VisibilityIcon sx={{ color: "grey"}} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
+            {visibility ? <VisibilityIcon sx={{ color: "grey" }} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
           </button>
           <Link href="/management/scheduleManagement">
-          <Button sx={{mt:3}} variant="contained" fullWidth type="submit">
-            <strong>Ingresar</strong>
-          </Button>
+            <Button sx={{ mt: 3 }} variant="contained" fullWidth type="submit">
+              <strong>Ingresar</strong>
+            </Button>
           </Link>
-          
         </Box>
       </main>
     </>
   );
 };
-
 
 export default Home;

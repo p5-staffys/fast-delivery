@@ -12,19 +12,10 @@ interface Props {
 }
 
 const CardManagePackage: React.FC<Props> = ({ paquete }) => {
- 
   return (
-    
-    
-    <Box sx={{ maxWidth:"auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0",  }} >
-
-        
+    <Box sx={{ maxWidth: "auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0" }}>
       <Link href={`/repartidor/paquete/${paquete._id}`}>
-      <CardMedia
-        sx={{ height: "70px", width: "70px", flexShrink: 0 }}
-        image={imagePack.src}
-        title="paquete"
-      />
+        <CardMedia sx={{ height: "70px", width: "70px", flexShrink: 0 }} image={imagePack.src} title="paquete" />
       </Link>
       <Box
         sx={{
@@ -40,30 +31,32 @@ const CardManagePackage: React.FC<Props> = ({ paquete }) => {
             display: "flex",
             alignItems: "center",
             ml: 2,
-            
           }}
         >
           <Typography
-            sx={{mb:4,flexGrow: 1, maxHeight: "1em", overflow: "none", font:"Open Sans", fontWeight:400, fontSize:"12px", lineHeight:"20px"  }}
+            sx={{
+              mb: 4,
+              flexGrow: 1,
+              maxHeight: "1em",
+              overflow: "none",
+              font: "Open Sans",
+              fontWeight: 400,
+              fontSize: "12px",
+              lineHeight: "20px",
+            }}
             component="div"
             variant="subtitle1"
           >
             {paquete.destination}
           </Typography>
 
-          <IconButton sx={{mb:2 ,textAlign: "right" }} aria-label="previous">
+          <IconButton sx={{ mb: 2, textAlign: "right" }} aria-label="previous">
             <Image alt="trash" src={trash} />
           </IconButton>
         </Box>
-          
-
-       
       </Box>
-      </Box>
-    
+    </Box>
   );
 };
 
 export default CardManagePackage;
-
-

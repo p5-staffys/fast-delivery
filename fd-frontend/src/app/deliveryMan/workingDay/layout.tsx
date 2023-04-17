@@ -1,16 +1,16 @@
-import Header from "./components/header"
+import Header from "./components/header";
 
 interface Props {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
 
-function WorkingDayLayout ({children}: Props) {
+function WorkingDayLayout({ children }: Props) {
   return (
     <div>
-        <Header/>
-        {children}
+      <Header />
+      {children}
     </div>
-  )
+  );
 }
 
-export default WorkingDayLayout
+export default WorkingDayLayout;

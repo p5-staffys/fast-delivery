@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Container } from "@mui/system";
@@ -20,7 +20,6 @@ const ManagePackage = (): JSX.Element => {
   }, []);
   return (
     <>
-    
       <Container fixed>
         <Link href={`management/scheduleManagement`}>
           <IconButton aria-label="Example" sx={{ my: 2 }}>
@@ -53,6 +52,5 @@ const ManagePackage = (): JSX.Element => {
     </>
   );
 };
-
 
 export default ManagePackage;

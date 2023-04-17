@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Accordion,
@@ -19,10 +19,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Pack, requestPacks } from "../../../../utils/seed";
 
-const idPack = () : JSX.Element => {
- 
-
-
+const idPack = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<Pack[]>([]);
 
   useEffect(() => {
@@ -31,31 +28,20 @@ const idPack = () : JSX.Element => {
     });
   }, []);
 
-  
   return (
     <>
-     
       <Container>
-      <Link href={`deliveryMan/workingDay`}>
-        <IconButton aria-label="Example" sx={{ my: 2 }}>
-          <ArrowBackIosIcon sx={{ color: "black" }} />
-        </IconButton>
+        <Link href={`deliveryMan/workingDay`}>
+          <IconButton aria-label="Example" sx={{ my: 2 }}>
+            <ArrowBackIosIcon sx={{ color: "black" }} />
+          </IconButton>
         </Link>
         <Accordion sx={{ marginY: "15px" }} defaultExpanded={true}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
-          >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id="panel2a-header">
             <Typography variant="h5">Reparto en curso</Typography>
           </AccordionSummary>
           <Card>
-            <CardMedia
-              sx={{ height: "212px", width: "287px", ml: "34px", mt: 2}}
-              image={mapa.src}
-              title="mapa"
-              
-            />
+            <CardMedia sx={{ height: "212px", width: "287px", ml: "34px", mt: 2 }} image={mapa.src} title="mapa" />
             <CardContent>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Destino: </span>
@@ -64,19 +50,17 @@ const idPack = () : JSX.Element => {
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Numero del paquete: </span>
                 {paquetes[0]?._id}
-              </Typography >
+              </Typography>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Recibe: </span>
                 {paquetes[0]?.client}
               </Typography>
             </CardContent>
-            <CardActions
-              sx={{ flexDirection: "column-reverse", alignItems: "flex-end" }}
-            >
+            <CardActions sx={{ flexDirection: "column-reverse", alignItems: "flex-end" }}>
               <Link href={`deliveryMan/workingDay`}>
-              <Button sx={{}} variant="contained" size="small">
-                Finalizar
-              </Button>
+                <Button sx={{}} variant="contained" size="small">
+                  Finalizar
+                </Button>
               </Link>
             </CardActions>
           </Card>

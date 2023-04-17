@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Container } from "@mui/system";
 import { Accordion, AccordionDetails, AccordionSummary, Box, IconButton, Switch, Typography } from "@mui/material";
 import Link from "next/link";
@@ -7,7 +7,6 @@ import faridImg from "../../../../asset/faridImg.png";
 import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
-
 
 import { Pack, requestPacks } from "../../../../utils/seed";
 import Card from "../../../deliveryMan/workingDay/components/card";
@@ -23,7 +22,6 @@ const DeliveryDetail = (): JSX.Element => {
 
   return (
     <>
-     
       <Container fixed>
         <Link href={`/gestion/agenda`}>
           <IconButton aria-label="Example" sx={{ my: 1 }}>
@@ -87,6 +85,5 @@ const DeliveryDetail = (): JSX.Element => {
     </>
   );
 };
-
 
 export default DeliveryDetail;

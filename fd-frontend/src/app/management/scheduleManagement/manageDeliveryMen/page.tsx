@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { Box } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
@@ -17,7 +17,6 @@ import Progress from "../components/progress";
 const Repartidores = (): JSX.Element => {
   return (
     <>
-    
       <BackBtn back="management/scheduleManagement" />
       <Box sx={{ width: "90vw", m: "auto" }}>
         <Accordion defaultExpanded={true}>
@@ -75,6 +74,5 @@ const Repartidores = (): JSX.Element => {
     </>
   );
 };
-
 
 export default Repartidores;

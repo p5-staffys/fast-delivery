@@ -7,19 +7,16 @@ import { Typography } from "@mui/material";
 
 interface Props {
   ask: object;
-  handleClick: (( event: React.SyntheticEvent<Element, Event>, checked: boolean) => void) | undefined
-
+  handleClick: ((event: React.SyntheticEvent<Element, Event>, checked: boolean) => void) | undefined;
 }
 
-export default function ErrorRadios({ask,handleClick}:Props) {
-
-
+export default function ErrorRadios({ ask, handleClick }: Props): React.ReactElement {
   return (
-    <FormControl sx={{ alignItems:"center" }} >
+    <FormControl sx={{ alignItems: "center" }}>
       <Typography mt={4} fontWeight={700} fontSize="15px" lineHeight={"20px"}>
-      {Object.values(ask)}
+        {Object.values(ask)}
       </Typography>
-      <RadioGroup row sx={{mt:2}}>
+      <RadioGroup row sx={{ mt: 2 }}>
         <FormControlLabel
           value="true"
           control={<Radio />}

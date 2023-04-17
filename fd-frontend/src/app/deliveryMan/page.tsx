@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import logo from "../../asset/logoMoto.png";
 import Button from "@mui/material/Button";
@@ -10,7 +10,6 @@ import React from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { GetUsers } from "./services/user.services";
-
 
 const DeliveryMan = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
@@ -28,14 +27,11 @@ const DeliveryMan = (): JSX.Element => {
     const inputElement = e.currentTarget as HTMLInputElement;
     setPassword(inputElement.value);
   };
-  
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    // GetUsers(email,password)
-    // axios.post("http://localhost:8080/auth/signIn", { email, password }, { withCredentials: true }).then((response) => {
-    //   if (response.data === "user logged in") router.push("/repartidor/jornada");
-    // });
+    GetUsers(email, password);
   };
   const handleVisibility = (e: React.FormEvent<HTMLButtonElement>): void => {
     e.preventDefault();
@@ -46,7 +42,6 @@ const DeliveryMan = (): JSX.Element => {
     }
   };
   const eye: string = visibility ? "text" : "password";
-
 
   return (
     <>
@@ -92,13 +87,13 @@ const DeliveryMan = (): JSX.Element => {
           >
             {visibility ? <VisibilityIcon sx={{ color: "grey" }} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
           </button>
-          <Button variant="contained" fullWidth type="submit" sx={{ mt:5}}>
+          <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
             <strong>Ingresar</strong>{" "}
           </Button>
           <Link href="/deliveryMan/workingDay">
-          <Button variant="contained" fullWidth type="submit" sx={{ mt:5}}>
-            <strong>Ingresar</strong>{" "}
-          </Button>
+            <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
+              <strong>Ingresar</strong>{" "}
+            </Button>
           </Link>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
@@ -113,6 +108,5 @@ const DeliveryMan = (): JSX.Element => {
     </>
   );
 };
-
 
 export default DeliveryMan;

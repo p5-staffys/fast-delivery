@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { Box, Container } from "@mui/system";
 import Image from "next/image";
-import logoAdmin from "../../../asset/ImgAdmin.png"
+import logoAdmin from "../../../asset/ImgAdmin.png";
 import logo1 from "../../../asset/logito1.png";
 import logo2 from "../../../asset/logito2.jpg";
 import React from "react";
@@ -14,7 +14,6 @@ import Progress from "./components/progress";
 const Agenda = (): JSX.Element => {
   return (
     <>
-  
       <Container>
         <Box sx={{ mt: 2, display: "flex", flexDirection: "inherit" }}>
           <Image src={logoAdmin} alt="logo" width={53} height={53} />
@@ -78,6 +77,5 @@ const Agenda = (): JSX.Element => {
     </>
   );
 };
-
 
 export default Agenda;

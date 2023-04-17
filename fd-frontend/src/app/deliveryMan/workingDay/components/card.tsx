@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React from "react";
 import CardMedia from "@mui/material/CardMedia";
@@ -14,19 +14,10 @@ interface Props {
 }
 
 const CardManagePackage: React.FC<Props> = ({ paquete }) => {
- 
   return (
-    
-    
-    <Box sx={{ maxWidth:"auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0",  }} >
-
-        
+    <Box sx={{ maxWidth: "auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0" }}>
       <Link href={`/deliveryMan/workingDay/package`}>
-      <CardMedia
-        sx={{ height: "70px", width: "70px", flexShrink: 0 }}
-        image={imagePack.src}
-        title="paquete"
-      />
+        <CardMedia sx={{ height: "70px", width: "70px", flexShrink: 0 }} image={imagePack.src} title="paquete" />
       </Link>
       <Box
         sx={{
@@ -34,7 +25,6 @@ const CardManagePackage: React.FC<Props> = ({ paquete }) => {
           flexDirection: "column",
           width: "100%",
           maxWidth: "100%",
-          
         }}
       >
         <Box
@@ -47,7 +37,15 @@ const CardManagePackage: React.FC<Props> = ({ paquete }) => {
           }}
         >
           <Typography
-            sx={{ flexGrow: 1, maxHeight: "1em", overflow: "none", font:"Open Sans", fontWeight:400, fontSize:"12px", lineHeight:"20px"  }}
+            sx={{
+              flexGrow: 1,
+              maxHeight: "1em",
+              overflow: "none",
+              font: "Open Sans",
+              fontWeight: 400,
+              fontSize: "12px",
+              lineHeight: "20px",
+            }}
             component="div"
             variant="subtitle1"
           >
@@ -58,22 +56,19 @@ const CardManagePackage: React.FC<Props> = ({ paquete }) => {
             <Image alt="trash" src={trash} />
           </IconButton>
         </Box>
-         <Typography
+        <Typography
           variant="subtitle1"
           color="black"
           component="div"
           align="right"
-          sx={{mr:1, fontSize:"12px", lineHeight:"20px"}}
-          fontFamily="Open Sans"      
+          sx={{ mr: 1, fontSize: "12px", lineHeight: "20px" }}
+          fontFamily="Open Sans"
           fontWeight="700"
         >
           {paquete.status}
         </Typography>
-
-       
       </Box>
-      </Box>
-    
+    </Box>
   );
 };
 

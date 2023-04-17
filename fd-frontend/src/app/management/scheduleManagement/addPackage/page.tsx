@@ -20,11 +20,7 @@ const addPackage = (): JSX.Element => {
     <>
       <Box>
         <BackBtn back="management/scheduleManagement" />
-        <Typography
-          sx={{ ml: "20px", mb: "0.5vh", fontSize: "1em", fontWeight: 800 }}
-        >
-          Argregar paquetes
-        </Typography>
+        <Typography sx={{ ml: "20px", mb: "0.5vh", fontSize: "1em", fontWeight: 800 }}>Argregar paquetes</Typography>
       </Box>
       <Box className="addPackageData">
         <TextField
@@ -64,11 +60,7 @@ const addPackage = (): JSX.Element => {
           }}
         />
       </Box>
-      <Typography
-        sx={{ ml: "20px", mb: "0.5vh", fontSize: "0.8em", color: "#f5bd09" }}
-      >
-        Cantidad
-      </Typography>
+      <Typography sx={{ ml: "20px", mb: "0.5vh", fontSize: "0.8em", color: "#f5bd09" }}>Cantidad</Typography>
       <Box className="quantity">
         <IconButton onClick={handleSubtract}>-</IconButton>
         <Typography sx={{ m: "0 12px" }}>{quantity}</Typography>

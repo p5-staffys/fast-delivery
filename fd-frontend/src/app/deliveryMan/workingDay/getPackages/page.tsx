@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -48,7 +48,6 @@ const Paquetes = (): JSX.Element => {
 
   return (
     <div>
-      
       <Box
         sx={{ maxWidth: "100vw", height: "12vh", ml: 2, mt: 2 }}
         display="flex"
@@ -201,13 +200,12 @@ const Paquetes = (): JSX.Element => {
         </Box>
       </Box>
       <Link href="/deliveryMan/workingDay/getPackages/declaration">
-      <Button variant="contained" sx={{ m: "0 2.5vw", mt: 5, width: "95vw" }}>
-        Iniciar jornada
-      </Button>
+        <Button variant="contained" sx={{ m: "0 2.5vw", mt: 5, width: "95vw" }}>
+          Iniciar jornada
+        </Button>
       </Link>
     </div>
   );
 };
-
 
 export default Paquetes;

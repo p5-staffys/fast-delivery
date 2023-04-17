@@ -7,7 +7,6 @@ import ErrorRadios from "../components/radioGroup";
 import { SyntheticEvent, useState } from "react";
 import { inicial, questions } from "../../../../../utils/DeclarationUtil";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 
 const Paquetes = (): JSX.Element => {
   const [asks, setAsks] = useState(inicial);
@@ -17,10 +16,13 @@ const Paquetes = (): JSX.Element => {
     const { name, value } = event.target as HTMLButtonElement;
     const res = value === "true" ? true : false;
 
-    setAsks({ ...asks, [name]: res });
+    return setAsks({ ...asks, [name]: res });
   };
 
-  const handleSubmit = () => {
+  //(property) Props.handleClick: ((event: SyntheticEvent<Element, Event>, checked: boolean) => void) | undefined
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
     const arr = Object.values(asks);
     if (arr.some((element) => element === null)) {
       return alert("completa el formulario");
@@ -45,7 +47,7 @@ const Paquetes = (): JSX.Element => {
       <BackBtn back="deliveryMan/workingDay" />
 
       <Box sx={{ textAlign: "center", mt: 2 }}>
-        <Box sx={{ my: 4 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ my: 4 }}>
           <Typography fontWeight={400} fontSize="18px" lineHeight={"21,78px"}>
             Declaración jurada
           </Typography>
@@ -56,16 +58,11 @@ const Paquetes = (): JSX.Element => {
             <ErrorRadios ask={ask} handleClick={handleClick} />
           </Box>
         ))}
-      </Box>
 
-      <Button
-        onClick={handleSubmit}
-        sx={{ marginY: "15px" }}
-        variant="contained"
-        fullWidth={true}
-      >
-        continuar
-      </Button>
+        <Button type="submit" sx={{ marginY: "15px" }} variant="contained" fullWidth={true}>
+          continuar
+        </Button>
+      </Box>
     </Container>
   );
 };
