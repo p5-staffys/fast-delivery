@@ -8,7 +8,7 @@ export const setupSecurity = (app: INestApplication): void => {
 
   // Enable Cross-origin resource sharing for a list of domains
   app.enableCors({
-    origin: `http://localhost:${process.env.PORT}`, // Probably can change with .env
+    origin: `http://localhost:3000`, // Probably can change with .env
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

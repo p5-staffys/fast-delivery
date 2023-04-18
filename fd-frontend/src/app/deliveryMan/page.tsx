@@ -11,11 +11,13 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { GetUsers } from "./services/user.services";
 
-const DeliveryMan = (): JSX.Element => {
+
+const DeliveryMan = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
-
+  const [user, setUser] = useState<object>({});
+  
   const handleEmail: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
     const inputElement = e.currentTarget as HTMLInputElement;
@@ -28,11 +30,12 @@ const DeliveryMan = (): JSX.Element => {
     setPassword(inputElement.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    GetUsers(email, password);
+    
+   setUser(GetUsers(email, password))
   };
+  console.log(user)
   const handleVisibility = (e: React.FormEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     if (visibility) {
@@ -88,11 +91,11 @@ const DeliveryMan = (): JSX.Element => {
             {visibility ? <VisibilityIcon sx={{ color: "grey" }} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
           </button>
           <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
-            <strong>Ingresar</strong>{" "}
+            <strong>Ingresar</strong>
           </Button>
           <Link href="/deliveryMan/workingDay">
             <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
-              <strong>Ingresar</strong>{" "}
+              <strong>Ingresar</strong>
             </Button>
           </Link>
         </Box>
