@@ -6,12 +6,12 @@ import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/back
 const addPackage = (): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(0);
 
-  const handleAdd = () => {
+  const handleAdd = (): void => {
     if (quantity >= 0) {
       setQuantity(quantity + 1);
     }
   };
-  const handleSubtract = () => {
+  const handleSubtract = (): void => {
     if (quantity > 0) {
       setQuantity(quantity - 1);
     }

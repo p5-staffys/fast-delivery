@@ -3,7 +3,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-const Porcentaje = ({ value }: { value: number }) => {
+const Porcentaje = ({ value }: { value: number }): React.ReactElement => {
   const total = value === 100 ? "#96db76" : "#fdc93e";
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>

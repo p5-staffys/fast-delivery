@@ -12,7 +12,7 @@ const Paquetes = (): JSX.Element => {
   const [asks, setAsks] = useState(inicial);
   const router = useRouter();
 
-  const handleClick = (event: SyntheticEvent<Element, Event>) => {
+  const handleClick = (event: SyntheticEvent<Element, Event>): void => {
     const { name, value } = event.target as HTMLButtonElement;
     const res = value === "true" ? true : false;
 
