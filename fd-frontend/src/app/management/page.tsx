@@ -12,28 +12,34 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { logInAdmin } from "../../utils/seed";
 
 const Home = (): JSX.Element => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [email, setEmail] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
   const router = useRouter();
 
-  const handleEmail = (e: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleEmail = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    setEmail(e.target.value);
+    const inputElement = e.currentTarget as HTMLInputElement;
+    setEmail(inputElement.value);
   };
 
-  const handlePassword = (e: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handlePassword = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    setPassword(e.target.value);
+    const inputElement = e.currentTarget as HTMLInputElement;
+    setPassword(inputElement.value);
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     logInAdmin("pepe@argento.com");
     router.push("/gestion/agenda");
   };
 
-  const handleVisibility = (e: any) => {
+  const handleVisibility = (e: React.FormEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     if (visibility) {
       setVisibility(false);

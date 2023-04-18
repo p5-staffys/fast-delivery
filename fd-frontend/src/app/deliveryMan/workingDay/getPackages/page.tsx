@@ -15,32 +15,32 @@ const Paquetes = (): JSX.Element => {
   const [numThree, setNumThree] = useState<number>(0);
   const max = 7;
 
-  const handleAddOne = () => {
+  const handleAddOne = (): void => {
     if (numOne >= 0 && numOne < max) {
       setNumOne(numOne + 1);
     }
   };
-  const handleSubtractOne = () => {
+  const handleSubtractOne = (): void => {
     if (numOne > 0) {
       setNumOne(numOne - 1);
     }
   };
-  const handleAddTwo = () => {
+  const handleAddTwo = (): void => {
     if (numTwo >= 0 && numTwo < max) {
       setNumTwo(numTwo + 1);
     }
   };
-  const handleSubtractTwo = () => {
+  const handleSubtractTwo = (): void => {
     if (numTwo > 0) {
       setNumTwo(numTwo - 1);
     }
   };
-  const handleAddThree = () => {
+  const handleAddThree = (): void => {
     if (numThree >= 0 && numThree < max) {
       setNumThree(numThree + 1);
     }
   };
-  const handleSubtractThree = () => {
+  const handleSubtractThree = (): void => {
     if (numThree > 0) {
       setNumThree(numThree - 1);
     }

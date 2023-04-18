@@ -6,13 +6,13 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import axios from "axios";
 import { Pack, requestPacks } from "../../../utils/seed";
 import Card from "./components/card";
 
 const WorkingDay = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<Pack[]>([]);
   const [paquetesPending, setPaquetesPending] = useState<Pack[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [user, setUser] = useState<{ Name: string; Value: string }[]>([]);
 
   useEffect(() => {

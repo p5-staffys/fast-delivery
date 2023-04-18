@@ -1,6 +1,6 @@
 import logo from "../asset/favicon.ico";
 
-export default function Head() {
+export default function Head(): React.ReactElement {
   return (
     <>
       <title>Fast Delivery</title>

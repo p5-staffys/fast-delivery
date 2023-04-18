@@ -27,10 +27,10 @@ const items = [
   },
 ];
 
-function DayList() {
+function DayList(): JSX.Element {
   const [selected, setSelected] = useState(0);
 
-  const handleSelect = (i: number) => {
+  const handleSelect = (i: number): void => {
     setSelected(i);
   };
 
@@ -55,7 +55,7 @@ function DayList() {
               backgroundColor: `${i === selected ? "#FCBC11" : "primary.main"}`,
               borderRadius: "40px",
             }}
-            onClick={() => handleSelect(i)}
+            onClick={(): void => handleSelect(i)}
           >
             <Typography color={"white"} variant="h6" align="center">
               {item.date}
