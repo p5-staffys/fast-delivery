@@ -1,17 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { initializeApp, ServiceAccount } from 'firebase-admin/app';
+import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 
-import * as firebaseAdmin from 'firebase-admin';
-import firebaseAccountCredentials from '../../../fast-delivery-uma-firebase-adminsdk-y1cvp-422b7b2779.json';
-
-const serviceAccount = firebaseAccountCredentials as ServiceAccount;
-
-const app = initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount),
-  projectId: 'fast-delivery-uma',
-});
+const app = initializeApp({ projectId: 'fast-delivery-uma' });
 
 export const auth = getAuth(app);
 
@@ -21,10 +13,10 @@ export class AdminAuthService {
     return auth.verifyIdToken(idToken);
   }
 
-  async create(email: string, password: string) {
+  async create(email: string, password: string, admin: boolean) {
     const newAdminAuth = await auth.createUser({ email, password });
     const uid = newAdminAuth.uid;
-    await auth.setCustomUserClaims(uid, { admin: true });
+    await auth.setCustomUserClaims(uid, { admin });
     return newAdminAuth;
   }
 

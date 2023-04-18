@@ -28,7 +28,11 @@ export class AdminController {
   async create(@Body() newAdmin: IAdmin) {
     try {
       const { email, password } = newAdmin;
-      const newAdminAuth = await this.adminAuthService.create(email, password);
+      const newAdminAuth = await this.adminAuthService.create(
+        email,
+        password,
+        true,
+      );
       const _id = newAdminAuth.uid;
       const newAdminUser = await this.adminService.create({ ...newAdmin, _id });
       return newAdminUser;
