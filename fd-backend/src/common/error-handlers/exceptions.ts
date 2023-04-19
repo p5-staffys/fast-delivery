@@ -8,7 +8,7 @@ export class EntityNotFound extends HttpException {
 
 export class GeneralError extends HttpException {
   constructor(
-    private readonly error: string,
+    private readonly error: string | unknown,
     private readonly statusCode: HttpStatus = HttpStatus.BAD_REQUEST,
   ) {
     super(error, statusCode);

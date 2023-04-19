@@ -132,7 +132,7 @@ export abstract class EntityRepository<T extends Document> {
     filter: FilterQuery<T>,
     updateEntityData: UpdateQuery<unknown>,
     options?: QueryOptions,
-    customMessage?: String,
+    customMessage?: string,
   ): Promise<T> => {
     const data = await this.entityModel
       .findOneAndUpdate(filter, updateEntityData, {

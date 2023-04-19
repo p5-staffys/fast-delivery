@@ -14,7 +14,7 @@ export class UserRepository extends EntityRepository<UserDocument> {
   }
 
   async findOneById(_id: string) {
-    return await this.userModel.findOne({ _id });
+    return await this.userModel.findById(_id);
   }
 
   async findOneByIdAndDelete(_id: string) {

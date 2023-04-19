@@ -31,6 +31,10 @@ export class AdminService {
     return await this.adminModel.create(newAdmin);
   }
 
+  async findById(_id: string) {
+    return this.adminModel.findById(_id);
+  }
+
   async getUsers() {
     return 'Returns all users';
   }

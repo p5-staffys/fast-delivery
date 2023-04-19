@@ -44,13 +44,11 @@ export class UserController {
     const { password, email, name, lastName } = newUser;
     await this.userService.checkUserEmail(email);
     try {
-      const _id = (await this.authService.create(email, password)).user.uid;
+      const _id = (await this.adminAuthService.create(email, password, false))
+        .uid;
       return this.userService.create({ email, name, lastName, _id });
-    } catch {
-      throw new GeneralError(
-        'No fue posible registrarse',
-        HttpStatus.BAD_REQUEST,
-      );
+    } catch (error: unknown) {
+      throw new GeneralError(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -78,8 +76,9 @@ export class UserController {
     try {
       const userCredentials = await this.authService.signIn(email, password);
       const token = await userCredentials.user.getIdToken();
+      const _id = userCredentials.user.uid;
+      const user = await this.userService.findById(_id);
       response.cookie('idToken', token);
-      const user = await this.userService.findByEmail(email);
       return { user, token };
     } catch {
       throw new GeneralError(
