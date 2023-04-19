@@ -16,9 +16,9 @@ const DeliveryMan = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
-  const {setData} = useGlobalContext()
+  const { setData } = useGlobalContext();
   const router = useRouter();
- 
+
   const handleEmail: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
     const inputElement = e.currentTarget as HTMLInputElement;
@@ -33,10 +33,11 @@ const DeliveryMan = (): JSX.Element => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    setData(await GetUsers(email, password))
-    router.push("/deliveryMan/workingDay")
+    const response = await GetUsers(email, password);
+    setData(response.data);
+    router.push("/deliveryMan/workingDay");
   };
- 
+
   const handleVisibility = (e: React.FormEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     if (visibility) {

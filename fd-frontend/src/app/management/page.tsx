@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { logInAdmin } from "../../utils/seed";
@@ -19,15 +19,13 @@ const Home = (): JSX.Element => {
   const [visibility, setVisibility] = useState<boolean>(false);
   const router = useRouter();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleEmail = (e: React.FormEvent<HTMLInputElement>): void => {
+  const handleEmail: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
     const inputElement = e.currentTarget as HTMLInputElement;
     setEmail(inputElement.value);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handlePassword = (e: React.FormEvent<HTMLInputElement>): void => {
+  const handlePassword: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
     const inputElement = e.currentTarget as HTMLInputElement;
     setPassword(inputElement.value);
@@ -36,7 +34,7 @@ const Home = (): JSX.Element => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     logInAdmin("pepe@argento.com");
-    router.push("/gestion/agenda");
+    router.push("/management/scheduleManagement");
   };
 
   const handleVisibility = (e: React.FormEvent<HTMLButtonElement>): void => {
@@ -72,6 +70,7 @@ const Home = (): JSX.Element => {
             InputLabelProps={{
               style: { color: "#f5bd09" },
             }}
+            onChange={handleEmail}
           />
           <TextField
             id="standard-basic"
@@ -82,6 +81,7 @@ const Home = (): JSX.Element => {
             InputLabelProps={{
               style: { color: "#f5bd09" },
             }}
+            onChange={handlePassword}
           />
           <button
             style={{ position: "absolute", right: 20, top: 380, backgroundColor: "transparent", border: "none" }}
