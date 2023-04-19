@@ -10,14 +10,15 @@ import React from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { GetUsers } from "./services/user.services";
-
+import { useGlobalContext } from "@/context/store";
+import { useRouter } from "next/navigation";
 const DeliveryMan = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [user, setUser] = useState<object>({});
-
+  const {setData} = useGlobalContext()
+  const router = useRouter();
+ 
   const handleEmail: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
     const inputElement = e.currentTarget as HTMLInputElement;
@@ -32,9 +33,10 @@ const DeliveryMan = (): JSX.Element => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
-    setUser(GetUsers(email, password));
+    setData(await GetUsers(email, password))
+    router.push("/deliveryMan/workingDay")
   };
+ 
   const handleVisibility = (e: React.FormEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     if (visibility) {
