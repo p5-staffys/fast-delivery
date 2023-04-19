@@ -27,4 +27,9 @@ export class AdminAuthService {
   async remove(uid: string) {
     return auth.deleteUser(uid);
   }
+
+  async verifyAdmin(idToken: string) {
+    const admin = (await auth.verifyIdToken(idToken)).admin;
+    return admin;
+  }
 }

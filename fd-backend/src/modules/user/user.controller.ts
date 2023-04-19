@@ -10,7 +10,6 @@ import {
   Res,
   UseInterceptors,
   HttpStatus,
-  HttpException,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -49,11 +48,7 @@ export class UserController {
         .uid;
       return this.userService.create({ email, name, lastName, _id });
     } catch (error: unknown) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
-      /*throw new GeneralError(
-        'No fue posible registrarse',
-        HttpStatus.BAD_REQUEST,
-      );*/
+      throw new GeneralError(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -81,8 +76,9 @@ export class UserController {
     try {
       const userCredentials = await this.authService.signIn(email, password);
       const token = await userCredentials.user.getIdToken();
+      const _id = userCredentials.user.uid;
+      const user = await this.userService.findById(_id);
       response.cookie('idToken', token);
-      const user = await this.userService.findByEmail(email);
       return { user, token };
     } catch {
       throw new GeneralError(
