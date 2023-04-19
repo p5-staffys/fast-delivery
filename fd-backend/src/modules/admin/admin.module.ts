@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthGuard } from '../auth/middleware/auth.guard';
 import { AdminAuthService } from '../auth/admin-auth.service';
 import { Admin, AdminSchema } from './entities/admin.entity';
+import { AuthService } from '../auth/auth.service';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { Admin, AdminSchema } from './entities/admin.entity';
   providers: [
     AdminService,
     AdminAuthService,
+    AuthService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
