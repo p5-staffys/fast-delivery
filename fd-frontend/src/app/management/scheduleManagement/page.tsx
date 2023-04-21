@@ -12,6 +12,10 @@ import DayList from "./components/carousel";
 import Progress from "./components/progress";
 
 const Agenda = (): JSX.Element => {
+  const today = new Date();
+  const options: Intl.DateTimeFormatOptions = { timeZone: "UTC", dateStyle: "short" };
+  const formattedDate = today.toLocaleDateString("es-ES", options);
+
   return (
     <>
       <Container>
@@ -25,7 +29,7 @@ const Agenda = (): JSX.Element => {
         <DayList />
         <Accordion sx={{ mt: 2 }} defaultExpanded={true}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography sx={{ fontWeight: 700, fontSize: "16px" }}>15/02/23 - Detalles</Typography>
+            <Typography sx={{ fontWeight: 700, fontSize: "16px" }}>{formattedDate} - Detalles</Typography>
           </AccordionSummary>
           <Container>
             <Box sx={{ width: "90vw", m: "auto" }}>

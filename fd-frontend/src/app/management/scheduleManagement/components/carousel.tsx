@@ -3,29 +3,21 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { startOfWeek, addDays, format } from "date-fns";
+import { es } from "date-fns/locale";
 
-const items = [
-  {
-    date: 27,
-    day: "Lun",
-  },
-  {
-    date: 28,
-    day: "Mar",
-  },
-  {
-    date: 1,
-    day: "Mier",
-  },
-  {
-    date: 2,
-    day: "Jue",
-  },
-  {
-    date: 3,
-    day: "Vier",
-  },
-];
+const today = new Date();
+const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 1 });
+const days = [];
+
+for (let i = 0; i < 5; i++) {
+  const currentDate = addDays(startOfCurrentWeek, i);
+  const day = format(currentDate, "EEE", { locale: es });
+  const date = format(currentDate, "d");
+  days.push({ day, date });
+}
+
+const items = [...days];
 
 function DayList(): JSX.Element {
   const [selected, setSelected] = useState(0);
