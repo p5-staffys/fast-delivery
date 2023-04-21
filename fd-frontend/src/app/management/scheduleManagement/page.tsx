@@ -15,6 +15,7 @@ const Agenda = (): JSX.Element => {
   const today = new Date();
   const options: Intl.DateTimeFormatOptions = { timeZone: "UTC", dateStyle: "short" };
   const formattedDate = today.toLocaleDateString("es-ES", options);
+  const { user } = JSON.parse(localStorage.getItem("user") ?? "null");
 
   return (
     <>
@@ -22,7 +23,7 @@ const Agenda = (): JSX.Element => {
         <Box sx={{ mt: 2, display: "flex", flexDirection: "inherit" }}>
           <Image src={logoAdmin} alt="logo" width={53} height={53} />
           <Box sx={{ paddingX: 2, mb: 3 }}>
-            <Typography sx={{ fontSize: "14px" }}>Hola Admin!</Typography>
+            <Typography sx={{ fontSize: "14px" }}>Hola {user.name}!</Typography>
             <Typography sx={{ fontFamily: "Roboto", fontSize: "18px", fontWeight: 700 }}>Gestionar pedidos</Typography>
           </Box>
         </Box>
