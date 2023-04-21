@@ -78,7 +78,7 @@ export class UserController {
       const token = await userCredentials.user.getIdToken();
       const _id = userCredentials.user.uid;
       const user = await this.userService.findById(_id);
-      response.cookie('idToken', token);
+      response.cookie('idToken', token, { sameSite: 'none', secure: true });
       return { user, token };
     } catch {
       throw new GeneralError(
