@@ -7,17 +7,20 @@ import Link from "next/link";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AddIcon from "../../../../asset/AddIcon.png";
 import Image from "next/image";
-import { Pack, requestPacks } from "../../../../utils/seed";
 import CardManagePackage from "../components/cardManagePackage";
+import { GetPackages, Package } from "../services/admin.services";
 
 const ManagePackage = (): JSX.Element => {
-  const [paquetes, setPaquetes] = useState<Pack[]>([]);
+  const [packages, setPackages] = useState<Package[]>([]);
 
   useEffect(() => {
-    requestPacks(3).then((packs) => {
-      setPaquetes(packs);
-    });
+    async function getAllPackages(): Promise<void> {
+      const allPackages = await GetPackages();
+      setPackages(allPackages);
+    }
+    getAllPackages();
   }, []);
+
   return (
     <>
       <Container fixed>
@@ -36,9 +39,9 @@ const ManagePackage = (): JSX.Element => {
                 Hay 523 paquetes con el criterio de filtrado seleccionado
               </Typography>
             </Container>
-            {paquetes.map((paquete, i) => (
-              <AccordionDetails key={i}>
-                <CardManagePackage paquete={paquete} />
+            {packages.map((pack) => (
+              <AccordionDetails key={pack._id}>
+                <CardManagePackage package={pack} />
               </AccordionDetails>
             ))}
           </Accordion>

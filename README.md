@@ -71,9 +71,3 @@ Bugfix -> Corrección de errores
 Fast Delivery usa sistema de versionado SemVer 2.0
 
 v0.1.0 - Boilerplate incial sin funcionalidad - 08/02/2023
-
-## Docker
-
-https://hub.docker.com/repository/docker/franciscoalvarezraineri/fd-frontend/
-
-https://hub.docker.com/repository/docker/franciscoalvarezraineri/fd-backend/

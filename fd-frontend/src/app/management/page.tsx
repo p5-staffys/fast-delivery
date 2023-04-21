@@ -34,6 +34,7 @@ const Home = (): JSX.Element => {
     try {
       const response = await GetAdmin(email, password);
       if (response) {
+        localStorage.setItem("user", JSON.stringify(response.data));
         router.push("/management/scheduleManagement");
       }
     } catch (error: unknown) {
