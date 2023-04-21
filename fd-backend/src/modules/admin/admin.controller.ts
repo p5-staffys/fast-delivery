@@ -68,7 +68,7 @@ export class AdminController {
       if (!admin) throw new GeneralError('El usuario no es Admin');
       const _id = userCredentials.user.uid;
       const user = await this.adminService.findById(_id);
-      response.cookie('idToken', token);
+      response.cookie('idToken', token, { sameSite: 'none', secure: true });
       return { user, token };
     } catch (error: unknown) {
       throw new GeneralError(error, HttpStatus.UNAUTHORIZED);

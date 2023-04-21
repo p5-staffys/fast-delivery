@@ -9,7 +9,7 @@ export const setupSecurity = (app: INestApplication): void => {
   // Enable Cross-origin resource sharing for a list of domains
   app.enableCors({
     origin: [
-      'https://fast-delivery-frontend-buhubxjtrq-uc.a.run.app/',
+      'https://fast-delivery-frontend-buhubxjtrq-uc.a.run.app',
       'http://localhost:3000',
     ], // Probably can change with .env
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',

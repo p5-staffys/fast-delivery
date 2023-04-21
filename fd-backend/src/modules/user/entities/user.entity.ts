@@ -32,7 +32,7 @@ export class User implements Partial<IUser> {
   @Prop({ type: Number, default: 5 })
   rating: number;
 
-  @Prop({ type: Array })
+  @Prop({ type: Array, default: [] })
   packages: IPackageRef[];
 
   @Prop({ type: [formRefSchema], default: [] })
