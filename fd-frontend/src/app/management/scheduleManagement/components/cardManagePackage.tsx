@@ -5,16 +5,16 @@ import imagePack from "../../../../asset/pack.svg";
 import trash from "../../../../asset/redTrash.svg";
 import Link from "next/link";
 import Image from "next/image";
-import { Package } from "../services/admin.services";
+import { Pack } from "../../../../utils/seed";
 
-type CardManagePackageProps = {
-  package: Package;
-};
+interface Props {
+  paquete: Pack;
+}
 
-const CardManagePackage = ({ package: pack }: CardManagePackageProps): JSX.Element => {
+const CardManagePackage: React.FC<Props> = ({ paquete }) => {
   return (
     <Box sx={{ maxWidth: "auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0" }}>
-      <Link href={`/repartidor/paquete/${pack._id}`}>
+      <Link href={`/repartidor/paquete/${paquete._id}`}>
         <CardMedia sx={{ height: "70px", width: "70px", flexShrink: 0 }} image={imagePack.src} title="paquete" />
       </Link>
       <Box
@@ -47,7 +47,7 @@ const CardManagePackage = ({ package: pack }: CardManagePackageProps): JSX.Eleme
             component="div"
             variant="subtitle1"
           >
-            {pack.client.address.street}
+            {paquete.destination}
           </Typography>
 
           <IconButton sx={{ mb: 2, textAlign: "right" }} aria-label="previous">
