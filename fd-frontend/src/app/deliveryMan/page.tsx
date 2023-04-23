@@ -9,9 +9,9 @@ import { ChangeEventHandler, useState } from "react";
 import React from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { signIn } from "./services/user.services";
 import { useGlobalContext } from "@/context/store";
 import { useRouter } from "next/navigation";
+import { signIn } from "./services/user.services";
 
 const DeliveryMan = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
@@ -96,18 +96,13 @@ const DeliveryMan = (): JSX.Element => {
           <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
             <strong>Ingresar</strong>
           </Button>
-          <Link href="/deliveryMan/workingDay">
-            <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
-              <strong>Ingresar</strong>
-            </Button>
-          </Link>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
-          <Link href="#" className="linkLogin">
+          {/* <Link href="#" className="linkLogin">
             Recuperar Contraseña
-          </Link>
+          </Link> */}
           <Link href="#" className="linkLogin">
-            <strong>Registrarse</strong>
+            <strong style={{ textUnderlineOffset: "off" }}>Registrarse</strong>
           </Link>
         </Box>
       </main>

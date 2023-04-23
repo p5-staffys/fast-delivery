@@ -14,7 +14,16 @@ export interface User {
   email: string;
   status: string;
   rating: number;
-  //forms: any[];
+  forms: Package[];
+  __v: number;
+  packages: Package[];
+}
+
+export interface Package {
+  _id: string;
+  status: string;
+  address: string;
+  deliveryDate: string;
 }
 
 export const GlobalContext = createContext<ContextProps>({

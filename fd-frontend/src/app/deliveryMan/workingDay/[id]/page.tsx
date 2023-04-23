@@ -17,23 +17,27 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import mapa from "../../../../asset/mapa.png";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Pack, requestPacks } from "../../../../utils/seed";
+import { Package } from "@/context/store";
 
-const idPack = (): JSX.Element => {
-  const [paquetes, setPaquetes] = useState<Pack[]>([]);
+const idPack = ({ params }: string): JSX.Element => {
+  const [paquete, setPaquete] = useState<Package[]>([]);
+  const item = localStorage.getItem("user");
+  const userLocalstorage = JSON.parse(item);
 
   useEffect(() => {
-    requestPacks(1).then((packs) => {
-      setPaquetes(packs);
+    const pack = userLocalstorage.packages;
+    const packFiltrado = pack.filter((paquete: Package) => {
+      return paquete._id === params.id ? paquete : null;
     });
+    setPaquete(packFiltrado);
   }, []);
 
   return (
     <>
       <Container>
         <Link href={`deliveryMan/workingDay`}>
-          <IconButton aria-label="Example" sx={{ my: 2 }}>
-            <ArrowBackIosIcon sx={{ color: "black" }} />
+          <IconButton aria-label="Example">
+            <ArrowBackIosIcon sx={{ color: "black", mb: 2 }} />
           </IconButton>
         </Link>
         <Accordion sx={{ marginY: "15px" }} defaultExpanded={true}>
@@ -45,15 +49,15 @@ const idPack = (): JSX.Element => {
             <CardContent>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Destino: </span>
-                {paquetes[0]?.destination}
+                {paquete[0]?.address}
               </Typography>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Numero del paquete: </span>
-                {paquetes[0]?._id}
+                {paquete[0]?._id}
               </Typography>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Recibe: </span>
-                {paquetes[0]?.client}
+                {paquete[0]?.deliveryDate}
               </Typography>
             </CardContent>
             <CardActions sx={{ flexDirection: "column-reverse", alignItems: "flex-end" }}>

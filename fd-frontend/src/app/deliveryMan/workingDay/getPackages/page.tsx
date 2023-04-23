@@ -199,7 +199,7 @@ const Paquetes = (): JSX.Element => {
           </Box>
         </Box>
       </Box>
-      <Link href="/deliveryMan/workingDay/getPackages/declaration">
+      <Link style={{ textDecoration: "none" }} href="/deliveryMan/workingDay/getPackages/declaration">
         <Button variant="contained" sx={{ m: "0 2.5vw", mt: 5, width: "95vw" }}>
           Iniciar jornada
         </Button>
