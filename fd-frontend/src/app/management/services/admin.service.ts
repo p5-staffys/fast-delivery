@@ -30,7 +30,7 @@ export const signOut = async (): Promise<void> => {
 export const signUp = async (email: string, password: string, name: string, lastName: string): Promise<User> => {
   try {
     const response: AxiosResponse = await axios.post(
-      "https://fd-backend-no-cookie-buhubxjtrq-uw.a.run.app/user",
+      "https://fd-backend-no-cookie-buhubxjtrq-uw.a.run.app/admin",
       { email, name, lastName, password },
       { withCredentials: true },
     );
