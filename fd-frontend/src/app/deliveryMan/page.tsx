@@ -9,14 +9,15 @@ import { ChangeEventHandler, useState } from "react";
 import React from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { GetUsers } from "./services/user.services";
+import { signIn } from "./services/user.services";
 import { useGlobalContext } from "@/context/store";
 import { useRouter } from "next/navigation";
+
 const DeliveryMan = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
-  const { setData } = useGlobalContext();
+  const { setUser } = useGlobalContext();
   const router = useRouter();
 
   const handleEmail: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -33,8 +34,8 @@ const DeliveryMan = (): JSX.Element => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    const response = await GetUsers(email, password);
-    setData(response.data);
+    const user = await signIn(email, password);
+    setUser(user);
     router.push("/deliveryMan/workingDay");
   };
 

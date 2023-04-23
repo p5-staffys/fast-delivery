@@ -6,12 +6,10 @@ export interface IUser {
   name: string;
   lastName: string;
   email: string;
-  password: string;
   status: UserStatus;
   rating: number;
   packages: IPackageRef[];
   forms: IFormApply[];
-  __v: number;
 }
 
 export enum UserStatus {
