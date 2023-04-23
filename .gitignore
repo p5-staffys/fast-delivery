@@ -50,6 +50,7 @@ lerna-debug.log*
 
 # local env files
 .env*.local
+.env
 fast-delivery-uma-1e8ed58d847d.json
 
 # vercel
