@@ -33,9 +33,15 @@ const DeliveryMan = (): JSX.Element => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+
     const response = await GetUsers(email, password);
-    setData(response.data);
-    router.push("/deliveryMan/workingDay");
+    if (response.user) {
+      router.push("/deliveryMan/workingDay");
+      setData(response);
+      localStorage.setItem("user", JSON.stringify(response.user));
+    } else {
+      alert("contraseña incorrecta");
+    }
   };
 
   const handleVisibility = (e: React.FormEvent<HTMLButtonElement>): void => {
@@ -95,11 +101,7 @@ const DeliveryMan = (): JSX.Element => {
           <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
             <strong>Ingresar</strong>
           </Button>
-          <Link href="/deliveryMan/workingDay">
-            <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
-              <strong>Ingresar</strong>
-            </Button>
-          </Link>
+          
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
           <Link href="#" className="linkLogin">

@@ -3,15 +3,13 @@
 import React, { createContext, useContext, Dispatch, SetStateAction, useState } from "react";
 
 interface ContextProps {
-  userId: string;
-  setUserId: Dispatch<SetStateAction<string>>;
-  data: RootObject[];
-  setData: Dispatch<SetStateAction<RootObject[]>>;
+  data: RootObject;
+  setData: Dispatch<SetStateAction<RootObject>>;
 }
 
-interface RootObject {
-  user: User;
-  token: string;
+export interface RootObject {
+  user?: User;
+  token?: string;
 }
 
 interface User {
@@ -21,21 +19,29 @@ interface User {
   email: string;
   status: string;
   rating: number;
-  //   forms: any[];
+  forms: Package[];
+  __v: number;
+  packages: Package[];
+}
+
+export interface Package {
+  _id: string;
+  status: string;
+  address: string;
+  deliveryDate: string;
 }
 
 export const GlobalContext = createContext<ContextProps>({
-  userId: "",
-  setUserId: (): string => "",
-  data: [],
-  setData: (): RootObject[] => [],
+  data: {},
+  setData: () => {
+    // do nothing.
+  },
 });
 
 export const useGlobalContext = (): ContextProps => useContext(GlobalContext);
 
 export const GlobalContextProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
-  const [userId, setUserId] = useState("");
-  const [data, setData] = useState<RootObject[]>([]);
+  const [data, setData] = useState<RootObject>({});
 
-  return <GlobalContext.Provider value={{ userId, setUserId, data, setData }}>{children}</GlobalContext.Provider>;
+  return <GlobalContext.Provider value={{ data, setData }}>{children}</GlobalContext.Provider>;
 };

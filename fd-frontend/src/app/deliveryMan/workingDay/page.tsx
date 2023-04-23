@@ -6,38 +6,30 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Pack, requestPacks } from "../../../utils/seed";
+import { Pack } from "../../../utils/seed";
 import Card from "./components/card";
+import { Package, useGlobalContext } from "@/context/store";
+
 
 const WorkingDay = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<Pack[]>([]);
   const [paquetesPending, setPaquetesPending] = useState<Pack[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [user, setUser] = useState<{ Name: string; Value: string }[]>([]);
+  const { data } = useGlobalContext();
+  const item:any = localStorage.getItem("user");
+  const userLocalstorage = JSON.parse(item);
 
   useEffect(() => {
-    requestPacks(5).then((packs) => {
-      setPaquetes(packs);
-      const packFiltrados = packs.filter((paquete) => {
-        return paquete.status === "pending" ? paquete : null;
-      });
-      setPaquetesPending(packFiltrados);
+    const packs = data.user ? data.user.packages : userLocalstorage.packages;
+    setPaquetes(packs);
+    const packFiltrados = packs.filter((paquete: Package) => {
+      return paquete.status === "peding" ? paquete : null;
     });
+    setPaquetesPending(packFiltrados);
   }, []);
-
-  //   useEffect(() => {
-  //     axios
-  //       .get("http://localhost:8080/auth/current", { withCredentials: true })
-  //       .then((response) => {
-  //         setUser(response.data.UserAttributes);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }, []);
 
   return (
     <>
       <Container fixed>
-        {user.length ? <Typography variant="h6">{user[2].Value} says "Hello World"</Typography> : null}
         <Link href="/deliveryMan/workingDay/getPackages">
           <Button sx={{ marginY: "15px" }} variant="contained" fullWidth={true}>
             Obtener paquetes

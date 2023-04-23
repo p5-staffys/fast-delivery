@@ -1,5 +1,9 @@
-import axios, { AxiosResponse } from "axios";
-export const GetUsers = async (email: string, password: string): Promise<AxiosResponse> => {
+import { RootObject } from "@/context/store";
+import axios from "axios";
+
+
+
+export const GetUsers = async (email: string, password: string): Promise<RootObject> => {
 
   return axios
     .post(
