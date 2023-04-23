@@ -14,7 +14,7 @@ export interface User {
   email: string;
   status: string;
   rating: number;
-  //   forms: any[];
+  //forms: any[];
 }
 
 export const GlobalContext = createContext<ContextProps>({

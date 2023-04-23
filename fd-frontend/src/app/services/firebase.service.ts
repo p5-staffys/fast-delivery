@@ -9,8 +9,8 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDXtf7ajb2ib8NaqfDf0--2orNRYC7jZ6Y",
-  authDomain: "fast-delivery-uma.firebaseapp.com",
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -19,9 +19,16 @@ const auth = getAuth(app);
 export const firebaseSignIn = async (email: string, password: string): Promise<User> => {
   try {
     const userCredentials: UserCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user: User = userCredentials.user;
+    const user: IAuth = userCredentials.user;
+    sendEmailVerification(user);
     return user;
-  } catch (error) {
+  } catch (error: unknown) {
     throw error;
   }
 };
+
+export const firebaseSignOut = async (): Promise<void> => {
+  signOut(auth);
+};
+
+export interface IAuth extends User {}

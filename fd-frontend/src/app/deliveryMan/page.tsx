@@ -12,7 +12,6 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { signIn } from "./services/user.services";
 import { useGlobalContext } from "@/context/store";
 import { useRouter } from "next/navigation";
-import { User } from "@/utils/seed";
 
 const DeliveryMan = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
@@ -35,7 +34,7 @@ const DeliveryMan = (): JSX.Element => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    const user: User = await signIn(email, password);
+    const user = await signIn(email, password);
     setUser(user);
     router.push("/deliveryMan/workingDay");
   };
