@@ -9,8 +9,8 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  apiKey: "AIzaSyDXtf7ajb2ib8NaqfDf0--2orNRYC7jZ6Y",
+  authDomain: "fast-delivery-uma.firebaseapp.com",
 };
 
 const app = initializeApp(firebaseConfig);
