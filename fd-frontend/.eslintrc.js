@@ -24,6 +24,5 @@ module.exports = {
     "@typescript-eslint/no-implicit-any-catch": "warn",
     "@typescript-eslint/promise-function-async": "warn",
     "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/no-empty-interface": "off",
   },
 };
