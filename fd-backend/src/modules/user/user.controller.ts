@@ -1,4 +1,3 @@
-import { Response, Request } from 'express';
 import {
   Controller,
   Get,
@@ -7,13 +6,12 @@ import {
   Patch,
   Body,
   Req,
-  Res,
   UseInterceptors,
   HttpStatus,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
-import { AuthService } from '../auth/auth.service';
+
 import { AdminAuthService } from '../auth/admin-auth.service';
 
 import { ReponseUserDto } from './dto/response-user.dto';
@@ -22,8 +20,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { CurrentUserInterceptor } from '../auth/middleware/current-user.interceptor';
 import { CurrentUserRequest } from '../auth/middleware/current-user.interceptor';
 
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateAuthDto } from '../auth/dto/create-auth.dto';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/middleware/auth.guard';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import { User } from './entities/user.entity';
@@ -34,7 +31,6 @@ import { GeneralError } from '../../common/error-handlers/exceptions';
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly authService: AuthService,
     private readonly adminAuthService: AdminAuthService,
   ) {}
 
@@ -52,53 +48,6 @@ export class UserController {
     }
   }
 
-  @Delete()
-  async remove(): Promise<string> {
-    try {
-      const auth = await this.authService.getCurrentUser();
-      await this.authService.delete(auth);
-      await this.userService.remove(auth.uid);
-      return `User ${auth.uid} deleted`;
-    } catch {
-      throw new GeneralError('No se pudo eliminar el usuario');
-    }
-  }
-
-  @Public()
-  @Post('/signIn')
-  @ApiBody({ type: CreateAuthDto })
-  @ApiOperation({ description: 'Just log in ' })
-  async signIn(
-    @Body() singInDto: CreateAuthDto,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<ReponseUserDto | unknown> {
-    const { email, password } = singInDto;
-    try {
-      const userCredentials = await this.authService.signIn(email, password);
-      const token = await userCredentials.user.getIdToken();
-      const _id = userCredentials.user.uid;
-      const user = await this.userService.findById(_id);
-      response.cookie('idToken', token, { sameSite: 'none', secure: true });
-      return { user, token };
-    } catch {
-      throw new GeneralError(
-        'Email o password incorrecto',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-  }
-
-  @Post('/signOut')
-  async signOut(): Promise<string> {
-    try {
-      const user = await this.authService.getCurrentUser();
-      await this.authService.signOut();
-      return `El usuario ${user.uid} se deslogueó`;
-    } catch {
-      throw new GeneralError('No se pudo desloguear el usuario');
-    }
-  }
-
   @UseInterceptors(CurrentUserInterceptor)
   @Get()
   async getCurrent(
@@ -113,14 +62,26 @@ export class UserController {
     return true;
   }
 
+  @UseInterceptors(CurrentUserInterceptor)
+  @Delete()
+  async delete(@Req() request: CurrentUserRequest): Promise<string> {
+    try {
+      const _id = request.currentUser._id;
+      await this.userService.remove(_id);
+      return `User deleted`;
+    } catch {
+      throw new GeneralError('No se pudo eliminar el usuario');
+    }
+  }
+
+  @UseInterceptors(CurrentUserInterceptor)
   @Patch()
   async update(
     @Body() updateData: UpdateUserDto,
-    @Req() request: Request,
+    @Req() request: CurrentUserRequest,
   ): Promise<ReponseUserDto | unknown> {
     try {
-      const idToken = request.cookies['idToken'];
-      const _id = (await this.adminAuthService.authenticate(idToken)).uid;
+      const _id = request.currentUser._id;
       const user = await this.userService.update(_id, updateData);
       return user;
     } catch {
