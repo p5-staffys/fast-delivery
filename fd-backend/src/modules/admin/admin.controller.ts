@@ -9,6 +9,8 @@ import {
   UseGuards,
   Res,
   HttpStatus,
+  UseInterceptors,
+  Req,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { ApiTags, ApiBody, ApiOperation } from '@nestjs/swagger';
@@ -22,6 +24,10 @@ import { CreateAuthDto } from '../auth/dto/create-auth.dto';
 import { ReponseUserDto } from '../user/dto/response-user.dto';
 import { AuthService } from '../auth/auth.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
+import {
+  CurrentUserInterceptor,
+  CurrentUserRequest,
+} from '../auth/middleware/current-user.interceptor';
 
 @ApiTags('Admin')
 @Controller()
@@ -73,6 +79,14 @@ export class AdminController {
     } catch (error: unknown) {
       throw new GeneralError(error, HttpStatus.UNAUTHORIZED);
     }
+  }
+
+  @UseGuards(AdminGuard)
+  @UseInterceptors(CurrentUserInterceptor)
+  @Get()
+  async getAdmin(@Req() request: CurrentUserRequest) {
+    const user = request.currentUser;
+    return user;
   }
 
   @UseGuards(AdminGuard)
