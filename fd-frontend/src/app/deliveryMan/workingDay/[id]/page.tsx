@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Accordion,
   AccordionSummary,
@@ -17,14 +16,14 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import mapa from "../../../../asset/mapa.png";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Pack, requestPacks } from "../../../../utils/seed";
+import { Package } from "@/context/store";
+import { getPacketById } from "../../../services/packets.service";
 
-const idPack = (): JSX.Element => {
-  const [paquetes, setPaquetes] = useState<Pack[]>([]);
-
+const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
+  const [paquete, setPaquete] = useState<Package>();
   useEffect(() => {
-    requestPacks(1).then((packs) => {
-      setPaquetes(packs);
+    getPacketById(params.id).then((packet: Package) => {
+      setPaquete(packet);
     });
   }, []);
 
@@ -32,8 +31,8 @@ const idPack = (): JSX.Element => {
     <>
       <Container>
         <Link href={`deliveryMan/workingDay`}>
-          <IconButton aria-label="Example" sx={{ my: 2 }}>
-            <ArrowBackIosIcon sx={{ color: "black" }} />
+          <IconButton aria-label="Example">
+            <ArrowBackIosIcon sx={{ color: "black", mb: 2 }} />
           </IconButton>
         </Link>
         <Accordion sx={{ marginY: "15px" }} defaultExpanded={true}>
@@ -45,15 +44,15 @@ const idPack = (): JSX.Element => {
             <CardContent>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Destino: </span>
-                {paquetes[0]?.destination}
+                {paquete?.client.address.street}
               </Typography>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Numero del paquete: </span>
-                {paquetes[0]?._id}
+                {paquete?._id}
               </Typography>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Recibe: </span>
-                {paquetes[0]?.client}
+                {paquete?.deliveryDate.toString()}
               </Typography>
             </CardContent>
             <CardActions sx={{ flexDirection: "column-reverse", alignItems: "flex-end" }}>
@@ -70,4 +69,4 @@ const idPack = (): JSX.Element => {
   );
 };
 
-export default idPack;
+export default Packet;

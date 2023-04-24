@@ -7,6 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 
 import { auth } from '../admin-auth.service';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -18,8 +19,8 @@ export class AuthGuard implements CanActivate {
     ]);
     if (isPublic) return true;
 
-    const request = context.switchToHttp().getRequest();
-    const idToken = request.cookies['idToken'];
+    const request: Request = context.switchToHttp().getRequest();
+    const idToken: string = request.headers.authorization;
     try {
       const _id = (await auth.verifyIdToken(idToken)).uid;
       if (_id) return true;

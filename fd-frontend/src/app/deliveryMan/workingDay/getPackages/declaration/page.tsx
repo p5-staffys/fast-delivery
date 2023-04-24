@@ -1,13 +1,13 @@
 "use client";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import BackBtn from "../components/backBtn";
-import { Container, Typography } from "@mui/material";
+import { Container, IconButton, Typography } from "@mui/material";
 import ErrorRadios from "../components/radioGroup";
 import { SyntheticEvent, useState } from "react";
 import { inicial, questions } from "../../../../../utils/DeclarationUtil";
 import { useRouter } from "next/navigation";
-
+import Link from "next/link";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 const Paquetes = (): JSX.Element => {
   const [asks, setAsks] = useState(inicial);
   const router = useRouter();
@@ -44,8 +44,11 @@ const Paquetes = (): JSX.Element => {
 
   return (
     <Container>
-      <BackBtn back="deliveryMan/workingDay" />
-
+      <Link href={`deliveryMan/workingDay`}>
+        <IconButton aria-label="Example">
+          <ArrowBackIosIcon sx={{ color: "black" }} />
+        </IconButton>
+      </Link>
       <Box sx={{ textAlign: "center", mt: 2 }}>
         <Box component="form" onSubmit={handleSubmit} sx={{ my: 4 }}>
           <Typography fontWeight={400} fontSize="18px" lineHeight={"21,78px"}>

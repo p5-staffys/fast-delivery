@@ -9,10 +9,12 @@ import { useRouter } from "next/navigation";
 import { ChangeEventHandler, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { GetAdmin } from "./scheduleManagement/services/admin.services";
+import { logInAdmin } from "../../utils/seed";
 
 const Home = (): JSX.Element => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [email, setEmail] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
   const router = useRouter();
@@ -29,17 +31,10 @@ const Home = (): JSX.Element => {
     setPassword(inputElement.value);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    try {
-      const response = await GetAdmin(email, password);
-      if (response) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        router.push("/management/scheduleManagement");
-      }
-    } catch (error: unknown) {
-      alert("No eres admin");
-    }
+    logInAdmin("pepe@argento.com");
+    router.push("/management/scheduleManagement");
   };
 
   const handleVisibility = (e: React.FormEvent<HTMLButtonElement>): void => {
@@ -94,9 +89,11 @@ const Home = (): JSX.Element => {
           >
             {visibility ? <VisibilityIcon sx={{ color: "grey" }} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
           </button>
-          <Button sx={{ mt: 3 }} variant="contained" fullWidth type="submit">
-            <strong>Ingresar</strong>
-          </Button>
+          <Link href="/management/scheduleManagement">
+            <Button sx={{ mt: 3 }} variant="contained" fullWidth type="submit">
+              <strong>Ingresar</strong>
+            </Button>
+          </Link>
         </Box>
       </main>
     </>

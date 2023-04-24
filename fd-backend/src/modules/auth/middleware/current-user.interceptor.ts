@@ -18,8 +18,8 @@ export class CurrentUserInterceptor implements NestInterceptor {
     private userService: UserService,
   ) {}
   async intercept(context: ExecutionContext, handler: CallHandler) {
-    const request = context.switchToHttp().getRequest();
-    const idToken = request.cookies['idToken'];
+    const request: CurrentUserRequest = context.switchToHttp().getRequest();
+    const idToken: string = request.headers.authorization;
     const _id = (await this.adminAuthService.authenticate(idToken)).uid;
     if (_id) {
       try {
@@ -36,5 +36,5 @@ export class CurrentUserInterceptor implements NestInterceptor {
 }
 
 export interface CurrentUserRequest extends Request {
-  currentUser: IUser;
+  currentUser?: IUser;
 }

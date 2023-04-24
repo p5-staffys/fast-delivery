@@ -23,5 +23,6 @@ module.exports = {
     "no-console": ["error", { allow: ["info"] }],
     "@typescript-eslint/no-implicit-any-catch": "warn",
     "@typescript-eslint/promise-function-async": "warn",
+    "@typescript-eslint/no-empty-function": "off",
   },
 };

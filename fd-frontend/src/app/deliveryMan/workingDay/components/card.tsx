@@ -7,16 +7,16 @@ import imagePack from "../../../../asset/pack.svg";
 import trash from "../../../../asset/redTrash.svg";
 import Link from "next/link";
 import Image from "next/image";
-import { Pack } from "../../../../utils/seed";
+import { PackageRef } from "@/context/store";
 
 interface Props {
-  paquete: Pack;
+  paquete: PackageRef;
 }
 
 const CardManagePackage: React.FC<Props> = ({ paquete }) => {
   return (
     <Box sx={{ maxWidth: "auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0" }}>
-      <Link href={`/deliveryMan/workingDay/package`}>
+      <Link href={`/deliveryMan/workingDay/${paquete._id}`}>
         <CardMedia sx={{ height: "70px", width: "70px", flexShrink: 0 }} image={imagePack.src} title="paquete" />
       </Link>
       <Box
@@ -49,7 +49,7 @@ const CardManagePackage: React.FC<Props> = ({ paquete }) => {
             component="div"
             variant="subtitle1"
           >
-            {paquete.destination}
+            {paquete.address}
           </Typography>
 
           <IconButton sx={{ textAlign: "right" }} aria-label="previous">

@@ -25,7 +25,6 @@ describe('User Routes', () => {
       name: 'prueba',
       lastName: 'prueba',
       email: 'prueba@prueba.com',
-      password: 'password',
     };
     newUser = {
       name: 'prueba',
@@ -34,7 +33,6 @@ describe('User Routes', () => {
       status: UserStatus.Inactive,
       rating: 5,
       packages: [],
-      __v: 0,
     };
   });
 

@@ -9,14 +9,15 @@ import { ChangeEventHandler, useState } from "react";
 import React from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { GetUsers } from "./services/user.services";
 import { useGlobalContext } from "@/context/store";
 import { useRouter } from "next/navigation";
+import { signIn } from "./services/user.services";
+
 const DeliveryMan = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
-  const { setData } = useGlobalContext();
+  const { setUser } = useGlobalContext();
   const router = useRouter();
 
   const handleEmail: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -33,8 +34,8 @@ const DeliveryMan = (): JSX.Element => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    const response = await GetUsers(email, password);
-    setData(response.data);
+    const user = await signIn(email, password);
+    setUser(user);
     router.push("/deliveryMan/workingDay");
   };
 
@@ -95,18 +96,13 @@ const DeliveryMan = (): JSX.Element => {
           <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
             <strong>Ingresar</strong>
           </Button>
-          <Link href="/deliveryMan/workingDay">
-            <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
-              <strong>Ingresar</strong>
-            </Button>
-          </Link>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
-          <Link href="#" className="linkLogin">
+          {/* <Link href="#" className="linkLogin">
             Recuperar Contraseña
-          </Link>
+          </Link> */}
           <Link href="#" className="linkLogin">
-            <strong>Registrarse</strong>
+            <strong style={{ textUnderlineOffset: "off" }}>Registrarse</strong>
           </Link>
         </Box>
       </main>
