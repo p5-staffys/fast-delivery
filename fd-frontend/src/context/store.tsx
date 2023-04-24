@@ -21,14 +21,25 @@ export interface User {
   rating: number;
   forms: Form[];
   __v: number;
-  packages: Package[];
+  packages: PackageRef[];
+}
+
+export interface PackageRef {
+  _id: string;
+  status: string;
+  address: string;
+  deliveryDate: Date;
 }
 
 export interface Package {
   _id: string;
   status: string;
   address: string;
-  deliveryDate: string;
+  deliveryDate: Date;
+  peso: number;
+  destination: string;
+  client: string;
+  deliveredOn: Date;
 }
 
 export interface Form {

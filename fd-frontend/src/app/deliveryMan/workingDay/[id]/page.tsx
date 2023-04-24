@@ -1,3 +1,4 @@
+"use client";
 import {
   Accordion,
   AccordionSummary,
@@ -15,21 +16,15 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import mapa from "../../../../asset/mapa.png";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Package, useGlobalContext } from "@/context/store";
+import { Package } from "@/context/store";
+import { getPacketById } from "../../../services/packets.service";
 
-const idPack = ({ params }): JSX.Element => {
-  const [paquete, setPaquete] = useState<Package[]>([]);
-  const { user } = useGlobalContext();
-  const item = localStorage.getItem("user");
-  const userLocalstorage = JSON.parse(item);
-
+const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
+  const [paquete, setPaquete] = useState<Package>();
   useEffect(() => {
-    const packs = user ? user.packages : userLocalstorage.packages;
-    const packFiltrados = packs.filter((paquete: Package) => {
-      return paquete._id === params.id ? paquete : null;
+    getPacketById(params.id).then((packet: Package) => {
+      setPaquete(packet);
     });
-
-    setPaquete(packFiltrados);
   }, []);
 
   return (
@@ -49,15 +44,15 @@ const idPack = ({ params }): JSX.Element => {
             <CardContent>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Destino: </span>
-                {paquete[0]?.address}
+                {paquete?.address}
               </Typography>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Numero del paquete: </span>
-                {paquete[0]?._id}
+                {paquete?._id}
               </Typography>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Recibe: </span>
-                {paquete[0]?.deliveryDate}
+                {paquete?.deliveryDate.toString()}
               </Typography>
             </CardContent>
             <CardActions sx={{ flexDirection: "column-reverse", alignItems: "flex-end" }}>
@@ -74,4 +69,4 @@ const idPack = ({ params }): JSX.Element => {
   );
 };
 
-export default idPack;
+export default Packet;

@@ -8,11 +8,12 @@ import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
 
-import { Pack, requestPacks } from "../../../../utils/seed";
+import { requestPacks } from "../../../../utils/seed";
 import Card from "../../../deliveryMan/workingDay/components/card";
+import { Package } from "@/context/store";
 
 const DeliveryDetail = (): JSX.Element => {
-  const [paquetes, setPaquetes] = useState<Pack[]>([]);
+  const [paquetes, setPaquetes] = useState<Package[]>([]);
 
   useEffect(() => {
     requestPacks(2).then((packs) => {

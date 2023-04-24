@@ -1,3 +1,4 @@
+import { Package } from "@/context/store";
 import { faker } from "@faker-js/faker";
 
 export type Admin = {
@@ -58,7 +59,7 @@ export type Pack = {
   deliveredOn: Date;
 };
 
-function createPack(): Pack {
+function createPack(): Package {
   return {
     _id: faker.datatype.uuid(),
     status: faker.helpers.arrayElement(["pending", "delivered", "delivering"]),
@@ -67,11 +68,12 @@ function createPack(): Pack {
     client: faker.name.fullName(),
     deliveryDate: faker.date.recent(3),
     deliveredOn: faker.date.recent(3),
+    address: "calle falsa 123",
   };
 }
 
-async function requestPacks(cant: number): Promise<Pack[]> {
-  const packs: Pack[] = [];
+async function requestPacks(cant: number): Promise<Package[]> {
+  const packs: Package[] = [];
   for (let i = 0; i < cant; i++) {
     packs.push(createPack());
   }
