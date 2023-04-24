@@ -7,6 +7,11 @@ interface ContextProps {
   setUser: Dispatch<SetStateAction<Partial<User>>>;
 }
 
+export interface RootObject {
+  user: User;
+  token: string;
+}
+
 export interface User {
   _id: string;
   name: string;
@@ -14,7 +19,7 @@ export interface User {
   email: string;
   status: string;
   rating: number;
-  forms: Package[];
+  forms: Form[];
   __v: number;
   packages: Package[];
 }
@@ -24,6 +29,14 @@ export interface Package {
   status: string;
   address: string;
   deliveryDate: string;
+}
+
+export interface Form {
+  bebidasAlcoholicas: boolean;
+  medicamentosPsicoactivos: boolean;
+  problemaEmocional: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const GlobalContext = createContext<ContextProps>({
