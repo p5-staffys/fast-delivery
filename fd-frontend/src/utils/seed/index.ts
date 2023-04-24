@@ -1,3 +1,4 @@
+import { Package, PackageRef } from "@/context/store";
 import { faker } from "@faker-js/faker";
 
 export type Admin = {
@@ -58,22 +59,41 @@ export type Pack = {
   deliveredOn: Date;
 };
 
-function createPack(): Pack {
+function createPack(): Package {
   return {
     _id: faker.datatype.uuid(),
     status: faker.helpers.arrayElement(["pending", "delivered", "delivering"]),
-    peso: faker.datatype.number({ min: 100, max: 10000, precision: 100 }),
+    weight: faker.datatype.number({ min: 100, max: 10000, precision: 100 }),
     destination: faker.address.streetAddress(),
-    client: faker.name.fullName(),
-    deliveryDate: faker.date.recent(3),
-    deliveredOn: faker.date.recent(3),
+    client: { fullName: faker.name.firstName(), address: { street: "calle falsa 123" } },
+    deliveryDate: faker.date.recent(3).toDateString(),
+    deliveredOn: faker.date.recent(3).toDateString(),
+    quantity: 10,
+    deliveredBy: null,
   };
 }
 
-async function requestPacks(cant: number): Promise<Pack[]> {
-  const packs: Pack[] = [];
+function createPackRef(): PackageRef {
+  return {
+    _id: faker.datatype.uuid(),
+    status: faker.helpers.arrayElement(["pending", "delivered", "delivering"]),
+    address: "calle falsa 123",
+    deliveryDate: faker.date.recent(3),
+  };
+}
+
+async function requestPacks(cant: number): Promise<Package[]> {
+  const packs: Package[] = [];
   for (let i = 0; i < cant; i++) {
     packs.push(createPack());
+  }
+  return packs;
+}
+
+async function requestPackRefs(cant: number): Promise<PackageRef[]> {
+  const packs: PackageRef[] = [];
+  for (let i = 0; i < cant; i++) {
+    packs.push(createPackRef());
   }
   return packs;
 }
@@ -90,4 +110,4 @@ async function getPercentage(): Promise<number> {
   return faker.datatype.number({ min: 0, max: 100, precision: 10 });
 }
 
-export { logInUser, logInAdmin, requestPacks, requestUsers, getPercentage };
+export { logInUser, logInAdmin, requestPacks, requestUsers, getPercentage, requestPackRefs };

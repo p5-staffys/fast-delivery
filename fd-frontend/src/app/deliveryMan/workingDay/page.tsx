@@ -7,22 +7,22 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Card from "./components/card";
-import { Package, useGlobalContext } from "@/context/store";
+import { PackageRef, useGlobalContext } from "@/context/store";
 
 const WorkingDay = (): JSX.Element => {
-  const [paquetes, setPaquetes] = useState<Package[]>([]);
-  const [paquetesPending, setPaquetesPending] = useState<Package[]>([]);
+  const [paquetes, setPaquetes] = useState<PackageRef[]>([]);
+  const [paquetesPending, setPaquetesPending] = useState<PackageRef[]>([]);
   const { user } = useGlobalContext();
-  const item = localStorage.getItem("user");
-  const userLocalstorage = JSON.parse(item);
 
   useEffect(() => {
-    const packs = user ? user.packages : userLocalstorage.packages;
-    setPaquetes(packs);
-    const packFiltrados = packs.filter((paquete: Package) => {
-      return paquete.status === "peding" ? paquete : null;
-    });
-    setPaquetesPending(packFiltrados);
+    if (user?.packages) {
+      const packs = user.packages;
+      setPaquetes(packs);
+      const packFiltrados = packs.filter((paquete: PackageRef) => {
+        return paquete.status === "peding" ? paquete : null;
+      });
+      setPaquetesPending(packFiltrados);
+    }
   }, []);
 
   return (
