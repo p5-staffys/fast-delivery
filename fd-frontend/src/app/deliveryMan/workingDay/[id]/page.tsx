@@ -15,19 +15,21 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import mapa from "../../../../asset/mapa.png";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Package } from "@/context/store";
+import { Package, useGlobalContext } from "@/context/store";
 
-const idPack = ({ params }: string): JSX.Element => {
+const idPack = ({ params }): JSX.Element => {
   const [paquete, setPaquete] = useState<Package[]>([]);
+  const { user } = useGlobalContext();
   const item = localStorage.getItem("user");
   const userLocalstorage = JSON.parse(item);
 
   useEffect(() => {
-    const pack = userLocalstorage.packages;
-    const packFiltrado = pack.filter((paquete: Package) => {
+    const packs = user ? user.packages : userLocalstorage.packages;
+    const packFiltrados = packs.filter((paquete: Package) => {
       return paquete._id === params.id ? paquete : null;
     });
-    setPaquete(packFiltrado);
+
+    setPaquete(packFiltrados);
   }, []);
 
   return (
