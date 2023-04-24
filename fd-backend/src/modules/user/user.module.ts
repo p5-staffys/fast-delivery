@@ -7,7 +7,6 @@ import { UserService } from './user.service';
 import { User, UserSchema } from './entities/user.entity';
 import { CurrentUserInterceptor } from '../auth/middleware/current-user.interceptor';
 
-import { AuthService } from '../auth/auth.service';
 import { AdminAuthService } from '../auth/admin-auth.service';
 import { UserRepository } from './repository/user.repository';
 import { AuthGuard } from '../auth/middleware/auth.guard';
@@ -24,7 +23,6 @@ import { AuthGuard } from '../auth/middleware/auth.guard';
   controllers: [UserController],
   providers: [
     UserService,
-    AuthService,
     AdminAuthService,
     UserRepository,
     CurrentUserInterceptor,

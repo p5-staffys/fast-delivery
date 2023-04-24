@@ -5,10 +5,7 @@ export interface IAdmin {
   name: string;
   lastName: string;
   email: string;
-  password: string;
-  type: AdminType;
   packages: IPackageRef[];
-  __v: number;
 }
 
 export enum AdminType {
