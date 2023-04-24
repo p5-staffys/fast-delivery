@@ -34,12 +34,18 @@ export interface PackageRef {
 export interface Package {
   _id: string;
   status: string;
-  address: string;
-  deliveryDate: Date;
-  peso: number;
+  weight: number;
   destination: string;
-  client: string;
-  deliveredOn: Date;
+  client: {
+    fullName: string;
+    address: {
+      street: string;
+    };
+  };
+  deliveryDate: string;
+  deliveredOn: string | null;
+  deliveredBy: string | null;
+  quantity: number;
 }
 
 export interface Form {

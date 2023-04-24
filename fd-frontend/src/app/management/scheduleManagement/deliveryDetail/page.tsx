@@ -8,15 +8,15 @@ import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
 
-import { requestPacks } from "../../../../utils/seed";
+import { requestPackRefs } from "../../../../utils/seed";
 import Card from "../../../deliveryMan/workingDay/components/card";
-import { Package } from "@/context/store";
+import { PackageRef } from "@/context/store";
 
 const DeliveryDetail = (): JSX.Element => {
-  const [paquetes, setPaquetes] = useState<Package[]>([]);
+  const [paquetes, setPaquetes] = useState<PackageRef[]>([]);
 
   useEffect(() => {
-    requestPacks(2).then((packs) => {
+    requestPackRefs(2).then((packs) => {
       setPaquetes(packs);
     });
   }, []);

@@ -44,7 +44,7 @@ const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
             <CardContent>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Destino: </span>
-                {paquete?.address}
+                {paquete?.client.address.street}
               </Typography>
               <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
                 <span style={{ fontWeight: 700 }}>Numero del paquete: </span>
