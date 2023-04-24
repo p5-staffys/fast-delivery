@@ -5,10 +5,10 @@ import imagePack from "../../../../asset/pack.svg";
 import trash from "../../../../asset/redTrash.svg";
 import Link from "next/link";
 import Image from "next/image";
-import { Pack } from "../../../../utils/seed";
+import { Package } from "@/context/store";
 
 interface Props {
-  paquete: Pack;
+  paquete: Package;
 }
 
 const CardManagePackage: React.FC<Props> = ({ paquete }) => {

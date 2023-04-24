@@ -7,11 +7,12 @@ import Link from "next/link";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AddIcon from "../../../../asset/AddIcon.png";
 import Image from "next/image";
-import { Pack, requestPacks } from "../../../../utils/seed";
+import { requestPacks } from "../../../../utils/seed";
 import CardManagePackage from "../components/cardManagePackage";
+import { Package } from "@/context/store";
 
 const ManagePackage = (): JSX.Element => {
-  const [paquetes, setPaquetes] = useState<Pack[]>([]);
+  const [paquetes, setPaquetes] = useState<Package[]>([]);
 
   useEffect(() => {
     requestPacks(3).then((packs) => {
