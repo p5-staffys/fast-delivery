@@ -104,12 +104,13 @@ export class UserController {
   async getCurrent(
     @Req() request: CurrentUserRequest,
   ): Promise<ReponseUserDto> {
-    try {
-      const currentUser = request.currentUser;
-      return currentUser;
-    } catch {
-      throw new GeneralError('No se pudo devolver el usuario');
-    }
+    const currentUser = request.currentUser;
+    return currentUser;
+  }
+
+  @Get('authenticate')
+  async authenticate(): Promise<boolean> {
+    return true;
   }
 
   @Patch()

@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
   Res,
   HttpStatus,
   UseInterceptors,
@@ -17,7 +16,6 @@ import { ApiTags, ApiBody, ApiOperation } from '@nestjs/swagger';
 
 import { AdminAuthService } from '../auth/admin-auth.service';
 import { Public } from '../auth/middleware/auth.guard';
-import { AdminGuard } from '../auth/middleware/admin.guard';
 import { IAdmin } from './interface/admin.interface';
 import { GeneralError } from '../../common/error-handlers/exceptions';
 import { CreateAuthDto } from '../auth/dto/create-auth.dto';
@@ -39,7 +37,7 @@ export class AdminController {
   ) {}
 
   @Public()
-  @Post('/createUser')
+  @Post('/create')
   @ApiBody({ type: CreateUserDto })
   @ApiOperation({ description: 'Just log in ' })
   async create(@Body() newAdmin: IAdmin) {
@@ -81,7 +79,6 @@ export class AdminController {
     }
   }
 
-  @UseGuards(AdminGuard)
   @UseInterceptors(CurrentUserInterceptor)
   @Get()
   async getAdmin(@Req() request: CurrentUserRequest) {
@@ -89,31 +86,31 @@ export class AdminController {
     return user;
   }
 
-  @UseGuards(AdminGuard)
+  @Get('authenticate')
+  async authenticate(): Promise<boolean> {
+    return true;
+  }
+
   @Get('users')
   async getUsers() {
     return 'hola';
   }
 
-  @UseGuards(AdminGuard)
   @Get('active_users')
   async getActiveUsers() {
     return this.adminService.getActiveUsers();
   }
 
-  @UseGuards(AdminGuard)
   @Get('packages')
   async getPackages() {
     return this.adminService.getPackages();
   }
 
-  @UseGuards(AdminGuard)
   @Get('active_packages')
   async getActivePackages() {
     return this.adminService.getActivePackages();
   }
 
-  @UseGuards(AdminGuard)
   @Put('status/:_id')
   async changeUserStatus(@Param('_id') _id) {
     return this.adminService.changeUserStatus(_id);
