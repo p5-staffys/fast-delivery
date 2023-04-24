@@ -8,6 +8,7 @@ import { AuthGuard } from '../auth/middleware/auth.guard';
 import { AdminAuthService } from '../auth/admin-auth.service';
 import { Admin, AdminSchema } from './entities/admin.entity';
 import { AuthService } from '../auth/auth.service';
+import { AdminGuard } from '../auth/middleware/admin.guard';
 
 @Module({
   imports: [
@@ -26,6 +27,10 @@ import { AuthService } from '../auth/auth.service';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AdminGuard,
     },
   ],
 })
