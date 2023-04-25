@@ -6,20 +6,20 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { IAdmin } from 'src/modules/admin/interface/admin.interface';
-import { AdminService } from '../../admin/admin.service';
-import { AdminAuthService } from '../admin-auth.service';
+import { IAdmin } from '../interfaces/admin.interface';
+import { AdminService } from '../admin.service';
+import { AuthService } from '../../../common/firebase/auth.service';
 
 @Injectable()
 export class CurrentAdminInterceptor implements NestInterceptor {
   constructor(
-    private adminAuthService: AdminAuthService,
+    private authService: AuthService,
     private adminService: AdminService,
   ) {}
   async intercept(context: ExecutionContext, handler: CallHandler) {
     const request: CurrentAdminRequest = context.switchToHttp().getRequest();
     const idToken: string = request.headers.authorization;
-    const _id = (await this.adminAuthService.authenticate(idToken)).uid;
+    const _id = (await this.authService.authenticate(idToken)).uid;
     if (_id) {
       try {
         const user = await this.adminService.findById(_id);

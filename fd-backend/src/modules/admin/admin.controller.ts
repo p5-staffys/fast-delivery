@@ -12,38 +12,42 @@ import {
 import { AdminService } from './admin.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
-import { AdminAuthService } from '../auth/admin-auth.service';
-import { Public } from '../auth/middleware/auth.guard';
+import { AuthService } from '../../common/firebase/auth.service';
+import { Public } from '../../common/guards/auth.guard';
 import { GeneralError } from '../../common/error-handlers/exceptions';
 
-import { CreateAdminDto } from './dto/create-admin.dto';
+import { CreateAdminDto } from './dtos/create-admin.dto';
 import {
   CurrentAdminInterceptor,
   CurrentAdminRequest,
-} from '../auth/middleware/current-admin.interceptor';
+} from './interceptors/current-admin.interceptor';
 
 @ApiTags('Admin')
 @Controller()
 export class AdminController {
   constructor(
     private readonly adminService: AdminService,
-    private readonly adminAuthService: AdminAuthService,
+    private readonly authService: AuthService,
   ) {}
 
   @Public()
   @Post()
   @ApiOperation({ description: 'Create admin' })
-  async create(@Body() newAdmin: CreateAdminDto) {
+  async create(@Body() body: CreateAdminDto) {
+    const { password, email, name, lastName } = body;
     try {
-      const { email, password } = newAdmin;
-      const newAdminAuth = await this.adminAuthService.create(
+      await this.authService.checkAdminEmail(email);
+      await this.adminService.checkAdminEmail(email);
+      const newAuth = await this.authService.create(email, password, true);
+      const _id = newAuth.uid;
+      await this.adminService.checkAdminId(_id);
+      const newAdmin = await this.adminService.create({
         email,
-        password,
-        true,
-      );
-      const _id = newAdminAuth.uid;
-      const newAdminUser = await this.adminService.create({ ...newAdmin, _id });
-      return newAdminUser;
+        name,
+        lastName,
+        _id,
+      });
+      return newAdmin;
     } catch (error: unknown) {
       throw new GeneralError(error, HttpStatus.UNAUTHORIZED);
     }

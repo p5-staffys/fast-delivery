@@ -12,16 +12,16 @@ import {
 
 import { UserService } from './user.service';
 
-import { AdminAuthService } from '../auth/admin-auth.service';
+import { AuthService } from '../../common/firebase/auth.service';
 
-import { ReponseUserDto } from './dto/response-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { CurrentUserInterceptor } from '../auth/middleware/current-user.interceptor';
-import { CurrentUserRequest } from '../auth/middleware/current-user.interceptor';
+import { ReponseUserDto } from './dtos/response-user.dto';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { CurrentUserRequest } from './interceptors/current-user.interceptor';
 
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { Public } from '../auth/middleware/auth.guard';
+import { Public } from '../../common/guards/auth.guard';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import { User } from './entities/user.entity';
 import { GeneralError } from '../../common/error-handlers/exceptions';
@@ -31,17 +31,16 @@ import { GeneralError } from '../../common/error-handlers/exceptions';
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly adminAuthService: AdminAuthService,
+    private readonly authService: AuthService,
   ) {}
 
   @Public()
   @Post()
   async create(@Body() newUser: CreateUserDto): Promise<ReponseUserDto> {
     const { password, email, name, lastName } = newUser;
-    await this.userService.checkUserEmail(email);
+    //await this.userService.checkUserEmail(email);
     try {
-      const _id = (await this.adminAuthService.create(email, password, false))
-        .uid;
+      const _id = (await this.authService.create(email, password, false)).uid;
       return this.userService.create({ email, name, lastName, _id });
     } catch (error: unknown) {
       throw new GeneralError(error, HttpStatus.BAD_REQUEST);

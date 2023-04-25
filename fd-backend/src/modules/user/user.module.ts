@@ -5,11 +5,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { UserService } from './user.service';
 import { User, UserSchema } from './entities/user.entity';
-import { CurrentUserInterceptor } from '../auth/middleware/current-user.interceptor';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 
-import { AdminAuthService } from '../auth/admin-auth.service';
+import { AuthService } from '../../common/firebase/auth.service';
 import { UserRepository } from './repository/user.repository';
-import { AuthGuard } from '../auth/middleware/auth.guard';
+import { AuthGuard } from '../../common/guards/auth.guard';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { AuthGuard } from '../auth/middleware/auth.guard';
   controllers: [UserController],
   providers: [
     UserService,
-    AdminAuthService,
+    AuthService,
     UserRepository,
     CurrentUserInterceptor,
     {
@@ -31,11 +31,6 @@ import { AuthGuard } from '../auth/middleware/auth.guard';
       useClass: AuthGuard,
     },
   ],
-  exports: [
-    UserService,
-    CurrentUserInterceptor,
-    AdminAuthService,
-    UserRepository,
-  ],
+  exports: [UserService, CurrentUserInterceptor, AuthService, UserRepository],
 })
 export class UserModule {}

@@ -6,7 +6,7 @@ import { AppModule } from '../src/app.module';
 import {
   IUser,
   UserStatus,
-} from '../src/modules/user/interface/user.interface';
+} from '../src/modules/user/interfaces/user.interface';
 
 describe('User Routes', () => {
   let app: INestApplication;
