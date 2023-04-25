@@ -1,5 +1,5 @@
 import { IPackageRef } from '../../package/interface/package.interface';
-import { IFormApply } from 'src/common/modules/formApply/interface/form-apply.interface';
+import { IFormApply } from '../../../common/modules/formApply/interface/form-apply.interface';
 
 export interface IUser {
   _id: string;

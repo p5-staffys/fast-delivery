@@ -9,7 +9,7 @@ import {
 import { IUser } from '../interfaces/user.interface';
 import { IPackageRef } from '../../package/interface/package.interface';
 import { UserStatus } from '../interfaces/user.interface';
-import { IFormApply } from 'src/common/modules/formApply/interface/form-apply.interface';
+import { IFormApply } from '../../../common/modules/formApply/interface/form-apply.interface';
 
 export class ReponseUserDto implements Partial<IUser> {
   @IsNotEmpty()

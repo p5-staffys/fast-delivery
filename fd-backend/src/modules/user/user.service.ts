@@ -5,7 +5,7 @@ import { ReponseUserDto } from './dtos/response-user.dto';
 import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserRepository } from './repository/user.repository';
-import { FormAplyDto } from 'src/common/modules/formApply/dto/form-apply.dto';
+import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 
 @Injectable()
 export class UserService {

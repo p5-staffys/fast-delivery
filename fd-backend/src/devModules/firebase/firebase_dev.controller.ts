@@ -1,7 +1,7 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { GeneralError } from 'src/common/error-handlers/exceptions';
-import { Public } from 'src/common/guards/auth.guard';
+import { GeneralError } from '../../common/error-handlers/exceptions';
+import { Public } from '../../common/guards/auth.guard';
 import { SingInDto } from './dto/singin.dto';
 import { FirebaseDevService } from './firebase_dev.service';
 
