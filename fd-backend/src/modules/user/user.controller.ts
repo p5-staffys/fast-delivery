@@ -20,8 +20,8 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { CurrentUserRequest } from './interceptors/current-user.interceptor';
 
-import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { Public } from '../../common/guards/auth.guard';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import {  Public } from '../../common/guards/auth.guard';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import { User } from './entities/user.entity';
 import { GeneralError } from '../../common/error-handlers/exceptions';
@@ -57,6 +57,7 @@ export class UserController {
   }
 
   @Get('authenticate')
+  @ApiBearerAuth('idToken')
   async authenticate(): Promise<boolean> {
     return true;
   }

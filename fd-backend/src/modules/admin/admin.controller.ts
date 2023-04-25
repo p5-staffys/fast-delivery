@@ -8,6 +8,7 @@ import {
   HttpStatus,
   UseInterceptors,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import {
@@ -31,8 +32,10 @@ import {
   CurrentAdminRequest,
 } from './interceptors/current-admin.interceptor';
 import { IAdmin } from './interfaces/admin.interface';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @ApiTags('Admin')
+@UseGuards(AdminGuard)
 @Controller()
 export class AdminController {
   constructor(

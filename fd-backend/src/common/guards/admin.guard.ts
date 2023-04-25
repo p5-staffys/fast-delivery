@@ -1,9 +1,10 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, HttpStatus } from '@nestjs/common';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 
 import { auth } from '../firebase/auth.service';
 import { IS_PUBLIC_KEY } from './auth.guard';
+import { GeneralError } from '../error-handlers/exceptions';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
@@ -19,9 +20,10 @@ export class AdminGuard implements CanActivate {
     const idToken: string = request.headers.authorization;
     try {
       const admin = (await auth.verifyIdToken(idToken)).admin;
-      return admin;
+      if (admin) return true
     } catch {
-      return false;
+      throw new GeneralError('Credenciales invalidas o caducadas, por favor volve a ingresar', HttpStatus.UNAUTHORIZED)
+
     }
   }
 }

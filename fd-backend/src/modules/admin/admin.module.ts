@@ -7,7 +7,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthGuard } from '../../common/guards/auth.guard';
 import { AuthService } from '../../common/firebase/auth.service';
 import { Admin, AdminSchema } from './entities/admin.entity';
-import { AdminGuard } from '../../common/guards/admin.guard';
 import { AdminRepository } from './repository/admin.repository';
 import { CurrentAdminInterceptor } from './interceptors/current-admin.interceptor';
 import { UserModule } from '../user/user.module';
@@ -30,14 +29,6 @@ import { PackageModule } from '../package/package.module';
     AuthService,
     AdminRepository,
     CurrentAdminInterceptor,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: AdminGuard,
-    },
   ],
 })
 export class AdminModule {}
