@@ -3,11 +3,13 @@ import {
   CanActivate,
   ExecutionContext,
   SetMetadata,
+  HttpStatus,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 import { auth } from '../firebase/auth.service';
 import { Request } from 'express';
+import { GeneralError } from '../error-handlers/exceptions';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -23,9 +25,9 @@ export class AuthGuard implements CanActivate {
     const idToken: string = request.headers.authorization;
     try {
       const _id = (await auth.verifyIdToken(idToken)).uid;
-      if (_id) return true;
+      if(_id) return true
     } catch {
-      return false;
+      throw new GeneralError('Credenciales invalidas o caducadas, por favor volve a ingresar', HttpStatus.UNAUTHORIZED)
     }
   }
 }

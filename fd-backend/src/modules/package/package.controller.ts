@@ -38,7 +38,7 @@ export class PackageController {
   constructor(private readonly packageService: PackageService) {}
 
   @Post()
-  @ApiBearerAuth()
+  @ApiBearerAuth('idToken')
   @ApiResponse({
     status: 201,
     // type: dto de rta,
@@ -57,6 +57,7 @@ export class PackageController {
   //NEW QUE NO TENGA REPARTIDOR
 
   @Get()
+  @ApiBearerAuth('idToken')
   @ApiOperation({
     description: 'Package are wating for taken but dont have any delivery ',
   })
@@ -68,6 +69,7 @@ export class PackageController {
   }
 
   @Get(':_id')
+  @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
   @ApiOperation({ description: 'Get Package by id' })
   async getById(@Param('_id', ValidateMongoId) _id): Promise<Package> {
@@ -75,7 +77,7 @@ export class PackageController {
   }
 
   @Put(':_id/assign/')
-  @ApiBearerAuth()
+  @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
   @UseInterceptors(CurrentUserInterceptor)
   async assignToUser(
@@ -101,7 +103,7 @@ export class PackageController {
   }
 
   @Put(':_id/delivered')
-  @ApiBearerAuth()
+  @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
   async delivered(@Param('_id', ValidateMongoId) _id: Types.ObjectId) {
     return await this.packageService.delivered(_id);

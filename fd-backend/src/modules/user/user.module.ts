@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
-import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { UserService } from './user.service';
@@ -26,10 +25,7 @@ import { AuthGuard } from '../../common/guards/auth.guard';
     AuthService,
     UserRepository,
     CurrentUserInterceptor,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
+    
   ],
   exports: [UserService, CurrentUserInterceptor, AuthService, UserRepository],
 })
