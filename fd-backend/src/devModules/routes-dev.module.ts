@@ -10,8 +10,9 @@ export const devRoutes: Routes = [
     module: SeedModule,
   },
   {
-    path:'/firebase',
-    module: FirebaseDevModule    }
+    path: '/firebase',
+    module: FirebaseDevModule,
+  },
 ];
 
 const getModulesFromRoutes = (routes: Routes) => {

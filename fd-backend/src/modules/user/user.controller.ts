@@ -78,7 +78,6 @@ export class UserController {
   @ApiBearerAuth('idToken')
   @ApiResponse({
     status: 200,
-    type: 'true',
   })
   @Get('authenticate')
   async authenticate(): Promise<boolean> {

@@ -1,4 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  HttpStatus,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 
@@ -20,10 +25,12 @@ export class AdminGuard implements CanActivate {
     const idToken: string = request.headers.authorization;
     try {
       const admin = (await auth.verifyIdToken(idToken)).admin;
-      if (admin) return true
+      if (admin) return true;
     } catch {
-      throw new GeneralError('Credenciales invalidas o caducadas, por favor volve a ingresar', HttpStatus.UNAUTHORIZED)
-
+      throw new GeneralError(
+        'Credenciales invalidas o caducadas, por favor volve a ingresar',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 }
