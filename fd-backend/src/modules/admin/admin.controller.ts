@@ -86,6 +86,10 @@ export class AdminController {
   }
 
   @ApiBearerAuth('idToken')
+  @ApiOperation({
+    description:
+      'Cambia el estado del usuario. Modifica la propiedad "active" y funciona como un "toggle", cambiando de estado de true a false y de false a true',
+  })
   @ApiParam({ name: '_id', required: true, type: String })
   @Put('status/:_id')
   async changeUserStatus(@Param('_id') _id: string): Promise<boolean> {
