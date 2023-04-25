@@ -4,10 +4,12 @@ import { AdminController } from './admin.controller';
 import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { AuthGuard } from '../auth/middleware/auth.guard';
-import { AdminAuthService } from '../auth/admin-auth.service';
+import { AuthGuard } from '../../common/guards/auth.guard';
+import { AuthService } from '../../common/firebase/auth.service';
 import { Admin, AdminSchema } from './entities/admin.entity';
-import { AdminGuard } from '../auth/middleware/admin.guard';
+import { AdminGuard } from '../../common/guards/admin.guard';
+import { AdminRepository } from './repository/admin.repository';
+import { CurrentAdminInterceptor } from './interceptors/current-admin.interceptor';
 
 @Module({
   imports: [
@@ -21,7 +23,9 @@ import { AdminGuard } from '../auth/middleware/admin.guard';
   controllers: [AdminController],
   providers: [
     AdminService,
-    AdminAuthService,
+    AuthService,
+    AdminRepository,
+    CurrentAdminInterceptor,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

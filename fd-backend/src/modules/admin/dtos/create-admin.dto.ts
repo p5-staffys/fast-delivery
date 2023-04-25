@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { IAdmin } from '../interface/admin.interface';
+import { IAdmin } from '../interfaces/admin.interface';
 
 export class CreateAdminDto implements Partial<IAdmin> {
   @IsNotEmpty()
@@ -22,4 +22,25 @@ export class CreateAdminDto implements Partial<IAdmin> {
   @IsString()
   @ApiProperty({ example: '123123' })
   password: string;
+}
+
+export class CreateDBAdminDto implements Partial<IAdmin> {
+  @IsNotEmpty()
+  @IsString()
+  _id: string;
+
+  @IsNotEmpty()
+  @IsEmail()
+  @ApiProperty({ example: 'test@email.com' })
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({ example: 'Juan Carlos' })
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({ example: 'Macanudo' })
+  lastName: string;
 }

@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-import { IAdmin, IAdminRef, AdminType } from '../interface/admin.interface';
+import { IAdmin, IAdminRef, AdminType } from '../interfaces/admin.interface';
 import { IPackageRef } from '../../package/interface/package.interface';
 
 export type AdminDocument = HydratedDocument<Admin>;

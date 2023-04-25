@@ -7,20 +7,20 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import { AdminAuthService } from '../admin-auth.service';
-import { UserService } from '../../user/user.service';
-import { IUser } from '../../user/interface/user.interface';
+import { AuthService } from '../../../common/firebase/auth.service';
+import { UserService } from '../user.service';
+import { IUser } from '../interfaces/user.interface';
 
 @Injectable()
 export class CurrentUserInterceptor implements NestInterceptor {
   constructor(
-    private adminAuthService: AdminAuthService,
+    private authService: AuthService,
     private userService: UserService,
   ) {}
   async intercept(context: ExecutionContext, handler: CallHandler) {
     const request: CurrentUserRequest = context.switchToHttp().getRequest();
     const idToken: string = request.headers.authorization;
-    const _id = (await this.adminAuthService.authenticate(idToken)).uid;
+    const _id = (await this.authService.authenticate(idToken)).uid;
     if (_id) {
       try {
         const user = await this.userService.findById(_id);

@@ -5,7 +5,7 @@ import { Package } from './entities/package.entity';
 
 import { PackageRepository } from './repository/package.repository';
 import { Types } from 'mongoose';
-import { IUser } from '../user/interface/user.interface';
+import { IUser } from '../user/interfaces/user.interface';
 import { UserRepository } from '../user/repository/user.repository';
 import { PackageStatus } from './interface/package.interface';
 

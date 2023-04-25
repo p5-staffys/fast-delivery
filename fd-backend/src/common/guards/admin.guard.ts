@@ -1,16 +1,12 @@
-import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-  SetMetadata,
-} from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 
-import { auth } from '../admin-auth.service';
-import { Request } from 'express';
+import { auth } from '../firebase/auth.service';
+import { IS_PUBLIC_KEY } from './auth.guard';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -22,13 +18,10 @@ export class AuthGuard implements CanActivate {
     const request: Request = context.switchToHttp().getRequest();
     const idToken: string = request.headers.authorization;
     try {
-      const _id = (await auth.verifyIdToken(idToken)).uid;
-      if (_id) return true;
+      const admin = (await auth.verifyIdToken(idToken)).admin;
+      return admin;
     } catch {
       return false;
     }
   }
 }
-
-export const IS_PUBLIC_KEY = 'isPublic';
-export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);

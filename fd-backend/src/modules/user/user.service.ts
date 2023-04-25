@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateDBUserDto } from './dto/create-user.dto';
-import { ReponseUserDto } from './dto/response-user.dto';
+import { CreateDBUserDto } from './dtos/create-user.dto';
+import { ReponseUserDto } from './dtos/response-user.dto';
 
 import { User } from './entities/user.entity';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserRepository } from './repository/user.repository';
 import { FormAplyDto } from 'src/common/modules/formApply/dto/form-apply.dto';
 

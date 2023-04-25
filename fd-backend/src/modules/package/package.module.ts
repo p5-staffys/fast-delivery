@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
-import { AuthGuard } from '../auth/middleware/auth.guard';
+import { AuthGuard } from '../../common/guards/auth.guard';
 import { PackageService } from './package.service';
 import { PackageController } from './package.controller';
 import { MongooseModule } from '@nestjs/mongoose';

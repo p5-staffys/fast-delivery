@@ -30,7 +30,7 @@ import { Package } from './entities/package.entity';
 import {
   CurrentUserInterceptor,
   CurrentUserRequest,
-} from '../auth/middleware/current-user.interceptor';
+} from '../user/interceptors/current-user.interceptor';
 
 @ApiTags('Package')
 @Controller()
