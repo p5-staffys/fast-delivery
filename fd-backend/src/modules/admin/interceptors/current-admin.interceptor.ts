@@ -22,8 +22,8 @@ export class CurrentAdminInterceptor implements NestInterceptor {
     const _id = (await this.authService.authenticate(idToken)).uid;
     if (_id) {
       try {
-        const user = await this.adminService.findById(_id);
-        request.currentUser = user;
+        const admin = await this.adminService.findById(_id);
+        request.currentAdmin = admin;
       } catch {
         throw new NotFoundException(
           'Por favor ingresa tu email y password nuevamente',
@@ -35,5 +35,5 @@ export class CurrentAdminInterceptor implements NestInterceptor {
 }
 
 export interface CurrentAdminRequest extends Request {
-  currentUser?: IAdmin;
+  currentAdmin?: IAdmin;
 }

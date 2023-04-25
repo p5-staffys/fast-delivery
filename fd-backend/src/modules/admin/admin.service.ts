@@ -1,21 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 
 import { CreateDBAdminDto } from './dtos/create-admin.dto';
-import { Admin, AdminDocument } from './entities/admin.entity';
 import { AdminRepository } from './repository/admin.repository';
 
 @Injectable()
 export class AdminService {
-  constructor(
-    @InjectModel(Admin.name)
-    private readonly adminModel: Model<AdminDocument>,
-    private readonly adminRepository: AdminRepository,
-  ) {}
+  constructor(private readonly adminRepository: AdminRepository) {}
 
   async create(newAdmin: CreateDBAdminDto) {
-    return await this.adminModel.create(newAdmin);
+    return await this.adminRepository.createEntity(newAdmin);
   }
 
   async checkAdminId(_id: string): Promise<void> {
@@ -33,15 +26,7 @@ export class AdminService {
   }
 
   async findById(_id: string) {
-    return this.adminModel.findById(_id);
-  }
-
-  async getUsers() {
-    return 'Returns all users';
-  }
-
-  async getActiveUsers() {
-    return 'Returns amount of active users';
+    return this.adminRepository.findOneById(_id);
   }
 
   async getPackages() {

@@ -62,4 +62,19 @@ export class UserService {
     const updatedUser = await user.save();
     return updatedUser;
   }
+
+  async getUsers() {
+    return this.userRepository.find({});
+  }
+
+  async getActiveUsers() {
+    return this.userRepository.find({ active: true });
+  }
+
+  async changeUserStatus(_id: string) {
+    const user = await this.userRepository.findOneById(_id);
+    user.active = !user.active;
+    user.save();
+    return true;
+  }
 }

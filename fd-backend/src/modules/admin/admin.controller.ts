@@ -10,9 +10,18 @@ import {
   Req,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiBody,
+  ApiBearerAuth,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 import { AuthService } from '../../common/firebase/auth.service';
+import { UserService } from '../user/user.service';
+
 import { Public } from '../../common/guards/auth.guard';
 import { GeneralError } from '../../common/error-handlers/exceptions';
 
@@ -21,6 +30,7 @@ import {
   CurrentAdminInterceptor,
   CurrentAdminRequest,
 } from './interceptors/current-admin.interceptor';
+import { IAdmin } from './interfaces/admin.interface';
 
 @ApiTags('Admin')
 @Controller()
@@ -28,12 +38,18 @@ export class AdminController {
   constructor(
     private readonly adminService: AdminService,
     private readonly authService: AuthService,
+    private readonly userService: UserService,
   ) {}
 
   @Public()
   @Post()
   @ApiOperation({ description: 'Create admin' })
-  async create(@Body() body: CreateAdminDto) {
+  @ApiBody({ type: CreateAdminDto })
+  @ApiResponse({
+    status: 201,
+    // type,
+  })
+  async create(@Body() body: CreateAdminDto): Promise<IAdmin> {
     const { password, email, name, lastName } = body;
     try {
       await this.authService.checkAdminEmail(email);
@@ -53,26 +69,41 @@ export class AdminController {
     }
   }
 
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get current admin' })
   @UseInterceptors(CurrentAdminInterceptor)
   @Get()
   async getAdmin(@Req() request: CurrentAdminRequest) {
-    const user = request.currentUser;
-    return user;
+    const admin = request.currentAdmin;
+    return admin;
   }
 
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Authenticate current admin' })
   @Get('authenticate')
   async authenticate(): Promise<boolean> {
     return true;
   }
 
-  @Get('users')
-  async getUsers() {
-    return 'hola';
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @Put('status/:_id')
+  async changeUserStatus(@Param('_id') _id: string): Promise<boolean> {
+    return this.userService.changeUserStatus(_id);
   }
 
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get all users' })
+  @Get('users')
+  async getUsers() {
+    return this.userService.getUsers();
+  }
+
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get all active users' })
   @Get('active_users')
   async getActiveUsers() {
-    return this.adminService.getActiveUsers();
+    return this.userService.getActiveUsers();
   }
 
   @Get('packages')
@@ -83,10 +114,5 @@ export class AdminController {
   @Get('active_packages')
   async getActivePackages() {
     return this.adminService.getActivePackages();
-  }
-
-  @Put('status/:_id')
-  async changeUserStatus(@Param('_id') _id) {
-    return this.adminService.changeUserStatus(_id);
   }
 }
