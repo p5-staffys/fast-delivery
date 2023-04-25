@@ -29,6 +29,9 @@ export class User implements Partial<IUser> {
   @Prop({ type: String, default: 'inactive' })
   status: UserStatus;
 
+  @Prop({ type: Boolean, default: false })
+  active: boolean;
+
   @Prop({ type: Number, default: 5 })
   rating: number;
 

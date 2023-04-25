@@ -10,9 +10,13 @@ import { Admin, AdminSchema } from './entities/admin.entity';
 import { AdminGuard } from '../../common/guards/admin.guard';
 import { AdminRepository } from './repository/admin.repository';
 import { CurrentAdminInterceptor } from './interceptors/current-admin.interceptor';
+import { UserModule } from '../user/user.module';
+import { PackageModule } from '../package/package.module';
 
 @Module({
   imports: [
+    UserModule,
+    PackageModule,
     MongooseModule.forFeature([
       {
         name: Admin.name,
