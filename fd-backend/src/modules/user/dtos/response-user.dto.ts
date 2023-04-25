@@ -1,5 +1,6 @@
 import {
   IsArray,
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsNumber,
@@ -30,6 +31,10 @@ export class ReponseUserDto implements Partial<IUser> {
   @IsNotEmpty()
   @IsString()
   status: UserStatus;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  active: boolean;
 
   @IsNotEmpty()
   @IsNumber()

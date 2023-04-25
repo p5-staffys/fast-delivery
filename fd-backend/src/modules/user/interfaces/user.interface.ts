@@ -7,6 +7,7 @@ export interface IUser {
   lastName: string;
   email: string;
   status: UserStatus;
+  active: boolean;
   rating: number;
   packages: IPackageRef[];
   forms: IFormApply[];

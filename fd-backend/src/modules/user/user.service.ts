@@ -43,8 +43,10 @@ export class UserService {
   }
 
   async update(_id: string, updateData: UpdateUserDto): Promise<User> {
-    const user = await this.userRepository.findOneById(_id);
-    user.update(updateData);
+    const user = await this.userRepository.updateEntityOrFail(
+      { _id },
+      updateData,
+    );
     return user;
   }
 

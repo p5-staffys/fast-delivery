@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
-import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { AuthGuard } from '../../common/guards/auth.guard';
 import { AuthService } from '../../common/firebase/auth.service';
 import { Admin, AdminSchema } from './entities/admin.entity';
 import { AdminRepository } from './repository/admin.repository';
