@@ -2,7 +2,7 @@ name: GCP deployment workflow
 
 on:
   push:
-    branches: [master]
+    branches: [develop]
 
 env:
   PROJECT_ID: fast-delivery-uma
