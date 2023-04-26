@@ -38,6 +38,9 @@ export class Package {
 
   @Prop({ type: Number, default: 1 })
   readonly quantity: number;
+
+  @Prop({ type: Boolean, default: true })
+  showHistory: boolean;
 }
 
 export const PackageSchema = SchemaFactory.createForClass(Package);
