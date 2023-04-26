@@ -96,4 +96,14 @@ export class PackageService {
       `ID o Status invalido, solo puede ser "${PackageStatus.Delivering}"`,
     );
   }
+
+  async getPackageHistory(user: IUser, page?:number,limit?:number): Promise<Package[]>{
+    
+    const { name,lastName, _id} = user
+    return await this.packageRepository.find({  deliveredBy: {
+      name,
+      lastName,
+      _id
+    },  },page,limit)
+  }
 }
