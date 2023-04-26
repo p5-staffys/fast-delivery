@@ -4,7 +4,6 @@ import {
   Get,
   Param,
   Put,
-  Delete,
   Query,
   UseInterceptors,
   Req,
@@ -54,8 +53,6 @@ export class PackageController {
     }
   }
 
-  //NEW QUE NO TENGA REPARTIDOR
-
   @Get()
   @ApiBearerAuth('idToken')
   @ApiOperation({
@@ -68,16 +65,10 @@ export class PackageController {
     return await this.packageService.getPendingPackage(page, limit);
   }
 
-  @Get(':_id')
-  @ApiBearerAuth('idToken')
-  @ApiParam({ name: '_id', required: true, type: String })
-  @ApiOperation({ description: 'Get Package by id' })
-  async getById(@Param('_id', ValidateMongoId) _id): Promise<Package> {
-    return await this.packageService.getById(_id);
-  }
 
   @Put(':_id/assign/')
   @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'EndPoint to assing package to currentUser' })
   @ApiParam({ name: '_id', required: true, type: String })
   @UseInterceptors(CurrentUserInterceptor)
   async assignToUser(
@@ -87,25 +78,48 @@ export class PackageController {
     return await this.packageService.assignToUser(_id, currentUser);
   }
 
-  @Put(':_id/unassign')
-  async unassignFromUser(@Param('_id') _id) {
-    return this.packageService.unassignFromUser(_id);
-  }
+  @ApiOperation({ description: 'Get Package History by currentUser' })
+  @ApiBearerAuth('idToken')
+  @Get('/history')
+  @UseInterceptors(CurrentUserInterceptor)
+  async getPackageHistory(
+    @Query() queryPaginateDto: QueryPaginationDto,
+    @Req() { currentUser }: CurrentUserRequest,
 
-  @Put('_id')
-  async modifyPackage(@Param('_id') _id, @Body() newPackage) {
-    return this.packageService.modifyPackage(_id, newPackage);
+  ): Promise<Package[]> {
+    const { page , limit } = queryPaginateDto
+    return await this.packageService.getPackageHistory(currentUser,page,limit)
   }
+  // @Put(':_id/unassign')
+  // async unassignFromUser(@Param('_id') _id) {
+  //   return this.packageService.unassignFromUser(_id);
+  // }
 
-  @Delete(':_id')
-  async delete(@Param('_id') _id) {
-    return this.packageService.delete(_id);
-  }
+  // @Put('_id')
+  // async modifyPackage(@Param('_id') _id, @Body() newPackage) {
+  //   return this.packageService.modifyPackage(_id, newPackage);
+  // }
+
+  // @Delete(':_id')
+  // async delete(@Param('_id') _id) {
+  //   return this.packageService.delete(_id);
+  // }
+
 
   @Put(':_id/delivered')
   @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
-  async delivered(@Param('_id', ValidateMongoId) _id: Types.ObjectId) {
+  async delivered(@Param('_id', ValidateMongoId) _id: Types.ObjectId): Promise<Package> {
     return await this.packageService.delivered(_id);
   }
+
+  @Get(':_id')
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @ApiOperation({ description: 'Get Package by id' })
+  async getById(@Param('_id', ValidateMongoId) _id): Promise<Package> {
+    return await this.packageService.getById(_id);
+  }
+
+
 }

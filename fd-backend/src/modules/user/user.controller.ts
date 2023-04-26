@@ -90,6 +90,7 @@ export class UserController {
   }
 
   @Post('/addForm')
+  @ApiBearerAuth('idToken')
   @UseInterceptors(CurrentUserInterceptor)
   @ApiBody({ type: FormAplyDto })
   async addForm(
