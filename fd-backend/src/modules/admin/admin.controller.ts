@@ -32,7 +32,7 @@ import {
   CurrentAdminRequest,
 } from './interceptors/current-admin.interceptor';
 import { IAdmin } from './interfaces/admin.interface';
-import { AdminGuard } from 'src/common/guards/admin.guard';
+import { AdminGuard } from '../../common/guards/admin.guard';
 
 @ApiTags('Admin')
 @UseGuards(AdminGuard)
