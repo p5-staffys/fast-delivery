@@ -8,7 +8,6 @@ import { CurrentUserInterceptor } from './interceptors/current-user.interceptor'
 
 import { AuthService } from '../../common/firebase/auth.service';
 import { UserRepository } from './repository/user.repository';
-import { AuthGuard } from '../../common/guards/auth.guard';
 
 @Module({
   imports: [
@@ -20,13 +19,7 @@ import { AuthGuard } from '../../common/guards/auth.guard';
     ]),
   ],
   controllers: [UserController],
-  providers: [
-    UserService,
-    AuthService,
-    UserRepository,
-    CurrentUserInterceptor,
-    
-  ],
+  providers: [UserService, AuthService, UserRepository, CurrentUserInterceptor],
   exports: [UserService, CurrentUserInterceptor, AuthService, UserRepository],
 })
 export class UserModule {}

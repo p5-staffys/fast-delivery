@@ -17,10 +17,7 @@ import { UserModule } from '../user/user.module';
     ]),
   ],
   controllers: [PackageController],
-  providers: [
-    PackageService,
-    PackageRepository,
-  ],
+  providers: [PackageService, PackageRepository],
   exports: [PackageService],
 })
 export class PackageModule {}

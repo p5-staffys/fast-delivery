@@ -19,7 +19,7 @@ class EnvironmentVariables {
 
   @IsString()
   @IsNotEmpty()
-  GOOGLE_APPLICATION_CREDENTIALS: string
+  GOOGLE_APPLICATION_CREDENTIALS: string;
 
   @IsNotEmpty()
   @Min(1)

@@ -8,7 +8,6 @@ export const environments = registerAs('config', () => ({
     MONGODB: process.env.MONGODB,
   },
   GOOGLE_APPLICATION_CREDENTIALS: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-
 }));
 
 export default ConfigModule.forRoot({
