@@ -1,4 +1,3 @@
-import { Response, Request } from 'express';
 import {
   Controller,
   Get,
@@ -7,24 +6,28 @@ import {
   Patch,
   Body,
   Req,
-  Res,
   UseInterceptors,
   HttpStatus,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
-import { AuthService } from '../auth/auth.service';
-import { AdminAuthService } from '../auth/admin-auth.service';
 
-import { ReponseUserDto } from './dto/response-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { CurrentUserInterceptor } from '../auth/middleware/current-user.interceptor';
-import { CurrentUserRequest } from '../auth/middleware/current-user.interceptor';
+import { AuthService } from '../../common/firebase/auth.service';
 
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateAuthDto } from '../auth/dto/create-auth.dto';
-import { Public } from '../auth/middleware/auth.guard';
+import { ReponseUserDto } from './dtos/response-user.dto';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { CurrentUserRequest } from './interceptors/current-user.interceptor';
+
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { Public } from '../../common/guards/auth.guard';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import { User } from './entities/user.entity';
 import { GeneralError } from '../../common/error-handlers/exceptions';
@@ -35,91 +38,85 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
-    private readonly adminAuthService: AdminAuthService,
   ) {}
 
+  @ApiOperation({ description: 'Crear nuevo usuario en la DB' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({
+    status: 201,
+    type: ReponseUserDto,
+  })
   @Public()
   @Post()
   async create(@Body() newUser: CreateUserDto): Promise<ReponseUserDto> {
     const { password, email, name, lastName } = newUser;
-    await this.userService.checkUserEmail(email);
+    //await this.userService.checkUserEmail(email);
     try {
-      const _id = (await this.adminAuthService.create(email, password, false))
-        .uid;
+      const _id = (await this.authService.create(email, password, false)).uid;
       return this.userService.create({ email, name, lastName, _id });
     } catch (error: unknown) {
       throw new GeneralError(error, HttpStatus.BAD_REQUEST);
     }
   }
 
+  @ApiOperation({ description: 'Obtener los datos del usuario logueado' })
+  @ApiBearerAuth('idToken')
+  @UseInterceptors(CurrentUserInterceptor)
+  @ApiResponse({
+    status: 200,
+    type: ReponseUserDto,
+  })
+  @Get()
+  async getCurrent(
+    @Req() request: CurrentUserRequest,
+  ): Promise<ReponseUserDto> {
+    const currentUser = request.currentUser;
+    return currentUser;
+  }
+
+  @ApiOperation({ description: 'Autenticar el usuario logueado' })
+  @ApiBearerAuth('idToken')
+  @ApiResponse({
+    status: 200,
+  })
+  @Get('authenticate')
+  async authenticate(): Promise<boolean> {
+    return true;
+  }
+
+  @ApiOperation({ description: 'Borrar el usuario logueado' })
+  @ApiBearerAuth('idToken')
+  @ApiResponse({
+    status: 200,
+    type: 'Usuario eliminado de la DB',
+  })
+  @UseInterceptors(CurrentUserInterceptor)
   @Delete()
-  async remove(): Promise<string> {
+  async delete(@Req() request: CurrentUserRequest): Promise<string> {
     try {
-      const auth = await this.authService.getCurrentUser();
-      await this.authService.delete(auth);
-      await this.userService.remove(auth.uid);
-      return `User ${auth.uid} deleted`;
+      const _id = request.currentUser._id;
+      await this.userService.remove(_id);
+      return `Usuario eliminado de la DB`;
     } catch {
       throw new GeneralError('No se pudo eliminar el usuario');
     }
   }
 
-  @Public()
-  @Post('/signIn')
-  @ApiBody({ type: CreateAuthDto })
-  @ApiOperation({ description: 'Just log in ' })
-  async signIn(
-    @Body() singInDto: CreateAuthDto,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<ReponseUserDto | unknown> {
-    const { email, password } = singInDto;
-    try {
-      const userCredentials = await this.authService.signIn(email, password);
-      const token = await userCredentials.user.getIdToken();
-      const _id = userCredentials.user.uid;
-      const user = await this.userService.findById(_id);
-      response.cookie('idToken', token, { sameSite: 'none', secure: true });
-      return { user, token };
-    } catch {
-      throw new GeneralError(
-        'Email o password incorrecto',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-  }
-
-  @Post('/signOut')
-  async signOut(): Promise<string> {
-    try {
-      const user = await this.authService.getCurrentUser();
-      await this.authService.signOut();
-      return `El usuario ${user.uid} se deslogueó`;
-    } catch {
-      throw new GeneralError('No se pudo desloguear el usuario');
-    }
-  }
-
+  @ApiOperation({ description: 'Atualizar los datos del usuario logueado' })
+  @ApiBearerAuth('idToken')
+  @ApiBody({ type: UpdateUserDto })
+  @ApiResponse({
+    status: 200,
+    type: ReponseUserDto,
+  })
   @UseInterceptors(CurrentUserInterceptor)
-  @Get()
-  async getCurrent(
-    @Req() request: CurrentUserRequest,
-  ): Promise<ReponseUserDto> {
-    try {
-      const currentUser = request.currentUser;
-      return currentUser;
-    } catch {
-      throw new GeneralError('No se pudo devolver el usuario');
-    }
-  }
-
   @Patch()
   async update(
     @Body() updateData: UpdateUserDto,
-    @Req() request: Request,
-  ): Promise<ReponseUserDto | unknown> {
+    @Req() request: CurrentUserRequest,
+  ): Promise<ReponseUserDto> {
     try {
-      const idToken = request.cookies['idToken'];
-      const _id = (await this.adminAuthService.authenticate(idToken)).uid;
+      const _id = request.currentUser._id;
       const user = await this.userService.update(_id, updateData);
       return user;
     } catch {
@@ -127,9 +124,11 @@ export class UserController {
     }
   }
 
-  @Post('/addForm')
-  @UseInterceptors(CurrentUserInterceptor)
+  @ApiOperation({ description: 'Agrega el formulario al usuario logueado' })
+  @ApiBearerAuth('idToken')
   @ApiBody({ type: FormAplyDto })
+  @UseInterceptors(CurrentUserInterceptor)
+  @Post('/addForm')
   async addForm(
     @Body() form: FormAplyDto,
     @Req() { currentUser }: CurrentUserRequest,

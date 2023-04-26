@@ -5,7 +5,7 @@ import { Package } from './entities/package.entity';
 
 import { PackageRepository } from './repository/package.repository';
 import { Types } from 'mongoose';
-import { IUser } from '../user/interface/user.interface';
+import { IUser } from '../user/interfaces/user.interface';
 import { UserRepository } from '../user/repository/user.repository';
 import { PackageStatus } from './interface/package.interface';
 
@@ -54,7 +54,7 @@ export class PackageService {
 
     const actualPackageFilter = {
       _id,
-      status: PackageStatus.New,
+      status: { $in: [PackageStatus.New, PackageStatus.Pending] },
       deliveredBy: null,
     };
 
@@ -62,7 +62,7 @@ export class PackageService {
       { ...actualPackageFilter },
       { ...updatePack },
       null,
-      'Package ID o Status invalido, solo puede ser "new" y no tener ningun repartidor asignado',
+      'Package ID o Status invalido, solo puede ser "new" o "pending" y no tener ningun repartidor asignado',
     );
   }
 
@@ -94,6 +94,51 @@ export class PackageService {
       { ...update },
       null,
       `ID o Status invalido, solo puede ser "${PackageStatus.Delivering}"`,
+    );
+  }
+
+  async getPackageHistory(
+    user: IUser,
+    page?: number,
+    limit?: number,
+  ): Promise<Package[]> {
+    const { _id, name, lastName } = user;
+
+    const deliveredBy = {
+      _id,
+      name,
+      lastName,
+    };
+
+    return await this.packageRepository.find(
+      { deliveredBy, showHistory: true },
+      page,
+      limit,
+    );
+  }
+
+  async deleteFromHistory(_id: Types.ObjectId, user: IUser): Promise<Package> {
+    const actualPackage = {
+      _id,
+      deliveredBy: {
+        _id: user._id,
+        name: user.name,
+        lastName: user.lastName,
+      },
+      showHistory: true,
+    };
+
+    const update = {
+      showHistory: false,
+    };
+
+    return await this.packageRepository.updateEntityOrFail(
+      {
+        ...actualPackage,
+      },
+      {
+        ...update,
+      },
     );
   }
 }

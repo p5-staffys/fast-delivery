@@ -1,6 +1,6 @@
 import { AddressDTO } from '../../../common/modules/address/dto/Address.dto';
 import { IClient } from '../../../common/modules/client/interface/client.interface';
-import { IUserRef } from '../../../modules/user/interface/user.interface';
+import { IUserRef } from '../../user/interfaces/user.interface';
 
 export interface IPackage {
   _id: string;
@@ -23,6 +23,7 @@ export interface IPackageRef {
 
 export enum PackageStatus {
   New = 'new',
+  Pending = 'pending',
   Delivering = 'delivering',
   Delivered = 'delivered',
   Failed = 'failed',

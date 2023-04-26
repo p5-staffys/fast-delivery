@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 
-import { IUser } from '../src/modules/user/interface/user.interface';
+import { IUser } from '../src/modules/user/interfaces/user.interface';
 import {
   IPackage,
   PackageStatus,

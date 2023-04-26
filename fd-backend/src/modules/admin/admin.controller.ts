@@ -1,4 +1,3 @@
-import { Response } from 'express';
 import {
   Body,
   Controller,
@@ -6,102 +5,121 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
-  Res,
   HttpStatus,
+  UseInterceptors,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { ApiTags, ApiBody, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiBody,
+  ApiBearerAuth,
+  ApiResponse,
+} from '@nestjs/swagger';
 
-import { AdminAuthService } from '../auth/admin-auth.service';
-import { Public } from '../auth/middleware/auth.guard';
-import { AdminGuard } from '../auth/middleware/admin.guard';
-import { IAdmin } from './interface/admin.interface';
+import { AuthService } from '../../common/firebase/auth.service';
+import { UserService } from '../user/user.service';
+
+import { Public } from '../../common/guards/auth.guard';
 import { GeneralError } from '../../common/error-handlers/exceptions';
-import { CreateAuthDto } from '../auth/dto/create-auth.dto';
-import { ReponseUserDto } from '../user/dto/response-user.dto';
-import { AuthService } from '../auth/auth.service';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+
+import { CreateAdminDto } from './dtos/create-admin.dto';
+import {
+  CurrentAdminInterceptor,
+  CurrentAdminRequest,
+} from './interceptors/current-admin.interceptor';
+import { IAdmin } from './interfaces/admin.interface';
+import { AdminGuard } from '../../common/guards/admin.guard';
 
 @ApiTags('Admin')
+@UseGuards(AdminGuard)
 @Controller()
 export class AdminController {
   constructor(
     private readonly adminService: AdminService,
-    private readonly adminAuthService: AdminAuthService,
     private readonly authService: AuthService,
+    private readonly userService: UserService,
   ) {}
 
   @Public()
-  @Post('/createUser')
-  @ApiBody({ type: CreateUserDto })
-  @ApiOperation({ description: 'Just log in ' })
-  async create(@Body() newAdmin: IAdmin) {
+  @Post()
+  @ApiOperation({ description: 'Create admin' })
+  @ApiBody({ type: CreateAdminDto })
+  @ApiResponse({
+    status: 201,
+    // type,
+  })
+  async create(@Body() body: CreateAdminDto): Promise<IAdmin> {
+    const { password, email, name, lastName } = body;
     try {
-      const { email, password } = newAdmin;
-      const newAdminAuth = await this.adminAuthService.create(
+      await this.authService.checkAdminEmail(email);
+      await this.adminService.checkAdminEmail(email);
+      const newAuth = await this.authService.create(email, password, true);
+      const _id = newAuth.uid;
+      await this.adminService.checkAdminId(_id);
+      const newAdmin = await this.adminService.create({
         email,
-        password,
-        true,
-      );
-      const _id = newAdminAuth.uid;
-      const newAdminUser = await this.adminService.create({ ...newAdmin, _id });
-      return newAdminUser;
+        name,
+        lastName,
+        _id,
+      });
+      return newAdmin;
     } catch (error: unknown) {
       throw new GeneralError(error, HttpStatus.UNAUTHORIZED);
     }
   }
 
-  @Public()
-  @Post('/signIn')
-  @ApiBody({ type: CreateAuthDto })
-  @ApiOperation({ description: 'Just log in ' })
-  async signIn(
-    @Body() singInDto: CreateAuthDto,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<ReponseUserDto | unknown> {
-    const { email, password } = singInDto;
-    try {
-      const userCredentials = await this.authService.signIn(email, password);
-      const token = await userCredentials.user.getIdToken();
-      const admin = await this.adminAuthService.verifyAdmin(token);
-      if (!admin) throw new GeneralError('El usuario no es Admin');
-      const _id = userCredentials.user.uid;
-      const user = await this.adminService.findById(_id);
-      response.cookie('idToken', token, { sameSite: 'none', secure: true });
-      return { user, token };
-    } catch (error: unknown) {
-      throw new GeneralError(error, HttpStatus.UNAUTHORIZED);
-    }
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get current admin' })
+  @UseInterceptors(CurrentAdminInterceptor)
+  @Get()
+  async getAdmin(@Req() request: CurrentAdminRequest) {
+    const admin = request.currentAdmin;
+    return admin;
   }
 
-  @UseGuards(AdminGuard)
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Authenticate current admin' })
+  @Get('authenticate')
+  async authenticate(): Promise<boolean> {
+    return true;
+  }
+
+  @ApiBearerAuth('idToken')
+  @ApiOperation({
+    description:
+      'Cambia el estado del usuario. Modifica la propiedad "active" y funciona como un "toggle", cambiando de estado de true a false y de false a true',
+  })
+  @ApiParam({ name: '_id', required: true, type: String })
+  @Put('status/:_id')
+  async changeUserStatus(@Param('_id') _id: string): Promise<boolean> {
+    return this.userService.changeUserStatus(_id);
+  }
+
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get all users' })
   @Get('users')
   async getUsers() {
-    return 'hola';
+    return this.userService.getUsers();
   }
 
-  @UseGuards(AdminGuard)
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get all active users' })
   @Get('active_users')
   async getActiveUsers() {
-    return this.adminService.getActiveUsers();
+    return this.userService.getActiveUsers();
   }
 
-  @UseGuards(AdminGuard)
   @Get('packages')
   async getPackages() {
     return this.adminService.getPackages();
   }
 
-  @UseGuards(AdminGuard)
   @Get('active_packages')
   async getActivePackages() {
     return this.adminService.getActivePackages();
-  }
-
-  @UseGuards(AdminGuard)
-  @Put('status/:_id')
-  async changeUserStatus(@Param('_id') _id) {
-    return this.adminService.changeUserStatus(_id);
   }
 }

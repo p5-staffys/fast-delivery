@@ -17,21 +17,9 @@ class EnvironmentVariables {
   @IsString()
   MONGODB: string;
 
-  // @IsNotEmpty()
-  // @IsString()
-  // USER_POOL_ID: string;
-
-  // @IsNotEmpty()
-  // @IsString()
-  // CLIENT_ID: string;
-
-  // @IsNotEmpty()
-  // @IsString()
-  // ACCESS_KEY_ID: string;
-
-  // @IsNotEmpty()
-  // @IsString()
-  // SECRET_ACCESS_KEY: string;
+  @IsString()
+  @IsNotEmpty()
+  GOOGLE_APPLICATION_CREDENTIALS: string;
 
   @IsNotEmpty()
   @Min(1)

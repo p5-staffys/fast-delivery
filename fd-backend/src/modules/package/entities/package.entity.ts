@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { IUserRef } from '../../user/interface/user.interface';
+import { IUserRef } from '../../user/interfaces/user.interface';
 
 import { IPackageRef, PackageStatus } from '../interface/package.interface';
 
@@ -38,6 +38,9 @@ export class Package {
 
   @Prop({ type: Number, default: 1 })
   readonly quantity: number;
+
+  @Prop({ type: Boolean, default: true })
+  showHistory: boolean;
 }
 
 export const PackageSchema = SchemaFactory.createForClass(Package);

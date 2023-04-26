@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-import { IUser, IUserRef, UserStatus } from '../interface/user.interface';
+import { IUser, IUserRef, UserStatus } from '../interfaces/user.interface';
 import { IPackageRef } from '../../package/interface/package.interface';
 import { formRefSchema } from '../../../common/modules/formApply/entities/form-apply.entitie';
 import { IFormApply } from '../../../common/modules/formApply/interface/form-apply.interface';
@@ -28,6 +28,9 @@ export class User implements Partial<IUser> {
 
   @Prop({ type: String, default: 'inactive' })
   status: UserStatus;
+
+  @Prop({ type: Boolean, default: false })
+  active: boolean;
 
   @Prop({ type: Number, default: 5 })
   rating: number;

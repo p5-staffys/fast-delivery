@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { IUser } from '../interface/user.interface';
+import { IUser } from '../interfaces/user.interface';
 
 export class CreateUserDto implements Partial<IUser> {
   @IsNotEmpty()

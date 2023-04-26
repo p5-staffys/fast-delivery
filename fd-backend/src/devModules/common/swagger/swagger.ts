@@ -7,7 +7,11 @@ export const setupSwagger = (app: INestApplication): void => {
     .setDescription('Api created by Staffy')
     .setVersion('1.0')
     .addTag('API FastDelivery')
-    .addBearerAuth()
+    .addSecurity('idToken', {
+      type: 'apiKey',
+      in: 'header',
+      name: 'Authorization',
+    })
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

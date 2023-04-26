@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateDBUserDto } from './dto/create-user.dto';
-import { ReponseUserDto } from './dto/response-user.dto';
+import { CreateDBUserDto } from './dtos/create-user.dto';
+import { ReponseUserDto } from './dtos/response-user.dto';
 
 import { User } from './entities/user.entity';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserRepository } from './repository/user.repository';
-import { FormAplyDto } from 'src/common/modules/formApply/dto/form-apply.dto';
+import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 
 @Injectable()
 export class UserService {
@@ -43,8 +43,10 @@ export class UserService {
   }
 
   async update(_id: string, updateData: UpdateUserDto): Promise<User> {
-    const user = await this.userRepository.findOneById(_id);
-    user.update(updateData);
+    const user = await this.userRepository.updateEntityOrFail(
+      { _id },
+      updateData,
+    );
     return user;
   }
 
@@ -61,5 +63,20 @@ export class UserService {
 
     const updatedUser = await user.save();
     return updatedUser;
+  }
+
+  async getUsers() {
+    return this.userRepository.find({});
+  }
+
+  async getActiveUsers() {
+    return this.userRepository.find({ active: true });
+  }
+
+  async changeUserStatus(_id: string) {
+    const user = await this.userRepository.findOneById(_id);
+    user.active = !user.active;
+    user.save();
+    return true;
   }
 }
