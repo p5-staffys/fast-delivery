@@ -4,27 +4,81 @@ import Image from "next/image";
 import logoAdmin from "../../../asset/ImgAdmin.png";
 import logo1 from "../../../asset/logito1.png";
 import logo2 from "../../../asset/logito2.jpg";
-import React from "react";
+import logout from "../../../asset/logout.png";
+import React, { useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Link from "next/link";
 import DayList from "./components/carousel";
 import Progress from "./components/progress";
+import { signOut } from "../services/admin.service";
+import { useRouter } from "next/navigation";
 
 const Agenda = (): JSX.Element => {
+  const router = useRouter();
   const today = new Date();
-  const options: Intl.DateTimeFormatOptions = { timeZone: "UTC", dateStyle: "short" };
-  const formattedDate = today.toLocaleDateString("es-ES", options);
+  const formattedDate = today.toLocaleDateString("es-ES", { dateStyle: "short" });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isAdmin, setIsAdmin] = useState<boolean | void>(false);
+
+  /* useEffect(() => {
+    async function check() {
+      const isAdmin = await checkAdmin();
+      setIsAdmin(isAdmin)
+      if (!isAdmin) {
+        router.push("/");
+      }
+    }
+    check();
+  }, []); */
+
+  const handleLogout = async (): Promise<void> => {
+    await signOut();
+    router.push("/");
+  };
+
+  /* if (!isAdmin) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <img src="https://media.tenor.com/KJxyMUxQdcoAAAAC/you-shall-not-pass-gandalf.gif" alt="Acceso denegado" />
+      </div>
+    );
+  } */
 
   return (
     <>
       <Container>
-        <Box sx={{ mt: 2, display: "flex", flexDirection: "inherit" }}>
+        <Box sx={{ mt: 0, display: "flex", flexDirection: "inherit", alignItems: "center" }}>
           <Image src={logoAdmin} alt="logo" width={53} height={53} />
-          <Box sx={{ paddingX: 2, mb: 3 }}>
+          <Box sx={{ paddingX: 2, mb: 3, flexGrow: 1, marginTop: "10px" }}>
             <Typography sx={{ fontSize: "14px" }}>Hola Admin!</Typography>
             <Typography sx={{ fontFamily: "Roboto", fontSize: "18px", fontWeight: 700 }}>Gestionar pedidos</Typography>
           </Box>
+          <button
+            style={{
+              display: "flex",
+              textAlign: "right",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+              transition: "all 0.3s",
+            }}
+            onClick={handleLogout}
+          >
+            <Image
+              src={logout}
+              alt="logout"
+              width={43}
+              height={43}
+              style={{
+                filter:
+                  "brightness(0) saturate(100%) invert(34%) sepia(98%) saturate(7434%) hue-rotate(189deg) brightness(109%) contrast(108%)",
+                color: "blue",
+              }}
+            />
+          </button>
         </Box>
         <DayList />
         <Accordion sx={{ mt: 2 }} defaultExpanded={true}>

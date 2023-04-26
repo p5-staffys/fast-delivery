@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { firebaseSignIn, firebaseSignOut, IAuth } from "../../services/firebase.service";
 import { User } from "../../../context/store";
 
@@ -7,7 +7,7 @@ export const signIn = async (email: string, password: string): Promise<User> => 
     const auth: IAuth = await firebaseSignIn(email, password);
     const idToken: string = auth.idToken;
     localStorage.setItem("idToken", idToken);
-    const response: AxiosResponse = await axios.get("https://fd-backend-no-cookie-buhubxjtrq-uw.a.run.app/user", {
+    const response: AxiosResponse = await axios.get("https://fd-backend-no-cookie-buhubxjtrq-uw.a.run.app/admin", {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
@@ -22,6 +22,7 @@ export const signOut = async (): Promise<void> => {
   try {
     firebaseSignOut();
     localStorage.removeItem("idToken");
+    localStorage.removeItem("user");
   } catch (error: unknown) {
     throw error;
   }
@@ -39,5 +40,29 @@ export const signUp = async (email: string, password: string, name: string, last
     return user;
   } catch (error: unknown) {
     throw error;
+  }
+};
+
+export const checkAdmin = async (): Promise<boolean | void> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get(
+      "https://fd-backend-no-cookie-buhubxjtrq-uw.a.run.app/admin/authenticate",
+      {
+        withCredentials: true,
+        headers: { Authorization: idToken },
+      },
+    );
+
+    if (!response) {
+      return false;
+    }
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const axiosError: AxiosError = error;
+      if (axiosError.response?.status === 401) {
+        return false;
+      }
+    }
   }
 };
