@@ -1,51 +1,82 @@
 import React, { useState } from "react";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { startOfWeek, addDays, format } from "date-fns";
 import { es } from "date-fns/locale";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 const today = new Date();
 const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 1 });
 const days = [];
 
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 30; i++) {
   const currentDate = addDays(startOfCurrentWeek, i);
   const day = format(currentDate, "EEE", { locale: es });
   const date = format(currentDate, "d");
   days.push({ day, date });
 }
 
+const settings = {
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 10,
+  slidesToScroll: 1,
+  swipeToSlide: true,
+  centerMode: true,
+  initialSlide: today.getDay(),
+  responsive: [
+    {
+      breakpoint: 1280,
+      settings: {
+        slidesToShow: 7,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 960,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+      },
+    },
+  ],
+};
+
 const items = [...days];
 
 function DayList(): JSX.Element {
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(1);
 
   const handleSelect = (i: number): void => {
     setSelected(i);
   };
 
   return (
-    <ImageList
-      cols={items.length}
-      sx={{
-        justifyItems: "right",
-        alignItems: "center",
-      }}
-    >
+    <Slider {...settings}>
       {items.map((item, i) => (
-        <ImageListItem key={i}>
+        <div key={i}>
           <Box
             display="flex"
             alignContent="center"
             flexDirection="column"
             justifyContent="center"
             sx={{
-              width: 61,
-              height: `${i === selected ? "127px" : "99px"}`,
+              width: `60%`,
+              height: `${i === selected ? "150px" : "125px"}`,
               backgroundColor: `${i === selected ? "#FCBC11" : "primary.main"}`,
-              borderRadius: "40px",
+              borderRadius: "60px",
+              cursor: "pointer",
+              fontSize: "1.2rem",
             }}
             onClick={(): void => handleSelect(i)}
           >
@@ -56,9 +87,9 @@ function DayList(): JSX.Element {
               {item.day}
             </Typography>
           </Box>
-        </ImageListItem>
+        </div>
       ))}
-    </ImageList>
+    </Slider>
   );
 }
 
