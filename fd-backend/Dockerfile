@@ -14,5 +14,8 @@ RUN npm install
 # Build
 RUN npm run build
 
+# Exposing the port
+EXPOSE 8080
+
 # Running the application
 CMD ["npm", "run", "start:prod"]
