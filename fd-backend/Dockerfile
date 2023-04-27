@@ -14,11 +14,5 @@ RUN npm install
 # Build
 RUN npm run build
 
-# Exposing the port
-EXPOSE 8000
-
-# Define environment variable for port
-ENV PORT=8000
-
 # Running the application
 CMD ["npm", "run", "start:prod"]
