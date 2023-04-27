@@ -24,5 +24,5 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
       - name: Build and push Docker image for backend
         run: |
-          docker build -t fast-delivery-uma/fd-backend ./backend/
+          docker build -t fast-delivery-uma/fd-backend ./fd-backend/
           docker push gcr.io/fast-delivery-uma/fd-backend
