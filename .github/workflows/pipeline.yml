@@ -20,7 +20,8 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: fast-delivery-uma
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          service_account: "github-actions@fast-delivery-uma.iam.gserviceaccount.com"
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
       - name: Build and push Docker image for backend
         run: |
           docker build -t ./backend/
