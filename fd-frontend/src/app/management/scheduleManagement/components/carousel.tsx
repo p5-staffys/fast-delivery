@@ -7,9 +7,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
+interface Day {
+  day: string;
+  date: string;
+}
+
 const today = new Date();
 const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 1 });
-const days = [];
+const days: Day[] = [];
 
 for (let i = 0; i < 30; i++) {
   const currentDate = addDays(startOfCurrentWeek, i);
@@ -26,7 +31,7 @@ const settings = {
   slidesToScroll: 1,
   swipeToSlide: true,
   centerMode: true,
-  initialSlide: today.getDay(),
+  initialSlide: days.findIndex((day) => day.date === format(today, "d")),
   responsive: [
     {
       breakpoint: 1280,
@@ -55,7 +60,7 @@ const settings = {
 const items = [...days];
 
 function DayList(): JSX.Element {
-  const [selected, setSelected] = useState(1);
+  const [selected, setSelected] = useState<number>(days.findIndex((day) => day.date === format(today, "d")));
 
   const handleSelect = (i: number): void => {
     setSelected(i);

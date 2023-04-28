@@ -150,7 +150,6 @@ export abstract class EntityRepository<T extends Document> {
 
   deleteEntity = async (filter: FilterQuery<T>): Promise<boolean> => {
     const data = await this.entityModel.softDelete(filter);
-    console.log('data', data);
     if (!data) throw new EntityNotFound(this.entityModel.modelName);
     return data;
   };
