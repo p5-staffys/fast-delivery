@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model } from 'src/common/database/softdelete/softdelete.interface';
+
 import { EntityRepository } from '../../../common/database/repository/db.repository';
 import { User, UserDocument } from '../entities/user.entity';
 

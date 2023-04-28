@@ -54,7 +54,7 @@ export class PackageService {
 
     const actualPackageFilter = {
       _id,
-      status: PackageStatus.New,
+      status: { $in: [PackageStatus.New, PackageStatus.Pending] },
       deliveredBy: null,
     };
 
@@ -62,7 +62,7 @@ export class PackageService {
       { ...actualPackageFilter },
       { ...updatePack },
       null,
-      'Package ID o Status invalido, solo puede ser "new" y no tener ningun repartidor asignado',
+      'Package ID o Status invalido, solo puede ser "new" o "pending" y no tener ningun repartidor asignado',
     );
   }
 
@@ -72,10 +72,6 @@ export class PackageService {
 
   async modifyPackage(_id: string, newPackage) {
     return `Package modified. id: ${_id}, changes: ${newPackage}`;
-  }
-
-  async delete(_id: string) {
-    return `Delete package by id. id: ${_id}`;
   }
 
   async delivered(_id: Types.ObjectId): Promise<Package> {
@@ -97,13 +93,52 @@ export class PackageService {
     );
   }
 
-  async getPackageHistory(user: IUser, page?:number,limit?:number): Promise<Package[]>{
-    
-    const { name,lastName, _id} = user
-    return await this.packageRepository.find({  deliveredBy: {
+  async getPackageHistory(
+    user: IUser,
+    page?: number,
+    limit?: number,
+  ): Promise<Package[]> {
+    const { _id, name, lastName } = user;
+
+    const deliveredBy = {
+      _id,
       name,
       lastName,
-      _id
-    },  },page,limit)
+    };
+
+    return await this.packageRepository.find(
+      { deliveredBy, showHistory: true },
+      page,
+      limit,
+    );
+  }
+
+  async deleteFromHistory(_id: Types.ObjectId, user: IUser): Promise<Package> {
+    const actualPackage = {
+      _id,
+      deliveredBy: {
+        _id: user._id,
+        name: user.name,
+        lastName: user.lastName,
+      },
+      showHistory: true,
+    };
+
+    const update = {
+      showHistory: false,
+    };
+
+    return await this.packageRepository.updateEntityOrFail(
+      {
+        ...actualPackage,
+      },
+      {
+        ...update,
+      },
+    );
+  }
+
+  async deletePackage(_id: Types.ObjectId): Promise<void> {
+    await this.packageRepository.deleteEntity(_id);
   }
 }

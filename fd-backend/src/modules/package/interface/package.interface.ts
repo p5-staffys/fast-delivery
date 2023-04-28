@@ -23,6 +23,7 @@ export interface IPackageRef {
 
 export enum PackageStatus {
   New = 'new',
+  Pending = 'pending',
   Delivering = 'delivering',
   Delivered = 'delivered',
   Failed = 'failed',

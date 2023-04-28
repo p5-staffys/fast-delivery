@@ -17,10 +17,6 @@ class EnvironmentVariables {
   @IsString()
   MONGODB: string;
 
-  @IsString()
-  @IsNotEmpty()
-  GOOGLE_APPLICATION_CREDENTIALS: string;
-
   @IsNotEmpty()
   @Min(1)
   @IsNumber()

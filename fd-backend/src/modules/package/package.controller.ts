@@ -7,6 +7,8 @@ import {
   Query,
   UseInterceptors,
   Req,
+  Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { PackageService } from './package.service';
@@ -30,6 +32,7 @@ import {
   CurrentUserInterceptor,
   CurrentUserRequest,
 } from '../user/interceptors/current-user.interceptor';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @ApiTags('Package')
 @Controller()
@@ -65,7 +68,6 @@ export class PackageController {
     return await this.packageService.getPendingPackage(page, limit);
   }
 
-
   @Put(':_id/assign/')
   @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'EndPoint to assing package to currentUser' })
@@ -85,10 +87,13 @@ export class PackageController {
   async getPackageHistory(
     @Query() queryPaginateDto: QueryPaginationDto,
     @Req() { currentUser }: CurrentUserRequest,
-
   ): Promise<Package[]> {
-    const { page , limit } = queryPaginateDto
-    return await this.packageService.getPackageHistory(currentUser,page,limit)
+    const { page, limit } = queryPaginateDto;
+    return await this.packageService.getPackageHistory(
+      currentUser,
+      page,
+      limit,
+    );
   }
   // @Put(':_id/unassign')
   // async unassignFromUser(@Param('_id') _id) {
@@ -100,16 +105,12 @@ export class PackageController {
   //   return this.packageService.modifyPackage(_id, newPackage);
   // }
 
-  // @Delete(':_id')
-  // async delete(@Param('_id') _id) {
-  //   return this.packageService.delete(_id);
-  // }
-
-
   @Put(':_id/delivered')
   @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
-  async delivered(@Param('_id', ValidateMongoId) _id: Types.ObjectId): Promise<Package> {
+  async delivered(
+    @Param('_id', ValidateMongoId) _id: Types.ObjectId,
+  ): Promise<Package> {
     return await this.packageService.delivered(_id);
   }
 
@@ -117,9 +118,32 @@ export class PackageController {
   @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
   @ApiOperation({ description: 'Get Package by id' })
-  async getById(@Param('_id', ValidateMongoId) _id): Promise<Package> {
+  async getById(
+    @Param('_id', ValidateMongoId) _id: Types.ObjectId,
+  ): Promise<Package> {
     return await this.packageService.getById(_id);
   }
 
+  //To see What happend if package is delivering
+  @Delete(':_id/history')
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @ApiOperation({ description: 'Delete package from history' })
+  @UseInterceptors(CurrentUserInterceptor)
+  async deleteFromHistory(
+    @Param('_id', ValidateMongoId) _id,
+    @Req() { currentUser }: CurrentUserRequest,
+  ): Promise<Package> {
+    return this.packageService.deleteFromHistory(_id, currentUser);
+  }
 
+  @Delete(':_id')
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @ApiOperation({ description: 'Delete package by admin' })
+  @UseGuards(AdminGuard)
+  async deletePackage(@Param('_id', ValidateMongoId) _id): Promise<string> {
+    await this.packageService.deletePackage(_id);
+    return 'Package deleted';
+  }
 }
