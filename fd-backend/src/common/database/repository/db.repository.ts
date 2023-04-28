@@ -5,9 +5,9 @@ import {
   HydratedDocument, //instancia de un modelo
   QueryOptions,
   UpdateQuery,
-  Model,
 } from 'mongoose';
 import { EntityNotFound } from '../../../common/error-handlers/exceptions';
+import { Model } from '../softdelete/softdelete.interface';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(
@@ -145,6 +145,19 @@ export abstract class EntityRepository<T extends Document> {
       throw new EntityNotFound(
         `${customMessage}, ${this.entityModel.modelName}`,
       );
+    return data;
+  };
+
+  deleteEntity = async (filter: FilterQuery<T>): Promise<boolean> => {
+    const data = await this.entityModel.softDelete(filter);
+    console.log('data', data);
+    if (!data) throw new EntityNotFound(this.entityModel.modelName);
+    return data;
+  };
+
+  restoreEntity = async (filter: FilterQuery<T>): Promise<boolean> => {
+    const data = await this.entityModel.restore(filter);
+    if (!data) throw new EntityNotFound(this.entityModel.modelName);
     return data;
   };
 }
