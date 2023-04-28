@@ -24,6 +24,15 @@ export interface User {
   packages: PackageRef[];
 }
 
+export interface UserRef {
+  client: {
+    fullName: string;
+    address: {
+      street: string;
+    };
+  };
+}
+
 export interface PackageRef {
   _id: string;
   status: string;
