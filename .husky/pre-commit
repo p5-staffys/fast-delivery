@@ -1,10 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-cd fd-frontend
-npx lint-staged
-
-cd ..
-
-cd fd-backend
-npx lint-staged
+npm run lint:front
+npm run lint:back

@@ -1,74 +1,151 @@
 "use client";
-import React, { useState } from "react";
+import React, { ChangeEventHandler, useState } from "react";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/backBtn";
+import { UserRef } from "@/context/store";
+import { createPackage } from "@/app/services/packets.service";
 
 const addPackage = (): JSX.Element => {
-  const [quantity, setQuantity] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [weight, setWeight] = useState<number>(0);
+  const [deliveryDate, setDeliveryDate] = useState<string>("");
+  const [client, setClient] = useState<UserRef>({
+    client: {
+      fullName: "",
+      address: {
+        street: "",
+      },
+    },
+  });
 
   const handleAdd = (): void => {
-    if (quantity >= 0) {
-      setQuantity(quantity + 1);
-    }
+    setQuantity((prevQuantity) => Math.min(prevQuantity + 1, 10));
   };
+
   const handleSubtract = (): void => {
-    if (quantity > 0) {
-      setQuantity(quantity - 1);
+    setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
+  };
+
+  const handleWeight: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
+    e.preventDefault();
+    const inputElement = e.currentTarget as HTMLInputElement;
+    setWeight(parseInt(inputElement.value));
+  };
+
+  const handleDeliveryDate: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
+    e.preventDefault();
+    const inputElement = e.currentTarget as HTMLInputElement;
+    setDeliveryDate(inputElement.value);
+  };
+
+  const handlestreet: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
+    e.preventDefault();
+    const inputElement = e.currentTarget as HTMLInputElement;
+    const name = inputElement.name;
+    const value = inputElement.value;
+    setClient((prevState) => ({
+      ...prevState,
+      client: {
+        ...prevState.client,
+        address: {
+          ...prevState.client.address,
+          [name]: value,
+        },
+      },
+    }));
+  };
+
+  const handleUser: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
+    e.preventDefault();
+    const inputElement = e.currentTarget as HTMLInputElement;
+    const name = inputElement.name;
+    const value = inputElement.value;
+    setClient((prevState) => ({
+      ...prevState,
+      client: {
+        ...prevState.client,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    try {
+      const response = await createPackage(weight, client, deliveryDate, quantity);
+      if (response) {
+        alert("se creó el paquete con exito");
+      }
+    } catch (error: unknown) {
+      alert("falló la creacion del paquete");
     }
   };
+
   return (
     <>
       <Box>
-        <BackBtn back="management/scheduleManagement" />
+        <BackBtn back="management/scheduleManagement/managePackages" />
         <Typography sx={{ ml: "20px", mb: "0.5vh", fontSize: "1em", fontWeight: 800 }}>Argregar paquetes</Typography>
       </Box>
-      <Box className="addPackageData">
-        <TextField
-          id="standard-basic"
-          label="Dirección"
-          variant="standard"
-          fullWidth
-          InputLabelProps={{
-            style: { color: "#f5bd09" },
-          }}
-        />
-        <TextField
-          id="standard-basic"
-          label="Nombre de quien recibe"
-          variant="standard"
-          fullWidth
-          InputLabelProps={{
-            style: { color: "#f5bd09" },
-          }}
-        />
-        <TextField
-          id="standard-basic"
-          label="Peso (Kg)"
-          variant="standard"
-          fullWidth
-          InputLabelProps={{
-            style: { color: "#f5bd09" },
-          }}
-        />
-        <TextField
-          id="standard-basic"
-          label="Fecha en la que debe ser repartido"
-          variant="standard"
-          fullWidth
-          InputLabelProps={{
-            style: { color: "#f5bd09" },
-          }}
-        />
+      <Box component="form" onSubmit={handleSubmit}>
+        <Box className="addPackageData">
+          <TextField
+            id="standard-basic"
+            label="Dirección"
+            variant="standard"
+            fullWidth
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+            onChange={handlestreet}
+            name="street"
+          />
+          <TextField
+            id="standard-basic"
+            label="Nombre de quien recibe"
+            variant="standard"
+            fullWidth
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+            onChange={handleUser}
+            name="fullName"
+          />
+          <TextField
+            id="standard-basic"
+            label="Peso (Kg)"
+            variant="standard"
+            fullWidth
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+            onChange={handleWeight}
+          />
+          <TextField
+            id="standard-basic"
+            label="Fecha en la que debe ser repartido"
+            variant="standard"
+            fullWidth
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+            onChange={handleDeliveryDate}
+          />
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", mb: "0.5vh" }}>
+          <Typography variant="body1" sx={{ color: "#f5bd09", mr: "12px" }}>
+            Cantidad
+          </Typography>
+          <Box className="quantity" sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton onClick={handleSubtract}>-</IconButton>
+            <Typography sx={{ m: "0 12px" }}>{quantity}</Typography>
+            <IconButton onClick={handleAdd}>+</IconButton>
+          </Box>
+        </Box>
+        <Button variant="contained" sx={{ m: "0 5vw", mt: 2, width: "90vw" }} type="submit">
+          <strong>Agregar</strong>
+        </Button>
       </Box>
-      <Typography sx={{ ml: "20px", mb: "0.5vh", fontSize: "0.8em", color: "#f5bd09" }}>Cantidad</Typography>
-      <Box className="quantity">
-        <IconButton onClick={handleSubtract}>-</IconButton>
-        <Typography sx={{ m: "0 12px" }}>{quantity}</Typography>
-        <IconButton onClick={handleAdd}>+</IconButton>
-      </Box>
-      <Button variant="contained" sx={{ m: "0 5vw", mt: 2, width: "90vw" }}>
-        <strong>Agregar</strong>
-      </Button>
     </>
   );
 };

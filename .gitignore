@@ -51,6 +51,7 @@ lerna-debug.log*
 # local env files
 .env*.local
 .env
+/cypress/Cypress.env
 fast-delivery-uma-1e8ed58d847d.json
 
 # vercel
