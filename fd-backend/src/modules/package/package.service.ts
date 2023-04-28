@@ -74,10 +74,6 @@ export class PackageService {
     return `Package modified. id: ${_id}, changes: ${newPackage}`;
   }
 
-  async delete(_id: string) {
-    return `Delete package by id. id: ${_id}`;
-  }
-
   async delivered(_id: Types.ObjectId): Promise<Package> {
     const actualPackage = {
       _id,
@@ -140,5 +136,9 @@ export class PackageService {
         ...update,
       },
     );
+  }
+
+  async deletePackage(_id: Types.ObjectId): Promise<void> {
+    await this.packageRepository.deleteEntity(_id);
   }
 }
