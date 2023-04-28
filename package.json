@@ -10,8 +10,9 @@
     "format": "prettier --write",
     "prepare": "husky install",
     "test": "exit 0",
-    "lint:back": "cd fd-backend && npm run lint",
-    "lint:front": "cd fd-frontend && npm run lint",
+    "lint": "npm run lint:back && npm run lint:front",
+    "lint:back": "cd fd-backend && npx lint-staged",
+    "lint:front": "cd fd-frontend && npx lint-staged",
     "build": "cd fd-frontend && npm run build",
     "test:back": "cd fd-backend && npm run test:e2e"
   },
@@ -27,12 +28,5 @@
     "jest-environment-jsdom": "^29.4.3",
     "lint-staged": "^13.1.2",
     "prettier": "^2.8.4"
-  },
-  "lint-staged": {
-    "!(*eslintrc)*.{ts,tsx}": [
-      "npm run lint:back",
-      "npm run lint:front"
-    ],
-    "*.{js,jsx,ts,tsx,md,html,json,css,scss}": "prettier --write"
   }
 }
