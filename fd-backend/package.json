@@ -12,7 +12,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --cache --fix --max-warnings=0",
+    "lint": "eslint \"{src,test}/**/*.ts\" --cache --fix --max-warnings=0",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -84,5 +84,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "lint-staged": {
+    "!(*eslintrc)*.{ts,tsx}": "npm run lint",
+    "*.{js,jsx,ts,tsx,md,html,json,css,scss}": "prettier --write"
   }
 }
