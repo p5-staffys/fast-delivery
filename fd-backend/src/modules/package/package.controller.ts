@@ -32,7 +32,7 @@ import {
   CurrentUserInterceptor,
   CurrentUserRequest,
 } from '../user/interceptors/current-user.interceptor';
-import { AdminGuard } from 'src/common/guards/admin.guard';
+import { AdminGuard } from '../../common/guards/admin.guard';
 import { QueryPaginationWithDateAndStatusDto } from './dto/pagination-status-date.dto';
 
 @ApiTags('Package')
