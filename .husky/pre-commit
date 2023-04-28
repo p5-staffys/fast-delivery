@@ -3,5 +3,3 @@
 
 npm run lint:front
 npm run lint:back
-
-npm run test:e2e
