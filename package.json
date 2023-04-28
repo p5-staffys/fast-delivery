@@ -3,18 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "front": "",
-    "back": "",
     "start": "concurrently 'cd fd-backend && npm run start:dev' 'cd fd-frontend && npm run dev'",
     "install": "concurrently 'cd fd-backend && npm i' 'cd fd-frontend && npm i'",
     "format": "prettier --write",
     "prepare": "husky install",
-    "test": "exit 0",
     "lint": "npm run lint:back && npm run lint:front",
     "lint:back": "cd fd-backend && npx lint-staged",
     "lint:front": "cd fd-frontend && npx lint-staged",
-    "build": "cd fd-frontend && npm run build",
-    "test:back": "cd fd-backend && npm run test:e2e"
+    "test": "npm run test:back && npm run test:cypress",
+    "test:back": "cd fd-backend && npm run test:e2e",
+    "test:e2e": "npm run build:front && npm run start:front && npm run test:cypress",
+    "build:front": "cd fd-frontend && npm run build",
+    "start:front": "cd fd-frontend && npm start & wait-on http://localhost:3000",
+    "test:cypress": "cypress run"
   },
   "dependencies": {
     "concurrently": "^7.6.0"
