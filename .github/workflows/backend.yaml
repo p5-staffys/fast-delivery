@@ -6,8 +6,7 @@ on:
 
 env:
   PROJECT_ID: fast-delivery-uma
-  REGION: us-central1
-  GOOGLE_APPLICATION_CREDENTIALS: "${{ secrets.GOOGLE_CREDENTIALS }}"
+  REGION: us-east1
 
 jobs:
   build-and-push-backend-image:
