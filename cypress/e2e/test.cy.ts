@@ -11,6 +11,7 @@ describe("Full App Run", () => {
     cy.visit("https://frontend-buhubxjtrq-ue.a.run.app/deliveryMan");
 
     //  Verify that the value has been updated
-    cy.get(".action-email").should("have.value", "fake@email.com");
+    cy.get(":nth-child(1) > .MuiInputBase-root > #standard-basic");
+    cy.get(":nth-child(1) > .MuiInputBase-root > #standard-basic").should("have.value", "fake@email.com");
   });
 });
