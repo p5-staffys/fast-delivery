@@ -28,3 +28,10 @@ export enum PackageStatus {
   Delivered = 'delivered',
   Failed = 'failed',
 }
+
+export interface IPackageQuery {
+  deliveryDate: { $gte: Date; $lte: Date };
+  status?: {
+    $eq: PackageStatus;
+  };
+}
