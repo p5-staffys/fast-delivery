@@ -7,7 +7,7 @@ import {
   UpdateQuery,
 } from 'mongoose';
 import { EntityNotFound } from '../../../common/error-handlers/exceptions';
-import { Model } from '../softdelete/softdelete.interface';
+import { Model } from '../softdelete/softDelete.interface';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(
