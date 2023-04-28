@@ -12,7 +12,7 @@
     "lint:front": "cd fd-frontend && npx lint-staged",
     "test": "npm run test:back && npm run test:e2e",
     "test:back": "cd fd-backend && npm run test:e2e",
-    "test:e2e": "npm run build:front && npm run start:front && npm run test:cypress & npm run kill:front",
+    "test:e2e": "npm run build:front && npm run start:front && npm run test:cypress && npm run kill:front",
     "build:front": "cd fd-frontend && npm run build",
     "start:front": "cd fd-frontend && npm start & wait-on http://localhost:3000",
     "test:cypress": "cypress run",
