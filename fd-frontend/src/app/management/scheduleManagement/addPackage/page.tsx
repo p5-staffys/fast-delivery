@@ -84,7 +84,7 @@ const addPackage = (): JSX.Element => {
   return (
     <>
       <Box>
-        <BackBtn back="management/scheduleManagement" />
+        <BackBtn back="management/scheduleManagement/managePackages" />
         <Typography sx={{ ml: "20px", mb: "0.5vh", fontSize: "1em", fontWeight: 800 }}>Argregar paquetes</Typography>
       </Box>
       <Box component="form" onSubmit={handleSubmit}>
