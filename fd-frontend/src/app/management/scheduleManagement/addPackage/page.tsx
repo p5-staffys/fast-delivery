@@ -32,10 +32,8 @@ const addPackage = (): JSX.Element => {
     setWeight(parseInt(inputElement.value));
   };
 
-  const handleDeliveryDate: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    const inputElement = e.currentTarget as HTMLInputElement;
-    setDeliveryDate(inputElement.value);
+  const handleDate: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setDeliveryDate(e.target.value);
   };
 
   const handlestreet: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -121,18 +119,12 @@ const addPackage = (): JSX.Element => {
             }}
             onChange={handleWeight}
           />
-          <TextField
-            id="standard-basic"
-            label="Fecha en la que debe ser repartido"
-            variant="standard"
-            fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
-            onChange={handleDeliveryDate}
-          />
+          <Typography sx={{ mt: "1em", mb: "0.5vh", fontSize: "1em", color: "#f5bd09" }}>
+            Fecha en la que debe ser repartido{" "}
+          </Typography>
+          <input type="date" value={deliveryDate} onChange={handleDate} style={{ color: "#f5bd09" }} />
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", mb: "0.5vh" }}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: "0.5vh", mt: "1em" }}>
           <Typography variant="body1" sx={{ color: "#f5bd09", mr: "12px" }}>
             Cantidad
           </Typography>
