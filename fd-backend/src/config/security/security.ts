@@ -10,6 +10,7 @@ export const setupSecurity = (app: INestApplication): void => {
   app.enableCors({
     origin: [
       'https://fast-delivery-frontend-buhubxjtrq-uc.a.run.app',
+      'https://frontend-buhubxjtrq-ue.a.run.app',
       'http://localhost:3000',
     ], // Probably can change with .env
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',

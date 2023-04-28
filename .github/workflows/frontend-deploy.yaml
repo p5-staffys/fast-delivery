@@ -1,8 +1,8 @@
-name: Backend Deployment
+name: Frontend Deployment
 
 on:
   push:
-    branches: [master]
+    branches: [develop]
 
 env:
   PROJECT_ID: fast-delivery-uma
@@ -25,8 +25,8 @@ jobs:
       - name: LogIn to Docker
         run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-east1-docker.pkg.dev
       - name: Build Docker Image
-        run: docker build -t us-east1-docker.pkg.dev/fast-delivery-uma/deploy/backend ./fd-backend/
+        run: docker build -t us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend ./fd-frontend/
       - name: Push Image to Artifact Registry
-        run: docker push us-east1-docker.pkg.dev/fast-delivery-uma/deploy/backend
+        run: docker push us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend
       - name: Deploy Image with Google Run
-        run: gcloud run deploy backend --image us-east1-docker.pkg.dev/fast-delivery-uma/deploy/backend --region us-east1
+        run: gcloud run deploy frontend --image us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend --region us-east1

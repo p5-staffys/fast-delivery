@@ -28,7 +28,7 @@
     "prettier": "^2.8.4"
   },
   "lint-staged": {
-    "!(*eslintrc)*.{js,jsx,ts,tsx}": [
+    "!(*eslintrc)*.{ts,tsx}": [
       "npm run lint:back",
       "npm run lint:front"
     ],
