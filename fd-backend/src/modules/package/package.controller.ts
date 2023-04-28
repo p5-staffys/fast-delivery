@@ -33,6 +33,7 @@ import {
   CurrentUserRequest,
 } from '../user/interceptors/current-user.interceptor';
 import { AdminGuard } from 'src/common/guards/admin.guard';
+import { QueryPaginationWithDateAndStatusDto } from './dto/pagination-status-date.dto';
 
 @ApiTags('Package')
 @Controller()
@@ -47,6 +48,7 @@ export class PackageController {
   })
   @ApiBody({ type: CreatePackageDto })
   @ApiOperation({ description: 'Create package' })
+  @UseGuards(AdminGuard)
   async create(@Body() newPackage: CreatePackageDto): Promise<Package> {
     try {
       const createdPackage = await this.packageService.create(newPackage);
@@ -56,7 +58,7 @@ export class PackageController {
     }
   }
 
-  @Get()
+  @Get('pending')
   @ApiBearerAuth('idToken')
   @ApiOperation({
     description: 'Package are wating for taken but dont have any delivery ',
@@ -145,5 +147,17 @@ export class PackageController {
   async deletePackage(@Param('_id', ValidateMongoId) _id): Promise<string> {
     await this.packageService.deletePackage(_id);
     return 'Package deleted';
+  }
+
+  @Get()
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get Package by date' })
+  @UseGuards(AdminGuard)
+  async getPackage(
+    @Query() queryParams: QueryPaginationWithDateAndStatusDto,
+  ): Promise<Package[]> {
+    const { limit, page, status, date } = queryParams;
+
+    return await this.packageService.getPackage(date, page, limit, status);
   }
 }

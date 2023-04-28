@@ -7,7 +7,7 @@ import { PackageRepository } from './repository/package.repository';
 import { Types } from 'mongoose';
 import { IUser } from '../user/interfaces/user.interface';
 import { UserRepository } from '../user/repository/user.repository';
-import { PackageStatus } from './interface/package.interface';
+import { IPackageQuery, PackageStatus } from './interface/package.interface';
 
 @Injectable()
 export class PackageService {
@@ -140,5 +140,23 @@ export class PackageService {
 
   async deletePackage(_id: Types.ObjectId): Promise<void> {
     await this.packageRepository.deleteEntity(_id);
+  }
+  async getPackage(
+    dateFilter: Date,
+    page?: number,
+    limit?: number,
+    status?: PackageStatus,
+  ): Promise<Package[]> {
+    const packageFilterQuery: IPackageQuery = {
+      deliveryDate: { $gte: dateFilter, $lte: dateFilter },
+    };
+    if (status) {
+      packageFilterQuery.status = { $eq: status };
+    }
+    return await this.packageRepository.find(
+      { ...packageFilterQuery },
+      page,
+      limit,
+    );
   }
 }
