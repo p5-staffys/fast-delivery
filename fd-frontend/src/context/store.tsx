@@ -1,68 +1,11 @@
 "use client";
 
 import React, { createContext, useContext, Dispatch, SetStateAction, useState } from "react";
+import { User } from "@/utils/interfaces/user.interfaces";
 
 interface ContextProps {
   user: Partial<User>;
   setUser: Dispatch<SetStateAction<Partial<User>>>;
-}
-
-export interface RootObject {
-  user: User;
-  token: string;
-}
-
-export interface User {
-  _id: string;
-  name: string;
-  lastName: string;
-  email: string;
-  status: string;
-  rating: number;
-  forms: Form[];
-  __v: number;
-  packages: PackageRef[];
-}
-
-export interface UserRef {
-  client: {
-    fullName: string;
-    address: {
-      street: string;
-    };
-  };
-}
-
-export interface PackageRef {
-  _id: string;
-  status: string;
-  address: string;
-  deliveryDate: Date;
-}
-
-export interface Package {
-  _id: string;
-  status: string;
-  weight: number;
-  destination: string;
-  client: {
-    fullName: string;
-    address: {
-      street: string;
-    };
-  };
-  deliveryDate: string;
-  deliveredOn: string | null;
-  deliveredBy: string | null;
-  quantity: number;
-}
-
-export interface Form {
-  bebidasAlcoholicas: boolean;
-  medicamentosPsicoactivos: boolean;
-  problemaEmocional: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export const GlobalContext = createContext<ContextProps>({

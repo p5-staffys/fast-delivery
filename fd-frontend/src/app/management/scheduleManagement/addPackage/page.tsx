@@ -2,21 +2,18 @@
 import React, { ChangeEventHandler, useState } from "react";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/backBtn";
-import { UserRef } from "@/context/store";
-import { createPackage } from "@/app/services/packets.service";
+import { createPackage } from "@/app/services/package.service";
 
 const addPackage = (): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(1);
   const [weight, setWeight] = useState<number>(0);
   const [deliveryDate, setDeliveryDate] = useState<string>("");
-  const [client, setClient] = useState<UserRef>({
-    client: {
-      fullName: "",
-      address: {
-        street: "",
-      },
-    },
-  });
+  const [fullName, setFullName] = useState<string>("");
+  const [number, setNumber] = useState<string>("");
+  const [street, setStreet] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [state, setState] = useState<string>("");
+  const [country, setCountry] = useState<string>("Argentina");
 
   const handleAdd = (): void => {
     setQuantity((prevQuantity) => Math.min(prevQuantity + 1, 10));
@@ -26,51 +23,52 @@ const addPackage = (): JSX.Element => {
     setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
   };
 
-  const handleWeight: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    const inputElement = e.currentTarget as HTMLInputElement;
-    setWeight(parseInt(inputElement.value));
+  const handleWeight: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setWeight(parseInt(e.target.value));
   };
 
   const handleDate: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setDeliveryDate(e.target.value);
   };
 
-  const handlestreet: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    const inputElement = e.currentTarget as HTMLInputElement;
-    const name = inputElement.name;
-    const value = inputElement.value;
-    setClient((prevState) => ({
-      ...prevState,
-      client: {
-        ...prevState.client,
-        address: {
-          ...prevState.client.address,
-          [name]: value,
-        },
-      },
-    }));
+  const handleFullName: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setFullName(e.target.value);
   };
 
-  const handleUser: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    const inputElement = e.currentTarget as HTMLInputElement;
-    const name = inputElement.name;
-    const value = inputElement.value;
-    setClient((prevState) => ({
-      ...prevState,
-      client: {
-        ...prevState.client,
-        [name]: value,
-      },
-    }));
+  const handleNumber: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setNumber(e.target.value);
+  };
+
+  const handleStreet: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setStreet(e.target.value);
+  };
+
+  const handleCity: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setCity(e.target.value);
+  };
+
+  const handleState: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setState(e.target.value);
+  };
+
+  const handleCountry: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setCountry(e.target.value);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     try {
-      const response = await createPackage(weight, client, deliveryDate, quantity);
+      const response = await createPackage(
+        weight,
+        fullName,
+        number,
+        street,
+        city,
+        state,
+        country,
+        deliveryDate,
+        quantity,
+      );
       if (response) {
         alert("se creó el paquete con exito");
       }
@@ -89,25 +87,70 @@ const addPackage = (): JSX.Element => {
         <Box className="addPackageData">
           <TextField
             id="standard-basic"
-            label="Dirección"
-            variant="standard"
-            fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
-            onChange={handlestreet}
-            name="street"
-          />
-          <TextField
-            id="standard-basic"
             label="Nombre de quien recibe"
             variant="standard"
             fullWidth
             InputLabelProps={{
               style: { color: "#f5bd09" },
             }}
-            onChange={handleUser}
+            onChange={handleFullName}
             name="fullName"
+          />
+          <TextField
+            id="standard-basic"
+            label="Calle"
+            variant="standard"
+            fullWidth
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+            onChange={handleStreet}
+            name="street"
+          />
+          <TextField
+            id="standard-basic"
+            label="Altura"
+            variant="standard"
+            fullWidth
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+            onChange={handleNumber}
+            name="number"
+          />
+          <TextField
+            id="standard-basic"
+            label="Ciudad"
+            variant="standard"
+            fullWidth
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+            onChange={handleCity}
+            name="city"
+          />
+          <TextField
+            id="standard-basic"
+            label="Provincia"
+            variant="standard"
+            fullWidth
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+            onChange={handleState}
+            name="state"
+          />
+          <TextField
+            id="standard-basic"
+            label="País"
+            variant="standard"
+            fullWidth
+            InputLabelProps={{
+              style: { color: "#f5bd09" },
+            }}
+            onChange={handleCountry}
+            name="country"
+            defaultValue={country}
           />
           <TextField
             id="standard-basic"

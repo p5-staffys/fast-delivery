@@ -7,7 +7,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { AddressDTO } from '../../address/dto/Address.dto';
+import { AddressDTO, latlngDTO } from '../../address/dto/Address.dto';
 
 import { IClient } from '../interface/client.interface';
 
@@ -26,4 +26,10 @@ export class ClientDto implements IClient {
   @ValidateNested()
   @Type(() => AddressDTO)
   address: AddressDTO;
+
+  @IsNotEmpty()
+  @IsDefined()
+  @ApiProperty({ type: latlngDTO })
+  @AutoMap()
+  latlng: { lat: number; lng: number };
 }

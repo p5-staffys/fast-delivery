@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 
 import { requestPackRefs } from "../../../../utils/seed";
 import Card from "../../../deliveryMan/workingDay/components/card";
-import { PackageRef } from "@/context/store";
+import { PackageRef } from "@/utils/interfaces/package.interfaces";
 
 const DeliveryDetail = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<PackageRef[]>([]);

@@ -1,4 +1,4 @@
-import { Package, PackageRef } from "@/context/store";
+import { Package, PackageRef } from "../interfaces/package.interfaces";
 import { faker } from "@faker-js/faker";
 
 export type Admin = {
@@ -65,7 +65,11 @@ function createPack(): Package {
     status: faker.helpers.arrayElement(["pending", "delivered", "delivering"]),
     weight: faker.datatype.number({ min: 100, max: 10000, precision: 100 }),
     destination: faker.address.streetAddress(),
-    client: { fullName: faker.name.firstName(), address: { street: "calle falsa 123" } },
+    client: {
+      fullName: faker.name.firstName(),
+      address: { number: "1", street: "calle falsa 123", city: "fake city", state: "fake state", country: "fakeland" },
+      latlng: { lat: 1, lng: 1 },
+    },
     deliveryDate: faker.date.recent(3).toDateString(),
     deliveredOn: faker.date.recent(3).toDateString(),
     quantity: 10,

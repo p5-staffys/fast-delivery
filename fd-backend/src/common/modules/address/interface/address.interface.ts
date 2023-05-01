@@ -1,6 +1,12 @@
 export interface IAdress {
-  // city: string;
+  number: string;
   street: string;
-  // number: string;
-  // reference: string;
+  city: string;
+  state: string;
+  country: string;
+}
+
+export interface Ilatlng {
+  lat: number;
+  lng: number;
 }

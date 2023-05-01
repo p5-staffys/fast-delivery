@@ -7,7 +7,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Card from "./components/card";
-import { PackageRef, useGlobalContext } from "@/context/store";
+import { useGlobalContext } from "@/context/store";
+import { PackageRef } from "@/utils/interfaces/package.interfaces";
 
 const WorkingDay = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<PackageRef[]>([]);
