@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { Client, Package, PackageCreate } from "@/utils/interfaces/package.interfaces";
+import { Client, Package, PackageCreate } from "../../utils/interfaces/package.interfaces";
 
 export const getPackageById = async (_id: string): Promise<Package> => {
   try {
