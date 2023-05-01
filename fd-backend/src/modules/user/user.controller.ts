@@ -8,6 +8,7 @@ import {
   Req,
   UseInterceptors,
   HttpStatus,
+  Headers,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -79,9 +80,17 @@ export class UserController {
   @ApiResponse({
     status: 200,
   })
+  @Public()
   @Get('authenticate')
-  async authenticate(): Promise<boolean> {
-    return true;
+  async authenticate(
+    @Headers('Authorization') authorization,
+  ): Promise<boolean> {
+    try {
+      await this.authService.authenticate(authorization);
+      return true;
+    } catch (error: unknown) {
+      return false;
+    }
   }
 
   @ApiOperation({ description: 'Borrar el usuario logueado' })
