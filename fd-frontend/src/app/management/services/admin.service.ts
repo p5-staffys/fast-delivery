@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { firebaseSignIn, firebaseSignOut, IAuth } from "../../services/firebase.service";
-import { User } from "../../../context/store";
+import { User } from "@/utils/interfaces/user.interfaces";
 
 export const signIn = async (email: string, password: string): Promise<User> => {
   try {

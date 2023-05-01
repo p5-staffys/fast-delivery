@@ -8,6 +8,7 @@ import { inicial, questions } from "../../../../../utils/DeclarationUtil";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+
 const Paquetes = (): JSX.Element => {
   const [asks, setAsks] = useState(inicial);
   const router = useRouter();

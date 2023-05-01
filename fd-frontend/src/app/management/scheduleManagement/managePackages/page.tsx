@@ -9,7 +9,7 @@ import AddIcon from "../../../../asset/AddIcon.png";
 import Image from "next/image";
 import { requestPacks } from "../../../../utils/seed";
 import CardManagePackage from "../components/cardManagePackage";
-import { Package } from "@/context/store";
+import { Package } from "@/utils/interfaces/package.interfaces";
 
 const ManagePackage = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<Package[]>([]);
