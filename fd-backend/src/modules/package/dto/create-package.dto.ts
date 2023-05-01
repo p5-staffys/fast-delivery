@@ -23,7 +23,8 @@ export class CreatePackageDto {
   @IsDefined()
   @ApiProperty({ type: ClientDto })
   @ValidateNested({
-    message: 'Client tiene un objeto con propiedades fullname y address ',
+    message:
+      'Client tiene un objeto con propiedades fullname, address y latlng ',
   })
   @Type(() => ClientDto)
   client: ClientDto;
