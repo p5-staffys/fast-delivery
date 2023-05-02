@@ -7,7 +7,7 @@ interface Props {
 
 function WorkingDayLayout({ children }: Props): React.ReactElement {
   return (
-    <div>
+    <div style={{ marginTop: "3rem" }}>
       <Header />
       {children}
     </div>
