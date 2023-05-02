@@ -2,7 +2,7 @@ name: Backend Deployment
 
 on:
   push:
-    branches: [development]
+    branches: [develop]
 
 env:
   PROJECT_ID: fast-delivery-uma
