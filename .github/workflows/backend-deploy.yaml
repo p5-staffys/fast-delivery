@@ -9,14 +9,14 @@ env:
   REGION: us-east1
 
 jobs:
-  build-and-push-backend-image:
+  build-and-deploy-backend-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: "Authenticate to Google Cloud"
+      - name: Authenticate to Google Cloud
         uses: "google-github-actions/auth@v1"
         with:
           project_id: fast-delivery-uma
