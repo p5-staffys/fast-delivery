@@ -25,7 +25,7 @@ jobs:
       - name: LogIn to Docker
         run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-east1-docker.pkg.dev
       - name: Build Docker Image
-        run: docker build -t us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }} --build-arg NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }} --build-arg NEXT_PUBLIC_GOOGLE_MAPS_KEY=${{ secrets.GOOGLE_MAPS_KEY }} ./fd-frontend/
+        run: docker build -t us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend --build-arg FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }} --build-arg FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }} --build-arg GOOGLE_MAPS_KEY=${{ secrets.GOOGLE_MAPS_KEY }} ./fd-frontend/
       - name: Push Image to Artifact Registry
         run: docker push us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend
       - name: Deploy to Cloud Run

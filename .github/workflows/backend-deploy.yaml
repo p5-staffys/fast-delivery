@@ -4,12 +4,8 @@ on:
   push:
     branches: [master]
 
-env:
-  PROJECT_ID: fast-delivery-uma
-  REGION: us-east1
-
 jobs:
-  build-and-deploy-backend-image:
+  build-and-push-backend-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
@@ -28,5 +24,12 @@ jobs:
         run: docker build -t us-east1-docker.pkg.dev/fast-delivery-uma/deploy/backend ./fd-backend/
       - name: Push Image to Artifact Registry
         run: docker push us-east1-docker.pkg.dev/fast-delivery-uma/deploy/backend
-      - name: Deploy Image with Google Run
-        run: gcloud run deploy backend --image us-east1-docker.pkg.dev/fast-delivery-uma/deploy/backend --region us-east1
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: backend
+          region: us-east1
+          image: us-east1-docker.pkg.dev/fast-delivery-uma/deploy/backend
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
