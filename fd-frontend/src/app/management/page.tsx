@@ -10,6 +10,7 @@ import { ChangeEventHandler, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { signIn } from "./services/admin.service";
+import { IconButton, InputAdornment } from "@mui/material";
 
 const Home = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
@@ -55,12 +56,7 @@ const Home = (): JSX.Element => {
   return (
     <>
       <main className="container-login">
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ mt: "104px", width: "100vw", mb: "100px" }}
-        >
+        <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: "6rem", width: "100vw", mb: "6rem" }}>
           <Link href="/">
             <Image src={logo} alt="logo" width={149} height={94} />
           </Link>
@@ -87,13 +83,24 @@ const Home = (): JSX.Element => {
               style: { color: "#f5bd09" },
             }}
             onChange={handlePassword}
+            sx={{
+              mt: 2,
+              mb: 1,
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton aria-label="toggle password visibility" onClick={handleVisibility} edge="end">
+                    {visibility ? (
+                      <VisibilityIcon sx={{ color: "grey" }} />
+                    ) : (
+                      <VisibilityOffIcon sx={{ color: "grey" }} />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
-          <button
-            style={{ position: "absolute", right: 20, top: 380, backgroundColor: "transparent", border: "none" }}
-            onClick={handleVisibility}
-          >
-            {visibility ? <VisibilityIcon sx={{ color: "grey" }} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
-          </button>
           <Button sx={{ mt: 3 }} variant="contained" fullWidth type="submit">
             <strong>Ingresar</strong>
           </Button>

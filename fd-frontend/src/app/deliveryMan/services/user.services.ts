@@ -22,6 +22,7 @@ export const signOut = async (): Promise<void> => {
   try {
     firebaseSignOut();
     localStorage.removeItem("idToken");
+    localStorage.removeItem("user");
   } catch (error: unknown) {
     throw error;
   }
