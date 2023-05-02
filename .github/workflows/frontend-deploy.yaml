@@ -25,8 +25,15 @@ jobs:
       - name: LogIn to Docker
         run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-east1-docker.pkg.dev
       - name: Build Docker Image
-        run: docker build -t us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend ./fd-frontend/
+        run: docker build -t us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend --build-arg FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }} --build-arg FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }} --build-arg GOOGLE_MAPS_KEY=${{ secrets.GOOGLE_MAPS_KEY }} ./fd-frontend/
       - name: Push Image to Artifact Registry
         run: docker push us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend
-      - name: Deploy Image with Google Run
-        run: gcloud run deploy frontend --image us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend --region us-east1
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: frontend
+          region: us-east1
+          image: us-east1-docker.pkg.dev/fast-delivery-uma/deploy/frontend
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
