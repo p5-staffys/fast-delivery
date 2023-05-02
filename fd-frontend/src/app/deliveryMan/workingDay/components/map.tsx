@@ -8,15 +8,15 @@ const mapOptions = {
   scrollwheel: false,
 };
 
+const googleMapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
+
 const Map = ({ destination }: { destination: google.maps.LatLngLiteral }): ReactElement => {
   const [origin, setOrigin] = useState({ lat: 1, lng: 1 });
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   // const [distance, setDistance] = useState<google.maps.DistanceMatrixResponse | null>(null);
 
-  // const googleMapsApiKey: string = process.env.GOOGLE_MAPS_KEY ? process.env.GOOGLE_MAPS_KEY : "";
-
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyCfFOABtRpwkquUomSFilfx41tMw1wRL84",
+    googleMapsApiKey,
   });
 
   useEffect(() => {
@@ -27,8 +27,8 @@ const Map = ({ destination }: { destination: google.maps.LatLngLiteral }): React
           const lng = position.coords.longitude;
           setOrigin({ lat, lng });
         },
-        (error) => {
-          alert(error);
+        () => {
+          alert("Necesita habilitar la geolocaclización en su dispositivo.");
         },
       );
     } else {
@@ -54,7 +54,7 @@ const Map = ({ destination }: { destination: google.maps.LatLngLiteral }): React
         if (status === google.maps.DirectionsStatus.OK) {
           setDirections(result);
         } else {
-          alert(`error fetching directions ${result}`);
+          alert("No pudo planificarse la ruta.");
         }
       },
     );

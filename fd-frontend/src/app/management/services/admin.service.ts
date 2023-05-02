@@ -63,3 +63,17 @@ export const checkAdmin = async (): Promise<boolean | void> => {
     }
   }
 };
+
+export const getAuthorization = async (): Promise<boolean> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get("https://backend-buhubxjtrq-ue.a.run.app/admin/authenticate", {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const authorization = response.data;
+    return authorization;
+  } catch (error: unknown) {
+    throw error;
+  }
+};

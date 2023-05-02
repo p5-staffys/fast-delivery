@@ -1,9 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signOut, User, UserCredential } from "firebase/auth";
 
+const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+const authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN;
+
 const firebaseConfig = {
-  apiKey: "AIzaSyDXtf7ajb2ib8NaqfDf0--2orNRYC7jZ6Y",
-  authDomain: "fast-delivery-uma.firebaseapp.com",
+  apiKey,
+  authDomain,
 };
 
 const app = initializeApp(firebaseConfig);

@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import { IconButton } from "@mui/material";
 import BackBtn from "./components/backBtn";
 import Link from "next/link";
+import AuthGuard from "../../authGuard";
 
 const Paquetes = (): JSX.Element => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
@@ -47,164 +48,166 @@ const Paquetes = (): JSX.Element => {
   };
 
   return (
-    <div>
-      <Box
-        sx={{ maxWidth: "100vw", height: "12vh", ml: 2, mt: 2 }}
-        display="flex"
-        justifyContent="center"
-        alignItems="start"
-        flexDirection="column"
-      >
-        <BackBtn back="deliveryMan/workingDay" />
-        <h2>Obtener paquetes</h2>
-        <Typography sx={{ fontSize: "0.9em" }}>¿Cuántos paquetes más vas a repartir hoy?</Typography>
-      </Box>
-      <Box
-        display="flex"
-        justifyContent="left"
-        alignItems="end"
-        sx={{
-          m: "auto",
-          pl: 6,
-          pb: 5,
-          pt: 5,
-          borderBottom: "2px solid #e0e0e0",
-        }}
-      >
-        <Box>
-          <Checkbox {...label} defaultChecked />
+    <AuthGuard>
+      <>
+        <Box
+          sx={{ maxWidth: "100vw", height: "12vh", ml: 2, mt: 2 }}
+          display="flex"
+          justifyContent="center"
+          alignItems="start"
+          flexDirection="column"
+        >
+          <BackBtn back="deliveryMan/workingDay" />
+          <h2>Obtener paquetes</h2>
+          <Typography sx={{ fontSize: "0.9em" }}>¿Cuántos paquetes más vas a repartir hoy?</Typography>
         </Box>
-        <Box display="flex" justifyContent="center" alignItems="start" flexDirection="column" sx={{ ml: 4 }}>
-          <Typography sx={{ fontSize: "0.8em" }}>Amenabar 2356, CABA</Typography>
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
-            <IconButton
-              sx={{
-                width: 30,
-                height: 30,
-                borderRadius: "3px",
-                border: "1px solid #b2bcca",
-                padding: 0,
-              }}
-              onClick={handleSubtractOne}
-            >
-              -
-            </IconButton>
-            <Typography sx={{ m: "0 10px" }}>{numOne}</Typography>
-            <IconButton
-              sx={{
-                width: 30,
-                height: 30,
-                borderRadius: "3px",
-                border: "1px solid #b2bcca",
-                padding: 0,
-              }}
-              onClick={handleAddOne}
-            >
-              +
-            </IconButton>
+        <Box
+          display="flex"
+          justifyContent="left"
+          alignItems="end"
+          sx={{
+            m: "auto",
+            pl: 6,
+            pb: 5,
+            pt: 5,
+            borderBottom: "2px solid #e0e0e0",
+          }}
+        >
+          <Box>
+            <Checkbox {...label} defaultChecked />
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="start" flexDirection="column" sx={{ ml: 4 }}>
+            <Typography sx={{ fontSize: "0.8em" }}>Amenabar 2356, CABA</Typography>
+            <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
+              <IconButton
+                sx={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "3px",
+                  border: "1px solid #b2bcca",
+                  padding: 0,
+                }}
+                onClick={handleSubtractOne}
+              >
+                -
+              </IconButton>
+              <Typography sx={{ m: "0 10px" }}>{numOne}</Typography>
+              <IconButton
+                sx={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "3px",
+                  border: "1px solid #b2bcca",
+                  padding: 0,
+                }}
+                onClick={handleAddOne}
+              >
+                +
+              </IconButton>
+            </Box>
           </Box>
         </Box>
-      </Box>
-      {/* SIGUIENTE */}
-      <Box
-        display="flex"
-        justifyContent="left"
-        alignItems="end"
-        sx={{
-          m: "auto",
-          pl: 6,
-          pb: 5,
-          pt: 5,
-          borderBottom: "2px solid #e0e0e0",
-        }}
-      >
-        <Box>
-          <Checkbox {...label} defaultChecked />
-        </Box>
-        <Box display="flex" justifyContent="center" alignItems="start" flexDirection="column" sx={{ ml: 4 }}>
-          <Typography sx={{ fontSize: "0.8em" }}>AV. Carabobo y Rivadavia, CABA</Typography>
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
-            <IconButton
-              sx={{
-                width: 30,
-                height: 30,
-                borderRadius: "3px",
-                border: "1px solid #b2bcca",
-                padding: 0,
-              }}
-              onClick={handleSubtractTwo}
-            >
-              -
-            </IconButton>
-            <Typography sx={{ m: "0 10px" }}>{numTwo}</Typography>
-            <IconButton
-              sx={{
-                width: 30,
-                height: 30,
-                borderRadius: "3px",
-                border: "1px solid #b2bcca",
-                padding: 0,
-              }}
-              onClick={handleAddTwo}
-            >
-              +
-            </IconButton>
+        {/* SIGUIENTE */}
+        <Box
+          display="flex"
+          justifyContent="left"
+          alignItems="end"
+          sx={{
+            m: "auto",
+            pl: 6,
+            pb: 5,
+            pt: 5,
+            borderBottom: "2px solid #e0e0e0",
+          }}
+        >
+          <Box>
+            <Checkbox {...label} defaultChecked />
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="start" flexDirection="column" sx={{ ml: 4 }}>
+            <Typography sx={{ fontSize: "0.8em" }}>AV. Carabobo y Rivadavia, CABA</Typography>
+            <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
+              <IconButton
+                sx={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "3px",
+                  border: "1px solid #b2bcca",
+                  padding: 0,
+                }}
+                onClick={handleSubtractTwo}
+              >
+                -
+              </IconButton>
+              <Typography sx={{ m: "0 10px" }}>{numTwo}</Typography>
+              <IconButton
+                sx={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "3px",
+                  border: "1px solid #b2bcca",
+                  padding: 0,
+                }}
+                onClick={handleAddTwo}
+              >
+                +
+              </IconButton>
+            </Box>
           </Box>
         </Box>
-      </Box>
-      {/* SIGUIENTE */}
-      <Box
-        display="flex"
-        justifyContent="left"
-        alignItems="end"
-        sx={{
-          m: "auto",
-          pl: 6,
-          pb: 5,
-          pt: 5,
-          borderBottom: "2px solid #e0e0e0",
-        }}
-      >
-        <Box>
-          <Checkbox {...label} defaultChecked />
-        </Box>
-        <Box display="flex" justifyContent="center" alignItems="start" flexDirection="column" sx={{ ml: 4 }}>
-          <Typography sx={{ fontSize: "0.8em" }}>Melian 1242, CABA</Typography>
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
-            <IconButton
-              sx={{
-                width: 30,
-                height: 30,
-                borderRadius: "3px",
-                border: "1px solid #b2bcca",
-                padding: 0,
-              }}
-              onClick={handleSubtractThree}
-            >
-              -
-            </IconButton>
-            <Typography sx={{ m: "0 10px" }}>{numThree}</Typography>
-            <IconButton
-              sx={{
-                width: 30,
-                height: 30,
-                borderRadius: "3px",
-                border: "1px solid #b2bcca",
-                padding: 0,
-              }}
-              onClick={handleAddThree}
-            >
-              +
-            </IconButton>
+        {/* SIGUIENTE */}
+        <Box
+          display="flex"
+          justifyContent="left"
+          alignItems="end"
+          sx={{
+            m: "auto",
+            pl: 6,
+            pb: 5,
+            pt: 5,
+            borderBottom: "2px solid #e0e0e0",
+          }}
+        >
+          <Box>
+            <Checkbox {...label} defaultChecked />
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="start" flexDirection="column" sx={{ ml: 4 }}>
+            <Typography sx={{ fontSize: "0.8em" }}>Melian 1242, CABA</Typography>
+            <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
+              <IconButton
+                sx={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "3px",
+                  border: "1px solid #b2bcca",
+                  padding: 0,
+                }}
+                onClick={handleSubtractThree}
+              >
+                -
+              </IconButton>
+              <Typography sx={{ m: "0 10px" }}>{numThree}</Typography>
+              <IconButton
+                sx={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "3px",
+                  border: "1px solid #b2bcca",
+                  padding: 0,
+                }}
+                onClick={handleAddThree}
+              >
+                +
+              </IconButton>
+            </Box>
           </Box>
         </Box>
-      </Box>
-      <Link style={{ textDecoration: "none" }} href="/deliveryMan/workingDay/getPackages/declaration">
-        <Button variant="contained" sx={{ m: "0 2.5vw", mt: 5, width: "95vw" }}>
-          Iniciar jornada
-        </Button>
-      </Link>
-    </div>
+        <Link style={{ textDecoration: "none" }} href="/deliveryMan/workingDay/getPackages/declaration">
+          <Button variant="contained" sx={{ m: "0 2.5vw", mt: 5, width: "95vw" }}>
+            Iniciar jornada
+          </Button>
+        </Link>
+      </>
+    </AuthGuard>
   );
 };
 

@@ -1,14 +1,19 @@
 "use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
+import { useGlobalContext } from "@/context/store";
+import { PackageRef } from "@/utils/interfaces/package.interfaces";
+//import { getAuthorization } from "../services/user.services";
+import AuthGuard from "../authGuard";
+
 import Button from "@mui/material/Button";
 import { Container, Accordion, AccordionSummary, CardContent } from "@mui/material";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useEffect, useState } from "react";
-import Link from "next/link";
+
 import Card from "./components/card";
-import { useGlobalContext } from "@/context/store";
-import { PackageRef } from "@/utils/interfaces/package.interfaces";
 
 const WorkingDay = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<PackageRef[]>([]);
@@ -27,7 +32,7 @@ const WorkingDay = (): JSX.Element => {
   }, []);
 
   return (
-    <>
+    <AuthGuard>
       <Container fixed>
         <Link style={{ textDecoration: "none" }} href="/deliveryMan/workingDay/getPackages">
           <Button sx={{ marginY: "15px" }} variant="contained" fullWidth={true}>
@@ -63,7 +68,7 @@ const WorkingDay = (): JSX.Element => {
           ))}
         </Accordion>
       </Container>
-    </>
+    </AuthGuard>
   );
 };
 

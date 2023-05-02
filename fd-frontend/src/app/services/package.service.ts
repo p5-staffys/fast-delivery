@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { Client, Package, PackageCreate } from "../../utils/interfaces/package.interfaces";
 
+const googleMapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
+
 export const getPackageById = async (_id: string): Promise<Package> => {
   try {
     const idToken = localStorage.getItem("idToken");
@@ -46,9 +48,10 @@ export const createPackage = async (
     const urlCity = city.trim().replace(/\s+/g, "+");
     const urlState = state.trim().replace(/\s+/g, "+");
     const urlCountry = country.trim().replace(/\s+/g, "+");
+
     const addressString = `${urlStreet},+${urlNumber},+${urlCity},+${urlState}+province,+${urlCountry}`;
     const geocode: AxiosResponse = await axios.get(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${addressString}&key=AIzaSyCfFOABtRpwkquUomSFilfx41tMw1wRL84`,
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${addressString}&key=${googleMapsApiKey}`,
     );
     const latlng: google.maps.LatLngLiteral = geocode.data.results[0].geometry.location;
     const client: Client = { fullName, address: { number, street, city, state, country }, latlng };
@@ -58,6 +61,7 @@ export const createPackage = async (
       deliveryDate,
       quantity,
     };
+
     const idToken = localStorage.getItem("idToken");
     const response: AxiosResponse = await axios.post("https://backend-buhubxjtrq-ue.a.run.app/package/", newPackage, {
       withCredentials: true,

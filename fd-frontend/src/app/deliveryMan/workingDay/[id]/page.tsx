@@ -18,6 +18,7 @@ import { Package } from "@/utils/interfaces/package.interfaces";
 import { getPackageById } from "../../../services/package.service";
 
 import Map from "../components/map";
+import AuthGuard from "../../authGuard";
 
 const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
   const [paquete, setPaquete] = useState<Package>();
@@ -28,7 +29,7 @@ const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
   }, []);
 
   return (
-    <>
+    <AuthGuard>
       <Container>
         <Link href={`deliveryMan/workingDay`}>
           <IconButton aria-label="Example">
@@ -67,7 +68,7 @@ const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
           ) : null}
         </Accordion>
       </Container>
-    </>
+    </AuthGuard>
   );
 };
 

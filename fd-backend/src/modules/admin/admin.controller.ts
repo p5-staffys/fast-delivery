@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   Req,
   UseGuards,
+  Headers,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import {
@@ -83,9 +84,17 @@ export class AdminController {
 
   @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'Authenticate current admin' })
+  @Public()
   @Get('authenticate')
-  async authenticate(): Promise<boolean> {
-    return true;
+  async authenticate(
+    @Headers('Authorization') authorization,
+  ): Promise<boolean> {
+    try {
+      await this.authService.verifyAdmin(authorization);
+      return true;
+    } catch (error: unknown) {
+      return false;
+    }
   }
 
   @ApiBearerAuth('idToken')

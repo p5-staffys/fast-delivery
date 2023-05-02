@@ -41,3 +41,17 @@ export const signUp = async (email: string, password: string, name: string, last
     throw error;
   }
 };
+
+export const getAuthorization = async (): Promise<boolean> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get("https://backend-buhubxjtrq-ue.a.run.app/user/authenticate", {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const authorization = response.data;
+    return authorization;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
