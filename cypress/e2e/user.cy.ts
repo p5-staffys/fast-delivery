@@ -19,6 +19,6 @@ describe("Full User App Run", () => {
     cy.get('[style="text-decoration: none;"] > .MuiButtonBase-root').click();
     cy.url().should("include", "/deliveryMan/workingDay/getPackages");
 
-    cy.get(":nth-child(2) > .css-ncmk3f > .MuiBox-root > :nth-child(3)").click();
+    cy.get(":nth-child(3) > .css-ncmk3f > .MuiBox-root > :nth-child(3)").click();
   });
 });
