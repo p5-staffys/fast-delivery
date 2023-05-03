@@ -228,6 +228,7 @@ export class AdminController {
       const packages = await this.packageService.getPackagesByDeliveryDate(
         date,
       );
+
       const newPackages = packages.find((pack) => pack._id == 'new') || {
         total: 0,
       };
@@ -243,14 +244,17 @@ export class AdminController {
       const deliveredPackages = packages.find(
         (pack) => pack._id == 'delivered',
       ) || { total: 0 };
+
+      const activePackages =
+        newPackages.total +
+        pendingPackages.total +
+        deliveringPackages.total +
+        failedPackages.total;
+
       const response = {
         date,
-        activePackages:
-          newPackages.total +
-          pendingPackages.total +
-          deliveringPackages.total +
-          failedPackages.total,
-        deliveredPackages: deliveredPackages.total,
+        activePackages,
+        totalPackages: activePackages + deliveredPackages.total,
       };
       return response;
     } catch (error: unknown) {
