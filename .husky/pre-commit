@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-#! npm run lint:front
-#! npm run lint:back
+npm run lint:front
+npm run lint:back

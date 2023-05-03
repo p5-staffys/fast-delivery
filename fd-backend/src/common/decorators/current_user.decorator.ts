@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { AuthService } from '../firebase/auth.service';
+import { AuthService } from '../modules/firebase/auth.service';
 
 export const CurrentUser = createParamDecorator(
   async (data: string, context: ExecutionContext) => {

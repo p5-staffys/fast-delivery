@@ -49,11 +49,11 @@ export class UserRef implements IUserRef {
   @Prop({ required: true, type: String, unique: false })
   _id: string;
 
-  @Prop({ required: [true, 'Please enter a name'], type: String })
-  readonly name: string;
+  @Prop({ required: [true, 'Please enter an email'], type: String })
+  readonly email: string;
 
-  @Prop({ required: [true, 'Please enter a lastname'], type: String })
-  readonly lastName: string;
+  @Prop({ required: [true, 'Please enter a fullName'], type: String })
+  readonly fullName: string;
 }
 
 export const UserRefSchema = SchemaFactory.createForClass(UserRef);

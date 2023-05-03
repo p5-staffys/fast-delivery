@@ -26,7 +26,7 @@ export class UserRepository extends EntityRepository<UserDocument> {
     return await this.userModel.findOne({ email });
   }
 
-  async foundUserAndValidateForm(_id) {
+  async foundUserAndValidateForm(_id: string) {
     return await this.userModel.findOne({
       _id,
       forms: {

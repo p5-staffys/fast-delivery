@@ -20,6 +20,6 @@ export enum UserStatus {
 
 export interface IUserRef {
   _id: string;
-  name: string;
-  lastName: string;
+  email: string;
+  fullName: string;
 }

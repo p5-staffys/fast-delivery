@@ -8,7 +8,7 @@ import {
 import { Request } from 'express';
 import { IAdmin } from '../interfaces/admin.interface';
 import { AdminService } from '../admin.service';
-import { AuthService } from '../../../common/firebase/auth.service';
+import { AuthService } from '../../../common/modules/firebase/auth.service';
 
 @Injectable()
 export class CurrentAdminInterceptor implements NestInterceptor {

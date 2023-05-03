@@ -21,7 +21,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 
-import { AuthService } from '../../common/firebase/auth.service';
+import { AuthService } from '../../common/modules/firebase/auth.service';
 import { UserService } from '../user/user.service';
 
 import { Public } from '../../common/guards/auth.guard';
@@ -34,6 +34,7 @@ import {
 } from './interceptors/current-admin.interceptor';
 import { IAdmin } from './interfaces/admin.interface';
 import { AdminGuard } from '../../common/guards/admin.guard';
+import { UserLogsService } from 'src/common/modules/userLogs/userLogs.service';
 
 @ApiTags('Admin')
 @UseGuards(AdminGuard)
@@ -43,6 +44,7 @@ export class AdminController {
     private readonly adminService: AdminService,
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly userLogsService: UserLogsService,
   ) {}
 
   @Public()
@@ -78,8 +80,12 @@ export class AdminController {
   @UseInterceptors(CurrentAdminInterceptor)
   @Get()
   async getAdmin(@Req() request: CurrentAdminRequest) {
-    const admin = request.currentAdmin;
-    return admin;
+    try {
+      const admin = request.currentAdmin;
+      return admin;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 
   @ApiBearerAuth('idToken')
@@ -105,21 +111,54 @@ export class AdminController {
   @ApiParam({ name: '_id', required: true, type: String })
   @Put('status/:_id')
   async changeUserStatus(@Param('_id') _id: string): Promise<boolean> {
-    return this.userService.changeUserStatus(_id);
+    try {
+      const updatedUser = await this.userService.changeUserStatus(_id);
+      return updatedUser;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 
   @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'Get all users' })
   @Get('users')
   async getUsers() {
-    return this.userService.getUsers();
+    try {
+      const allUsers = await this.userService.getUsers();
+      return allUsers;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 
   @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'Get all active users' })
   @Get('active_users')
   async getActiveUsers() {
-    return this.userService.getActiveUsers();
+    try {
+      const activeUsers = await this.userService.getActiveUsers();
+      return activeUsers;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
+  }
+
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get users logs of a day' })
+  @Get('getUserLogs/:day')
+  async getUserLogs(@Param('day') day: string) {
+    try {
+      const userLogs = await this.userLogsService.getRecordByDay(day);
+      const totalUsersCount = await this.userService.countUsers();
+      const response = {
+        activeUsers: userLogs.activeUsers,
+        day: userLogs.day,
+        totalUsersCount,
+      };
+      return response;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 
   @Get('packages')

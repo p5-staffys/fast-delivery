@@ -6,11 +6,13 @@ import { UserService } from './user.service';
 import { User, UserSchema } from './entities/user.entity';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 
-import { AuthService } from '../../common/firebase/auth.service';
+import { AuthService } from '../../common/modules/firebase/auth.service';
 import { UserRepository } from './repository/user.repository';
+import { UserLogsModule } from 'src/common/modules/userLogs/userLogs.module';
 
 @Module({
   imports: [
+    UserLogsModule,
     MongooseModule.forFeature([
       {
         name: User.name,
