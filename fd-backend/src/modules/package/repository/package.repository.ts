@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import { PipelineStage, Types } from 'mongoose';
 import { Model } from '../../../common/database/softdelete/softDelete.interface';
 import { EntityRepository } from '../../../common/database/repository/db.repository';
 import { Package, PackageDocument } from '../entities/package.entity';
@@ -49,5 +49,9 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
       );
 
     return packages;
+  }
+
+  async aggregate(filter: PipelineStage[]) {
+    return this.packageModel.aggregate(filter);
   }
 }

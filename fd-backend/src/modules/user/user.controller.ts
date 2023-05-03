@@ -147,13 +147,15 @@ export class UserController {
   ): Promise<User> {
     try {
       const updatedUser = await this.userService.addForm(currentUser._id, form);
-      const day = form.day;
+      const date = updatedUser.forms[updatedUser.forms.length - 1].createdAt
+        .toJSON()
+        .split('T')[0];
       const userRef: IUserRef = {
         fullName: `${updatedUser.name} ${updatedUser.lastName}`,
         _id: updatedUser._id,
         email: updatedUser.email,
       };
-      await this.userLogsService.recordUser(day, userRef);
+      await this.userLogsService.recordUser(date, userRef);
       return updatedUser;
     } catch (error: unknown) {
       throw new GeneralError(error);

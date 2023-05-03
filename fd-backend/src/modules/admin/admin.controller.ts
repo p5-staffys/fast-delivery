@@ -34,7 +34,8 @@ import {
 } from './interceptors/current-admin.interceptor';
 import { IAdmin } from './interfaces/admin.interface';
 import { AdminGuard } from '../../common/guards/admin.guard';
-import { UserLogsService } from 'src/common/modules/userLogs/userLogs.service';
+import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
+import { PackageService } from '../package/package.service';
 
 @ApiTags('Admin')
 @UseGuards(AdminGuard)
@@ -45,6 +46,7 @@ export class AdminController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly userLogsService: UserLogsService,
+    private readonly packageService: PackageService,
   ) {}
 
   @Public()
@@ -145,29 +147,114 @@ export class AdminController {
 
   @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'Get users logs of a day' })
-  @Get('getUserLogs/:day')
-  async getUserLogs(@Param('day') day: string) {
+  @Get('getLogs/:date')
+  async getLogs(@Param('date') requestDate: string) {
     try {
-      const userLogs = await this.userLogsService.getRecordByDay(day);
+      const date = new Date(requestDate);
+      const userLogs = await this.userLogsService.getRecordByDate(date);
       const totalUsersCount = await this.userService.countUsers();
-      const response = {
-        activeUsers: userLogs.activeUsers,
-        day: userLogs.day,
+      const users = {
+        activeUsers: userLogs.activeUsers.length,
         totalUsersCount,
       };
+
+      const packageLogs = await this.packageService.getPackagesByDeliveryDate(
+        date,
+      );
+      const newPackages = packageLogs.find((pack) => pack._id == 'new') || {
+        total: 0,
+      };
+      const pendingPackages = packageLogs.find(
+        (pack) => pack._id == 'pending',
+      ) || { total: 0 };
+      const deliveringPackages = packageLogs.find(
+        (pack) => pack._id == 'delivering',
+      ) || { total: 0 };
+      const failedPackages = packageLogs.find(
+        (pack) => pack._id == 'failed',
+      ) || {
+        total: 0,
+      };
+      const deliveredPackages = packageLogs.find(
+        (pack) => pack._id == 'delivered',
+      ) || { total: 0 };
+      const packages = {
+        activePackages:
+          newPackages.total +
+          pendingPackages.total +
+          deliveringPackages.total +
+          failedPackages.total,
+        deliveredPackages: deliveredPackages.total,
+      };
+
+      const response = {
+        date,
+        users,
+        packages,
+      };
+
       return response;
     } catch (error: unknown) {
       throw new GeneralError(error);
     }
   }
 
-  @Get('packages')
-  async getPackages() {
-    return this.adminService.getPackages();
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get users logs of a day' })
+  @Get('getUserLogs/:date')
+  async getUserLogs(@Param('date') requestDate: string) {
+    try {
+      const date = new Date(requestDate);
+      const userLogs = await this.userLogsService.getRecordByDate(date);
+      const totalUsersCount = await this.userService.countUsers();
+      const response = {
+        date: userLogs.date,
+        activeUsers: userLogs.activeUsers.length,
+        totalUsersCount,
+      };
+
+      return response;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 
-  @Get('active_packages')
-  async getActivePackages() {
-    return this.adminService.getActivePackages();
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get packages logs of a day' })
+  @Get('getPackageLogs/:date')
+  async getPackageLogs(@Param('date') requestDate: string) {
+    try {
+      const date = new Date(requestDate);
+      const packages = await this.packageService.getPackagesByDeliveryDate(
+        date,
+      );
+      const newPackages = packages.find((pack) => pack._id == 'new') || {
+        total: 0,
+      };
+      const pendingPackages = packages.find(
+        (pack) => pack._id == 'pending',
+      ) || { total: 0 };
+      const deliveringPackages = packages.find(
+        (pack) => pack._id == 'delivering',
+      ) || { total: 0 };
+      const failedPackages = packages.find((pack) => pack._id == 'failed') || {
+        total: 0,
+      };
+      const deliveredPackages = packages.find(
+        (pack) => pack._id == 'delivered',
+      ) || { total: 0 };
+      const response = {
+        date,
+        activePackages:
+          newPackages.total +
+          pendingPackages.total +
+          deliveringPackages.total +
+          failedPackages.total,
+        deliveredPackages: deliveredPackages.total,
+      };
+      return response;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 }

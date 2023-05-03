@@ -7,9 +7,9 @@ import { IUserLogs } from '../interface/userLogs.interface';
 export type UserLogsDocument = HydratedDocument<UserLogs>;
 
 @Schema()
-export class UserLogs implements Partial<IUserLogs> {
-  @Prop({ required: [true, 'Please enter a date'], type: String })
-  readonly day: string;
+export class UserLogs implements IUserLogs {
+  @Prop({ required: [true, 'Please enter a date'], type: Date })
+  readonly date: Date;
 
   @Prop({ type: [], default: [] })
   activeUsers: IUserRef[];

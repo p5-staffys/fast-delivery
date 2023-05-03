@@ -7,14 +7,15 @@ import { UserLogsRepository } from './repository/userLogs.repository';
 export class UserLogsService {
   constructor(private readonly userLogsRepository: UserLogsRepository) {}
 
-  async recordUser(day: string, user: IUserRef) {
-    const logEntry = await this.userLogsRepository.findOrCreate({ day });
+  async recordUser(stringDate: string, user: IUserRef) {
+    const date = new Date(stringDate);
+    const logEntry = await this.userLogsRepository.findOrCreate({ date });
     logEntry.activeUsers = [...logEntry.activeUsers, user];
     await logEntry.save();
     return logEntry;
   }
 
-  async getRecordByDay(day: string) {
-    return this.userLogsRepository.findOne({ day });
+  async getRecordByDate(date: Date) {
+    return this.userLogsRepository.findOne({ date });
   }
 }

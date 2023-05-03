@@ -28,12 +28,4 @@ export class AdminService {
   async findById(_id: string) {
     return this.adminRepository.findOneById(_id);
   }
-
-  async getPackages() {
-    return 'Returns all packages';
-  }
-
-  async getActivePackages() {
-    return 'Returns amount of active packages';
-  }
 }
