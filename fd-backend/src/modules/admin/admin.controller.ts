@@ -151,6 +151,7 @@ export class AdminController {
   async getLogs(@Param('date') requestDate: string) {
     try {
       const date = new Date(requestDate);
+
       const userLogs = await this.userLogsService.getRecordByDate(date);
       const totalUsersCount = await this.userService.countUsers();
       const users = {
@@ -158,34 +159,7 @@ export class AdminController {
         totalUsersCount,
       };
 
-      const packageLogs = await this.packageService.getPackagesByDeliveryDate(
-        date,
-      );
-      const newPackages = packageLogs.find((pack) => pack._id == 'new') || {
-        total: 0,
-      };
-      const pendingPackages = packageLogs.find(
-        (pack) => pack._id == 'pending',
-      ) || { total: 0 };
-      const deliveringPackages = packageLogs.find(
-        (pack) => pack._id == 'delivering',
-      ) || { total: 0 };
-      const failedPackages = packageLogs.find(
-        (pack) => pack._id == 'failed',
-      ) || {
-        total: 0,
-      };
-      const deliveredPackages = packageLogs.find(
-        (pack) => pack._id == 'delivered',
-      ) || { total: 0 };
-      const packages = {
-        activePackages:
-          newPackages.total +
-          pendingPackages.total +
-          deliveringPackages.total +
-          failedPackages.total,
-        deliveredPackages: deliveredPackages.total,
-      };
+      const packages = await this.packageService.getRecordByDate(date);
 
       const response = {
         date,
@@ -205,10 +179,11 @@ export class AdminController {
   async getUserLogs(@Param('date') requestDate: string) {
     try {
       const date = new Date(requestDate);
+
       const userLogs = await this.userLogsService.getRecordByDate(date);
       const totalUsersCount = await this.userService.countUsers();
       const response = {
-        date: userLogs.date,
+        date,
         activeUsers: userLogs.activeUsers.length,
         totalUsersCount,
       };
@@ -225,38 +200,8 @@ export class AdminController {
   async getPackageLogs(@Param('date') requestDate: string) {
     try {
       const date = new Date(requestDate);
-      const packages = await this.packageService.getPackagesByDeliveryDate(
-        date,
-      );
-
-      const newPackages = packages.find((pack) => pack._id == 'new') || {
-        total: 0,
-      };
-      const pendingPackages = packages.find(
-        (pack) => pack._id == 'pending',
-      ) || { total: 0 };
-      const deliveringPackages = packages.find(
-        (pack) => pack._id == 'delivering',
-      ) || { total: 0 };
-      const failedPackages = packages.find((pack) => pack._id == 'failed') || {
-        total: 0,
-      };
-      const deliveredPackages = packages.find(
-        (pack) => pack._id == 'delivered',
-      ) || { total: 0 };
-
-      const activePackages =
-        newPackages.total +
-        pendingPackages.total +
-        deliveringPackages.total +
-        failedPackages.total;
-
-      const response = {
-        date,
-        activePackages,
-        totalPackages: activePackages + deliveredPackages.total,
-      };
-      return response;
+      const packageLogs = await this.packageService.getRecordByDate(date);
+      return { date, packageLogs };
     } catch (error: unknown) {
       throw new GeneralError(error);
     }

@@ -141,6 +141,7 @@ export class PackageService {
   async deletePackage(_id: Types.ObjectId): Promise<void> {
     await this.packageRepository.deleteEntity(_id);
   }
+
   async getPackage(
     dateFilter: Date,
     page?: number,
@@ -160,10 +161,40 @@ export class PackageService {
     );
   }
 
-  async getPackagesByDeliveryDate(deliveryDate: Date) {
-    return this.packageRepository.aggregate([
+  async getRecordByDate(
+    deliveryDate: Date,
+  ): Promise<{ activePackages: number; totalPackages: number }> {
+    const packages = await this.packageRepository.aggregate([
       { $match: { deliveryDate } },
       { $group: { _id: '$status', total: { $sum: 1 } } },
     ]);
+
+    const newPackages = packages.find((pack) => pack._id == 'new') || {
+      total: 0,
+    };
+    const pendingPackages = packages.find((pack) => pack._id == 'pending') || {
+      total: 0,
+    };
+    const deliveringPackages = packages.find(
+      (pack) => pack._id == 'delivering',
+    ) || { total: 0 };
+    const failedPackages = packages.find((pack) => pack._id == 'failed') || {
+      total: 0,
+    };
+    const deliveredPackages = packages.find(
+      (pack) => pack._id == 'delivered',
+    ) || { total: 0 };
+
+    const activePackages =
+      newPackages.total +
+      pendingPackages.total +
+      deliveringPackages.total +
+      failedPackages.total;
+
+    const response = {
+      activePackages,
+      totalPackages: activePackages + deliveredPackages.total,
+    };
+    return response;
   }
 }
