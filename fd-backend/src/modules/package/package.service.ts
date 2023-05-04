@@ -159,4 +159,11 @@ export class PackageService {
       limit,
     );
   }
+
+  async getPackagesByDeliveryDate(deliveryDate: Date) {
+    return this.packageRepository.aggregate([
+      { $match: { deliveryDate } },
+      { $group: { _id: '$status', total: { $sum: 1 } } },
+    ]);
+  }
 }

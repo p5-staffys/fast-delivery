@@ -42,4 +42,4 @@ export class AdminRef implements IAdminRef {
   fullName: string;
 }
 
-export const AdminefSchema = SchemaFactory.createForClass(AdminRef);
+export const AdminRefSchema = SchemaFactory.createForClass(AdminRef);

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import { AuthService } from '../../../common/firebase/auth.service';
+import { AuthService } from '../../../common/modules/firebase/auth.service';
 import { UserService } from '../user.service';
 import { IUser } from '../interfaces/user.interface';
 

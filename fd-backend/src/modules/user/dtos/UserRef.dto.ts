@@ -12,11 +12,11 @@ export class UserRefDTO implements IUserRef {
 
   @AutoMap()
   @IsString()
-  @ApiProperty({ type: String, example: 'Juan Carlos' })
-  name: string;
+  @ApiProperty({ type: String, example: 'email@email.com' })
+  email: string;
 
   @AutoMap()
   @IsString()
-  @ApiProperty({ type: String, example: 'Macanudo' })
-  lastName: string;
+  @ApiProperty({ type: String, example: 'Juan Carlos Macanudo' })
+  fullName: string;
 }

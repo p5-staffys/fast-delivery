@@ -21,7 +21,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 
-import { AuthService } from '../../common/firebase/auth.service';
+import { AuthService } from '../../common/modules/firebase/auth.service';
 import { UserService } from '../user/user.service';
 
 import { Public } from '../../common/guards/auth.guard';
@@ -34,6 +34,8 @@ import {
 } from './interceptors/current-admin.interceptor';
 import { IAdmin } from './interfaces/admin.interface';
 import { AdminGuard } from '../../common/guards/admin.guard';
+import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
+import { PackageService } from '../package/package.service';
 
 @ApiTags('Admin')
 @UseGuards(AdminGuard)
@@ -43,6 +45,8 @@ export class AdminController {
     private readonly adminService: AdminService,
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly userLogsService: UserLogsService,
+    private readonly packageService: PackageService,
   ) {}
 
   @Public()
@@ -78,8 +82,12 @@ export class AdminController {
   @UseInterceptors(CurrentAdminInterceptor)
   @Get()
   async getAdmin(@Req() request: CurrentAdminRequest) {
-    const admin = request.currentAdmin;
-    return admin;
+    try {
+      const admin = request.currentAdmin;
+      return admin;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 
   @ApiBearerAuth('idToken')
@@ -105,30 +113,152 @@ export class AdminController {
   @ApiParam({ name: '_id', required: true, type: String })
   @Put('status/:_id')
   async changeUserStatus(@Param('_id') _id: string): Promise<boolean> {
-    return this.userService.changeUserStatus(_id);
+    try {
+      const updatedUser = await this.userService.changeUserStatus(_id);
+      return updatedUser;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 
   @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'Get all users' })
   @Get('users')
   async getUsers() {
-    return this.userService.getUsers();
+    try {
+      const allUsers = await this.userService.getUsers();
+      return allUsers;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 
   @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'Get all active users' })
   @Get('active_users')
   async getActiveUsers() {
-    return this.userService.getActiveUsers();
+    try {
+      const activeUsers = await this.userService.getActiveUsers();
+      return activeUsers;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 
-  @Get('packages')
-  async getPackages() {
-    return this.adminService.getPackages();
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get users logs of a day' })
+  @Get('getLogs/:date')
+  async getLogs(@Param('date') requestDate: string) {
+    try {
+      const date = new Date(requestDate);
+      const userLogs = await this.userLogsService.getRecordByDate(date);
+      const totalUsersCount = await this.userService.countUsers();
+      const users = {
+        activeUsers: userLogs.activeUsers.length,
+        totalUsersCount,
+      };
+
+      const packageLogs = await this.packageService.getPackagesByDeliveryDate(
+        date,
+      );
+      const newPackages = packageLogs.find((pack) => pack._id == 'new') || {
+        total: 0,
+      };
+      const pendingPackages = packageLogs.find(
+        (pack) => pack._id == 'pending',
+      ) || { total: 0 };
+      const deliveringPackages = packageLogs.find(
+        (pack) => pack._id == 'delivering',
+      ) || { total: 0 };
+      const failedPackages = packageLogs.find(
+        (pack) => pack._id == 'failed',
+      ) || {
+        total: 0,
+      };
+      const deliveredPackages = packageLogs.find(
+        (pack) => pack._id == 'delivered',
+      ) || { total: 0 };
+      const packages = {
+        activePackages:
+          newPackages.total +
+          pendingPackages.total +
+          deliveringPackages.total +
+          failedPackages.total,
+        deliveredPackages: deliveredPackages.total,
+      };
+
+      const response = {
+        date,
+        users,
+        packages,
+      };
+
+      return response;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 
-  @Get('active_packages')
-  async getActivePackages() {
-    return this.adminService.getActivePackages();
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get users logs of a day' })
+  @Get('getUserLogs/:date')
+  async getUserLogs(@Param('date') requestDate: string) {
+    try {
+      const date = new Date(requestDate);
+      const userLogs = await this.userLogsService.getRecordByDate(date);
+      const totalUsersCount = await this.userService.countUsers();
+      const response = {
+        date: userLogs.date,
+        activeUsers: userLogs.activeUsers.length,
+        totalUsersCount,
+      };
+
+      return response;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
+  }
+
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Get packages logs of a day' })
+  @Get('getPackageLogs/:date')
+  async getPackageLogs(@Param('date') requestDate: string) {
+    try {
+      const date = new Date(requestDate);
+      const packages = await this.packageService.getPackagesByDeliveryDate(
+        date,
+      );
+
+      const newPackages = packages.find((pack) => pack._id == 'new') || {
+        total: 0,
+      };
+      const pendingPackages = packages.find(
+        (pack) => pack._id == 'pending',
+      ) || { total: 0 };
+      const deliveringPackages = packages.find(
+        (pack) => pack._id == 'delivering',
+      ) || { total: 0 };
+      const failedPackages = packages.find((pack) => pack._id == 'failed') || {
+        total: 0,
+      };
+      const deliveredPackages = packages.find(
+        (pack) => pack._id == 'delivered',
+      ) || { total: 0 };
+
+      const activePackages =
+        newPackages.total +
+        pendingPackages.total +
+        deliveringPackages.total +
+        failedPackages.total;
+
+      const response = {
+        date,
+        activePackages,
+        totalPackages: activePackages + deliveredPackages.total,
+      };
+      return response;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 }

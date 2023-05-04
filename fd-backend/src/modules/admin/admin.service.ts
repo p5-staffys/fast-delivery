@@ -14,30 +14,18 @@ export class AdminService {
   async checkAdminId(_id: string): Promise<void> {
     const response = await this.adminRepository.checkAdminId(_id);
     if (response)
-      throw new BadRequestException('El admin ya esta registrado con ese id');
+      throw new BadRequestException('Un admin ya esta registrado con ese id');
   }
 
   async checkAdminEmail(email: string): Promise<void> {
     const response = await this.adminRepository.checkAdminEmail(email);
     if (response)
       throw new BadRequestException(
-        'El admin ya esta registrado con ese email',
+        'Un admin ya esta registrado con ese email',
       );
   }
 
   async findById(_id: string) {
     return this.adminRepository.findOneById(_id);
-  }
-
-  async getPackages() {
-    return 'Returns all packages';
-  }
-
-  async getActivePackages() {
-    return 'Returns amount of active packages';
-  }
-
-  async changeUserStatus(_id) {
-    return `Changes user ${_id} status`;
   }
 }

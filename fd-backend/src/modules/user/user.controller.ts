@@ -13,7 +13,7 @@ import {
 
 import { UserService } from './user.service';
 
-import { AuthService } from '../../common/firebase/auth.service';
+import { AuthService } from '../../common/modules/firebase/auth.service';
 
 import { ReponseUserDto } from './dtos/response-user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -32,6 +32,8 @@ import { Public } from '../../common/guards/auth.guard';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import { User } from './entities/user.entity';
 import { GeneralError } from '../../common/error-handlers/exceptions';
+import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
+import { IUserRef } from './interfaces/user.interface';
 
 @ApiTags('User')
 @Controller()
@@ -39,6 +41,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
+    private readonly userLogsService: UserLogsService,
   ) {}
 
   @ApiOperation({ description: 'Crear nuevo usuario en la DB' })
@@ -142,6 +145,20 @@ export class UserController {
     @Body() form: FormAplyDto,
     @Req() { currentUser }: CurrentUserRequest,
   ): Promise<User> {
-    return await this.userService.addForm(currentUser._id, form);
+    try {
+      const updatedUser = await this.userService.addForm(currentUser._id, form);
+      const date = updatedUser.forms[updatedUser.forms.length - 1].createdAt
+        .toJSON()
+        .split('T')[0];
+      const userRef: IUserRef = {
+        fullName: `${updatedUser.name} ${updatedUser.lastName}`,
+        _id: updatedUser._id,
+        email: updatedUser.email,
+      };
+      await this.userLogsService.recordUser(date, userRef);
+      return updatedUser;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 }

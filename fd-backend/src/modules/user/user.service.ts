@@ -52,6 +52,7 @@ export class UserService {
 
   async addForm(_id: string, form: FormAplyDto): Promise<User> {
     const latestForm = await this.userRepository.foundUserAndValidateForm(_id);
+
     if (latestForm)
       throw new BadRequestException(
         'El usuario ya tiene un formulario en las ultimas 24hs',
@@ -78,5 +79,9 @@ export class UserService {
     user.active = !user.active;
     user.save();
     return true;
+  }
+
+  async countUsers() {
+    return this.userRepository.findAndCountOrFail({});
   }
 }

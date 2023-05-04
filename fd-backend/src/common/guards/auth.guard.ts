@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { auth } from '../firebase/auth.service';
+import { auth } from '../modules/firebase/auth.service';
 import { Request } from 'express';
 import { GeneralError } from '../error-handlers/exceptions';
 
