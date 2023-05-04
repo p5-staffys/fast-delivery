@@ -6,3 +6,8 @@ export interface IClient {
   address: AddressDTO;
   latlng: Ilatlng;
 }
+
+export interface IClientRef {
+  fullName: string;
+  address: string;
+}

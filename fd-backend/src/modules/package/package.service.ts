@@ -1,20 +1,16 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { CreatePackageDto } from './dto/create-package.dto';
 import { Package } from './entities/package.entity';
 
 import { PackageRepository } from './repository/package.repository';
 import { Types } from 'mongoose';
-import { IUser } from '../user/interfaces/user.interface';
-import { UserRepository } from '../user/repository/user.repository';
+import { IUser, IUserRef } from '../user/interfaces/user.interface';
 import { IPackageQuery, PackageStatus } from './interface/package.interface';
 
 @Injectable()
 export class PackageService {
-  constructor(
-    private readonly packageRepository: PackageRepository,
-    private readonly userRepository: UserRepository,
-  ) {}
+  constructor(private readonly packageRepository: PackageRepository) {}
 
   async create(newPackage: CreatePackageDto): Promise<Package> {
     return await this.packageRepository.createEntity(newPackage);
@@ -28,27 +24,12 @@ export class PackageService {
     return await this.packageRepository.getPackageById(_id);
   }
 
-  async assignToUser(_id: Types.ObjectId, user: IUser): Promise<Package> {
-    const form = await this.userRepository.foundUserAndValidateForm(user._id);
-    if (!form)
-      throw new BadRequestException(
-        'No hiciste tu formulario de hoy, tenes que hacerlo para poder continuar',
-      );
-
-    const { bebidasAlcoholicas, medicamentosPsicoactivos, problemaEmocional } =
-      form.forms[form.forms.length - 1];
-
-    if (bebidasAlcoholicas || medicamentosPsicoactivos || problemaEmocional)
-      throw new BadRequestException(
-        'No cumplis los requisitos minimos para trabajar durante el dia de hoy, proba nuevamente en 24hs',
-      );
-    const { name, lastName } = user;
+  async assignToUser(
+    _id: Types.ObjectId,
+    deliveredBy: IUserRef,
+  ): Promise<Package> {
     const updatePack = {
-      deliveredBy: {
-        name,
-        lastName,
-        _id: user._id,
-      },
+      deliveredBy,
       status: PackageStatus.Delivering,
     };
 

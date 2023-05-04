@@ -1,22 +1,31 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
 import { IUserRef } from '../../user/interfaces/user.interface';
 
 import { IPackageRef, PackageStatus } from '../interface/package.interface';
 
 import { UserRefSchema } from '../../user/entities/user.entity';
-import { ClientSchema } from '../../../common/modules/client/entities/client.entity';
-import { IClient } from '../../../common/modules/client/interface/client.interface';
-import { AddressDTO } from '../../../common/modules/address/dto/Address.dto';
+import {
+  ClientRef,
+  ClientSchema,
+} from '../../../common/modules/client/entities/client.entity';
+import {
+  IClient,
+  IClientRef,
+} from '../../../common/modules/client/interface/client.interface';
 
 export type PackageDocument = HydratedDocument<Package>;
 
 @Schema({ timestamps: true, versionKey: false })
 export class Package {
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
+  _id: ObjectId;
+
   @Prop({ required: true, type: Number })
   readonly weight: number;
 
-  //Segun figma siempre lo crea el backoffice, verificar si es necesario
+  // Segun figma siempre lo crea el backoffice, verificar si es necesario
+  // Respuesta: en el backoffice hay mas de una persona, es util saber quien ingresó el paquete al sistema.
 
   // @Prop({ required: true, type: UserRefSchema })
   // readonly createdBy: IUserRef;
@@ -48,10 +57,10 @@ export const PackageSchema = SchemaFactory.createForClass(Package);
 @Schema()
 export class PackageRef implements IPackageRef {
   @Prop({ required: true, type: String })
-  _id: string;
+  _id: ObjectId;
 
-  @Prop({ required: true, type: AddressDTO })
-  address: AddressDTO;
+  @Prop({ required: true, type: ClientRef })
+  client: IClientRef;
 
   @Prop({ required: true, type: String })
   deliveryDate: Date;

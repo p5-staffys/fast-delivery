@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Document } from 'mongoose';
 
 import { IUser, IUserRef, UserStatus } from '../interfaces/user.interface';
 import { IPackageRef } from '../../package/interface/package.interface';
@@ -43,6 +43,8 @@ export class User implements Partial<IUser> {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+export type IUserDocument = Document<User>;
 
 @Schema()
 export class UserRef implements IUserRef {
