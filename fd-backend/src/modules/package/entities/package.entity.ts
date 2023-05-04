@@ -21,11 +21,8 @@ export class Package {
   @Prop({ required: true, type: Number })
   readonly weight: number;
 
-  // Segun figma siempre lo crea el backoffice, verificar si es necesario
-  // Respuesta: en el backoffice hay mas de una persona, es util saber quien ingresó el paquete al sistema.
-
-  // @Prop({ required: true, type: UserRefSchema })
-  // readonly createdBy: IUserRef;
+  @Prop({ required: true, type: UserRefSchema })
+  readonly createdBy: IUserRef;
 
   @Prop({ default: null, type: UserRefSchema })
   deliveredBy: IUserRef | null;

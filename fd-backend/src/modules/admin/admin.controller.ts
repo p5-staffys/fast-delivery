@@ -36,6 +36,8 @@ import { IAdmin } from './interfaces/admin.interface';
 import { AdminGuard } from '../../common/guards/admin.guard';
 import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
 import { PackageService } from '../package/package.service';
+import { CreatePackageDto } from '../package/dto/create-package.dto';
+import { Package } from '../package/entities/package.entity';
 
 @ApiTags('Admin')
 @UseGuards(AdminGuard)
@@ -202,6 +204,34 @@ export class AdminController {
       const date = new Date(requestDate);
       const packageLogs = await this.packageService.getRecordByDate(date);
       return { date, packageLogs };
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
+  }
+
+  @ApiBearerAuth('idToken')
+  @ApiResponse({
+    status: 201,
+    // type: dto de rta,
+  })
+  @ApiBody({ type: CreatePackageDto })
+  @ApiOperation({ description: 'Create package' })
+  @UseGuards(AdminGuard)
+  @UseInterceptors(CurrentAdminInterceptor)
+  @Post('package')
+  async createPackage(
+    @Body() body: CreatePackageDto,
+    @Req() { currentAdmin }: CurrentAdminRequest,
+  ): Promise<Package> {
+    try {
+      const createdBy = {
+        fullName: `${currentAdmin.name} ${currentAdmin.lastName}`,
+        _id: currentAdmin._id,
+        email: currentAdmin.email,
+      };
+      const newPackage = { ...body, createdBy };
+      const createdPackage = await this.packageService.create(newPackage);
+      return createdPackage;
     } catch (error: unknown) {
       throw new GeneralError(error);
     }

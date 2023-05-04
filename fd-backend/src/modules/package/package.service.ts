@@ -13,7 +13,8 @@ export class PackageService {
   constructor(private readonly packageRepository: PackageRepository) {}
 
   async create(newPackage: CreatePackageDto): Promise<Package> {
-    return await this.packageRepository.createEntity(newPackage);
+    const pack = await this.packageRepository.createEntity(newPackage);
+    return pack;
   }
 
   async getPendingPackage(page?: number, limit?: number): Promise<Package[]> {

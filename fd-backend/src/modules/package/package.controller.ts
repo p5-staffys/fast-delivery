@@ -1,6 +1,4 @@
 import {
-  Post,
-  Body,
   Get,
   Param,
   Put,
@@ -14,18 +12,14 @@ import { Controller } from '@nestjs/common';
 import { PackageService } from './package.service';
 import {
   ApiBearerAuth,
-  ApiBody,
   ApiOperation,
   ApiParam,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
 import { Types } from 'mongoose';
-import { CreatePackageDto } from './dto/create-package.dto';
 import { QueryPaginationDto } from '../../common/dto/pagination.dto';
 import { ValidateMongoId } from '../../common/pipe/validate-mongoid.pipe';
-import { GeneralError } from '../../common/error-handlers/exceptions';
 
 import { Package } from './entities/package.entity';
 import {
@@ -47,7 +41,8 @@ export class PackageController {
     private readonly userService: UserService,
   ) {}
 
-  @Post()
+  // Funcionalidad movida al modulo de admin
+  /*@Post()
   @ApiBearerAuth('idToken')
   @ApiResponse({
     status: 201,
@@ -56,14 +51,24 @@ export class PackageController {
   @ApiBody({ type: CreatePackageDto })
   @ApiOperation({ description: 'Create package' })
   @UseGuards(AdminGuard)
-  async create(@Body() newPackage: CreatePackageDto): Promise<Package> {
+  @UseInterceptors(CurrentAdminInterceptor)
+  async create(
+    @Body() body: CreatePackageDto,
+    @Req() { currentAdmin }: CurrentAdminRequest,
+  ): Promise<Package> {
     try {
+      const createdBy = {
+        fullName: `${currentAdmin.name} ${currentAdmin.lastName}`,
+        _id: currentAdmin._id,
+        email: currentAdmin.email,
+      };
+      const newPackage = { ...body, createdBy };
       const createdPackage = await this.packageService.create(newPackage);
       return createdPackage;
     } catch (error: unknown) {
       throw new GeneralError(error);
     }
-  }
+  }*/
 
   @Get('pending')
   @ApiBearerAuth('idToken')
