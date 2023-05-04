@@ -214,23 +214,28 @@ export class AdminController {
     status: 201,
     // type: dto de rta,
   })
-  @ApiBody({ type: CreatePackageDto })
+  @ApiBody({ type: [CreatePackageDto] })
   @ApiOperation({ description: 'Create package' })
   @UseGuards(AdminGuard)
   @UseInterceptors(CurrentAdminInterceptor)
   @Post('package')
   async createPackage(
-    @Body() body: CreatePackageDto,
+    @Body() body: CreatePackageDto[],
     @Req() { currentAdmin }: CurrentAdminRequest,
-  ): Promise<Package> {
+  ): Promise<Package[]> {
     try {
       const createdBy = {
         fullName: `${currentAdmin.name} ${currentAdmin.lastName}`,
         _id: currentAdmin._id,
         email: currentAdmin.email,
       };
-      const newPackage = { ...body, createdBy };
-      const createdPackage = await this.packageService.create(newPackage);
+      const newPackage = body.map((pack) => {
+        return {
+          ...pack,
+          createdBy,
+        };
+      });
+      const createdPackage = await this.packageService.createMany(newPackage);
       return createdPackage;
     } catch (error: unknown) {
       throw new GeneralError(error);

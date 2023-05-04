@@ -17,8 +17,31 @@ export class PackageService {
     return pack;
   }
 
+  async createMany(newPackages: CreatePackageDto[]) {
+    const packages = await this.packageRepository.createEntities(newPackages);
+    return packages;
+  }
+
   async getPendingPackage(page?: number, limit?: number): Promise<Package[]> {
     return await this.packageRepository.findPendingPackages(page, limit);
+  }
+
+  async getPendingPackageByClient(deliveryDate: Date): Promise<Package[]> {
+    const packages = await this.packageRepository.aggregate([
+      {
+        $match: {
+          status: PackageStatus.Pending,
+          deliveredBy: null,
+          deliveryDate,
+        },
+      },
+      {
+        $group: { _id: '$client', packages: { $addToSet: '$$ROOT' } },
+      },
+      /*{ $skip: limit * page },
+      { $limit: 4 },*/
+    ]);
+    return packages;
   }
 
   async getById(_id: Types.ObjectId): Promise<Package> {
@@ -33,7 +56,7 @@ export class PackageService {
 
     const actualPackageFilter = {
       _id,
-      status: { $in: [PackageStatus.New, PackageStatus.Pending] },
+      status: PackageStatus.Pending,
       deliveredBy: null,
     };
 

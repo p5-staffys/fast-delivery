@@ -72,6 +72,11 @@ export abstract class EntityRepository<T extends Document> {
     return entity;
   };
 
+  createEntities = async (createEntitiesData: unknown[]): Promise<T[]> => {
+    const entities = this.entityModel.create(createEntitiesData);
+    return entities;
+  };
+
   findOrCreate = async (
     filter: FilterQuery<T>,
     projection?: Record<string, unknown>,

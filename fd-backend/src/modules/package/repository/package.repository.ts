@@ -18,7 +18,7 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
   async findPendingPackages(page?: number, limit?: number): Promise<Package[]> {
     return await this.find(
       {
-        status: { $in: [PackageStatus.New, PackageStatus.Pending] },
+        status: PackageStatus.Pending,
         deliveredBy: null,
       },
       page,
@@ -35,7 +35,7 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
       $and: [
         { _id },
         {
-          status: { $in: [PackageStatus.New, PackageStatus.Pending] },
+          status: PackageStatus.Pending,
         },
         {
           deliveredBy: { $eq: null },

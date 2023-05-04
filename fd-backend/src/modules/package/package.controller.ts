@@ -70,7 +70,7 @@ export class PackageController {
     }
   }*/
 
-  @Get('pending')
+  /*@Get('pending')
   @ApiBearerAuth('idToken')
   @ApiOperation({
     description: 'Package are wating for taken but dont have any delivery ',
@@ -80,6 +80,21 @@ export class PackageController {
   ): Promise<Package[]> {
     const { limit, page } = queryPaginateDto;
     return await this.packageService.getPendingPackage(page, limit);
+  }*/
+
+  @Get('pending/:date')
+  @ApiBearerAuth('idToken')
+  @ApiOperation({
+    description: 'Package are wating for taken but dont have any delivery ',
+  })
+  @ApiParam({ name: 'date', required: true, type: String })
+  async getPendingPackageByClient(
+    @Query() queryPaginateDto: QueryPaginationDto,
+    @Param('date') date: string,
+  ): Promise<Package[]> {
+    //const { limit, page } = queryPaginateDto;
+    const deliveryDate = new Date(date);
+    return await this.packageService.getPendingPackageByClient(deliveryDate);
   }
 
   @Put(':_id/assign/')
@@ -123,14 +138,14 @@ export class PackageController {
       client,
       deliveryDate: updatePackage.deliveryDate,
       status: updatePackage.status,
-      quantity: updatePackage.quantity,
     };
 
     await this.userService.assignPackage(currentUser, packageRef);
     return updatePackage;
   }
 
-  @ApiOperation({ description: 'Get Package History by currentUser' })
+  // Funcionalidad obsoleta
+  /*  @ApiOperation({ description: 'Get Package History by currentUser' })
   @ApiBearerAuth('idToken')
   @Get('/history')
   @UseInterceptors(CurrentUserInterceptor)
@@ -144,7 +159,7 @@ export class PackageController {
       page,
       limit,
     );
-  }
+  }*/
   // @Put(':_id/unassign')
   // async unassignFromUser(@Param('_id') _id) {
   //   return this.packageService.unassignFromUser(_id);
