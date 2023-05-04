@@ -56,9 +56,14 @@ export class UserService {
     const latestForm = await this.userRepository.foundUserAndValidateForm(_id);
 
     if (latestForm)
-      throw new BadRequestException(
-        'El usuario ya tiene un formulario en las ultimas 24hs',
-      );
+      throw 'El usuario ya tiene un formulario en las ultimas 24hs.';
+
+    if (
+      form.bebidasAlcoholicas ||
+      form.medicamentosPsicoactivos ||
+      form.problemaEmocional
+    )
+      throw 'El usuario falló la aprobación del formulario.';
 
     const user = await this.userRepository.findOneById(_id);
 
