@@ -3,6 +3,7 @@ import React, { ChangeEventHandler, useState } from "react";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/backBtn";
 import { createPackage } from "@/app/services/package.service";
+import AdminGuard from "../../adminGuard";
 
 const addPackage = (): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(1);
@@ -78,110 +79,113 @@ const addPackage = (): JSX.Element => {
   };
 
   return (
-    <>
-      <Box>
-        <BackBtn back="management/scheduleManagement/managePackages" />
-        <Typography sx={{ ml: "20px", mb: "0.5vh", fontSize: "1em", fontWeight: 800 }}>Argregar paquetes</Typography>
-      </Box>
-      <Box component="form" onSubmit={handleSubmit}>
-        <Box className="addPackageData">
-          <TextField
-            id="standard-basic"
-            label="Nombre de quien recibe"
-            variant="standard"
-            fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
-            onChange={handleFullName}
-            name="fullName"
-          />
-          <TextField
-            id="standard-basic"
-            label="Calle"
-            variant="standard"
-            fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
-            onChange={handleStreet}
-            name="street"
-          />
-          <TextField
-            id="standard-basic"
-            label="Altura"
-            variant="standard"
-            fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
-            onChange={handleNumber}
-            name="number"
-          />
-          <TextField
-            id="standard-basic"
-            label="Ciudad"
-            variant="standard"
-            fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
-            onChange={handleCity}
-            name="city"
-          />
-          <TextField
-            id="standard-basic"
-            label="Provincia"
-            variant="standard"
-            fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
-            onChange={handleState}
-            name="state"
-          />
-          <TextField
-            id="standard-basic"
-            label="País"
-            variant="standard"
-            fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
-            onChange={handleCountry}
-            name="country"
-            defaultValue={country}
-          />
-          <TextField
-            id="standard-basic"
-            label="Peso (Kg)"
-            variant="standard"
-            fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
-            onChange={handleWeight}
-          />
-          <Typography sx={{ mt: "1em", mb: "0.5vh", fontSize: "1em", color: "#f5bd09" }}>
-            Fecha en la que debe ser repartido{" "}
-          </Typography>
-          <input type="date" value={deliveryDate} onChange={handleDate} style={{ color: "#f5bd09" }} />
+    <AdminGuard>
+      <>
+        <Box>
+          <BackBtn back="management/scheduleManagement/managePackages" />
+          <Typography sx={{ ml: "20px", mb: "0.5vh", fontSize: "1em", fontWeight: 800 }}>Argregar paquetes</Typography>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", mb: "0.5vh", mt: "1em" }}>
-          <Typography variant="body1" sx={{ color: "#f5bd09", mr: "12px" }}>
-            Cantidad
-          </Typography>
-          <Box className="quantity" sx={{ display: "flex", alignItems: "center" }}>
-            <IconButton onClick={handleSubtract}>-</IconButton>
-            <Typography sx={{ m: "0 12px" }}>{quantity}</Typography>
-            <IconButton onClick={handleAdd}>+</IconButton>
+        <Box component="form" onSubmit={handleSubmit}>
+          <Box className="addPackageData">
+            <TextField
+              id="standard-basic"
+              label="Nombre de quien recibe"
+              variant="standard"
+              fullWidth
+              InputLabelProps={{
+                style: { color: "#f5bd09" },
+              }}
+              onChange={handleFullName}
+              name="fullName"
+            />
+            <TextField
+              id="standard-basic"
+              label="Calle"
+              variant="standard"
+              fullWidth
+              InputLabelProps={{
+                style: { color: "#f5bd09" },
+              }}
+              onChange={handleStreet}
+              name="street"
+            />
+            <TextField
+              id="standard-basic"
+              label="Altura"
+              variant="standard"
+              fullWidth
+              InputLabelProps={{
+                style: { color: "#f5bd09" },
+              }}
+              onChange={handleNumber}
+              name="number"
+            />
+            <TextField
+              id="standard-basic"
+              label="Ciudad"
+              variant="standard"
+              fullWidth
+              InputLabelProps={{
+                style: { color: "#f5bd09" },
+              }}
+              onChange={handleCity}
+              name="city"
+            />
+            <TextField
+              id="standard-basic"
+              label="Provincia"
+              variant="standard"
+              fullWidth
+              InputLabelProps={{
+                style: { color: "#f5bd09" },
+              }}
+              onChange={handleState}
+              name="state"
+            />
+            <TextField
+              id="standard-basic"
+              label="País"
+              variant="standard"
+              fullWidth
+              InputLabelProps={{
+                style: { color: "#f5bd09" },
+              }}
+              onChange={handleCountry}
+              name="country"
+              defaultValue={country}
+            />
+            <TextField
+              id="standard-basic"
+              label="Peso (Kg)"
+              variant="standard"
+              fullWidth
+              InputLabelProps={{
+                style: { color: "#f5bd09" },
+              }}
+              type="number"
+              onChange={handleWeight}
+            />
+            <Typography sx={{ mt: "1em", mb: "0.5vh", fontSize: "1em", color: "#f5bd09" }}>
+              Fecha en la que debe ser repartido{" "}
+            </Typography>
+            <input type="date" value={deliveryDate} onChange={handleDate} style={{ color: "#f5bd09" }} />
           </Box>
+          <Box sx={{ display: "flex", alignItems: "center", mb: "0.5vh", mt: "1em" }}>
+            <Typography variant="body1" sx={{ color: "#f5bd09", mr: "12px" }}>
+              Cantidad
+            </Typography>
+            <Box className="quantity" sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton onClick={handleSubtract}>-</IconButton>
+              <Typography sx={{ m: "0 12px" }}>{quantity}</Typography>
+              <IconButton onClick={handleAdd}>+</IconButton>
+            </Box>
+          </Box>
+          <Button variant="contained" sx={{ m: "0 5vw", mt: 2, width: "90vw" }} type="submit">
+            <strong>Agregar</strong>
+          </Button>
         </Box>
-        <Button variant="contained" sx={{ m: "0 5vw", mt: 2, width: "90vw" }} type="submit">
-          <strong>Agregar</strong>
-        </Button>
-      </Box>
-    </>
+      </>
+    </AdminGuard>
   );
 };
 
