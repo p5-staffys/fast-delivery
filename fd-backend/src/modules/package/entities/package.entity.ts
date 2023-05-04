@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { IUserRef } from '../../user/interfaces/user.interface';
 
 import { IPackageRef, PackageStatus } from '../interface/package.interface';
@@ -18,9 +18,6 @@ export type PackageDocument = HydratedDocument<Package>;
 
 @Schema({ timestamps: true, versionKey: false })
 export class Package {
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
-  _id: ObjectId;
-
   @Prop({ required: true, type: Number })
   readonly weight: number;
 
@@ -56,8 +53,8 @@ export const PackageSchema = SchemaFactory.createForClass(Package);
 
 @Schema()
 export class PackageRef implements IPackageRef {
-  @Prop({ required: true, type: String })
-  _id: ObjectId;
+  @Prop({ required: true, type: Types.ObjectId })
+  _id: Types.ObjectId;
 
   @Prop({ required: true, type: ClientRef })
   client: IClientRef;

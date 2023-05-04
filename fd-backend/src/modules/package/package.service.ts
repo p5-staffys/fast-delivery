@@ -24,10 +24,7 @@ export class PackageService {
     return await this.packageRepository.getPackageById(_id);
   }
 
-  async assignToUser(
-    _id: Types.ObjectId,
-    deliveredBy: IUserRef,
-  ): Promise<Package> {
+  async assignToUser(_id: Types.ObjectId, deliveredBy: IUserRef) {
     const updatePack = {
       deliveredBy,
       status: PackageStatus.Delivering,

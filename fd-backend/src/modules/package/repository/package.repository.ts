@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { PipelineStage, Types } from 'mongoose';
+import { Types, PipelineStage } from 'mongoose';
 import { Model } from '../../../common/database/softdelete/softDelete.interface';
 import { EntityRepository } from '../../../common/database/repository/db.repository';
 import { Package, PackageDocument } from '../entities/package.entity';

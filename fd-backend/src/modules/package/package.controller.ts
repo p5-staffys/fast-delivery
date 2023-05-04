@@ -60,8 +60,8 @@ export class PackageController {
     try {
       const createdPackage = await this.packageService.create(newPackage);
       return createdPackage;
-    } catch {
-      throw new GeneralError('No se pudo crear el paquete');
+    } catch (error: unknown) {
+      throw new GeneralError(error);
     }
   }
 
@@ -104,7 +104,6 @@ export class PackageController {
       _id: currentUser._id,
       email: currentUser.email,
     };
-
     const updatePackage = await this.packageService.assignToUser(
       _id,
       deliveredBy,
@@ -114,7 +113,6 @@ export class PackageController {
       fullName: updatePackage.client.fullName,
       address: `${updatePackage.client.address.street} ${updatePackage.client.address.number}, ${updatePackage.client.address.city}, ${updatePackage.client.address.state}, ${updatePackage.client.address.country}`,
     };
-
     const packageRef: IPackageRef = {
       _id: updatePackage._id,
       client,
@@ -124,7 +122,6 @@ export class PackageController {
     };
 
     await this.userService.assignPackage(currentUser, packageRef);
-
     return updatePackage;
   }
 
@@ -173,7 +170,8 @@ export class PackageController {
   }
 
   //To see What happend if package is delivering
-  @Delete(':_id/history')
+  //This is not what the "delete" button should do
+  /*@Delete(':_id/history')
   @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
   @ApiOperation({ description: 'Delete package from history' })
@@ -183,7 +181,7 @@ export class PackageController {
     @Req() { currentUser }: CurrentUserRequest,
   ): Promise<Package> {
     return this.packageService.deleteFromHistory(_id, currentUser);
-  }
+  }*/
 
   @Delete(':_id')
   @ApiBearerAuth('idToken')

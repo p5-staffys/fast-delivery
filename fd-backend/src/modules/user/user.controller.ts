@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   HttpStatus,
   Headers,
+  Param,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -27,6 +28,7 @@ import {
   ApiTags,
   ApiOperation,
   ApiResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 import { Public } from '../../common/guards/auth.guard';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
@@ -34,6 +36,7 @@ import { User } from './entities/user.entity';
 import { GeneralError } from '../../common/error-handlers/exceptions';
 import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
 import { IUserRef } from './interfaces/user.interface';
+import { Types } from 'mongoose';
 
 @ApiTags('User')
 @Controller()
@@ -160,5 +163,21 @@ export class UserController {
     } catch (error: unknown) {
       throw new GeneralError(error);
     }
+  }
+
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @ApiOperation({ description: 'Delete package from history' })
+  @UseInterceptors(CurrentUserInterceptor)
+  @Delete('package/:_id')
+  async deleteFromHistory(
+    @Param('_id') _id: Types.ObjectId,
+    @Req() { currentUser }: CurrentUserRequest,
+  ): Promise<User> {
+    const updatedUser = await this.userService.deteleteFromHistory(
+      _id,
+      currentUser,
+    );
+    return updatedUser;
   }
 }

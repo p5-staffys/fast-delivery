@@ -7,7 +7,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserRepository } from './repository/user.repository';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import { IPackageRef } from '../package/interface/package.interface';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 @Injectable()
 export class UserService {
@@ -106,5 +106,21 @@ export class UserService {
     user.packages = [...user.packages, packageRef];
     const updateUser = await user.save();
     return updateUser;
+  }
+
+  async deteleteFromHistory(
+    _id: Types.ObjectId,
+    user: Document<unknown, User> &
+      Omit<
+        User &
+          Required<{
+            _id: string;
+          }>,
+        never
+      >,
+  ): Promise<User> {
+    user.packages = user.packages.filter((pack) => pack._id != _id);
+    await user.save();
+    return user;
   }
 }

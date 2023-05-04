@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { IClientRef } from '../../../common/modules/client/interface/client.interface';
 import { IUserRef } from '../../user/interfaces/user.interface';
 
@@ -14,7 +14,7 @@ export interface IPackage {
 }
 
 export interface IPackageRef {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   client: IClientRef;
   deliveryDate: Date;
   status: PackageStatus;
