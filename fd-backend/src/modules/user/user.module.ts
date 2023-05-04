@@ -9,10 +9,12 @@ import { CurrentUserInterceptor } from './interceptors/current-user.interceptor'
 import { AuthService } from '../../common/modules/firebase/auth.service';
 import { UserRepository } from './repository/user.repository';
 import { UserLogsModule } from 'src/common/modules/userLogs/userLogs.module';
+import { PackageModule } from '../package/package.module';
 
 @Module({
   imports: [
     UserLogsModule,
+    PackageModule,
     MongooseModule.forFeature([
       {
         name: User.name,

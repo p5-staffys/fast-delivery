@@ -108,6 +108,38 @@ export class UserService {
     return updateUser;
   }
 
+  async assignPackagesToHistory(
+    user: Document<unknown, User> &
+      Omit<
+        User &
+          Required<{
+            _id: string;
+          }>,
+        never
+      >,
+    packageRef: IPackageRef[],
+  ) {
+    const packages = [];
+    const alreadyAssigned = [];
+
+    for (let i = 0; i < packageRef.length; i++) {
+      const checkRepeted = user.packages.find(
+        (pack) => pack._id == packageRef[i]._id,
+      );
+      if (checkRepeted) {
+        alreadyAssigned.push(
+          `El paquete ${packageRef[i]._id} ya está asignado a este usuario`,
+        );
+      } else {
+        packages.push(packageRef[i]);
+      }
+    }
+
+    user.packages = packages;
+    const updatedUser = await user.save();
+    return { updatedUser, alreadyAssigned };
+  }
+
   async deteleteFromHistory(
     _id: Types.ObjectId,
     user: Document<unknown, User> &

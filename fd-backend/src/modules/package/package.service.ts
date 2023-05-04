@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Document } from 'mongoose';
 
 import { CreatePackageDto } from './dto/create-package.dto';
 import { Package } from './entities/package.entity';
@@ -6,6 +7,7 @@ import { Package } from './entities/package.entity';
 import { PackageRepository } from './repository/package.repository';
 import { Types } from 'mongoose';
 import { IUser, IUserRef } from '../user/interfaces/user.interface';
+import { User } from '../user/entities/user.entity';
 import { IPackageQuery, PackageStatus } from './interface/package.interface';
 
 @Injectable()
@@ -48,7 +50,7 @@ export class PackageService {
     return packages;
   }
 
-  async getById(_id: Types.ObjectId): Promise<Package> {
+  async getById(_id: Types.ObjectId) {
     return await this.packageRepository.getPackageById(_id);
   }
 
@@ -70,6 +72,44 @@ export class PackageService {
       null,
       'Package ID o Status invalido, solo puede ser "new" o "pending" y no tener ningun repartidor asignado',
     );
+  }
+
+  async assignPackagesToUser(
+    packages: Types.ObjectId[],
+    currentUser: Document<unknown, User> &
+      Omit<
+        User &
+          Required<{
+            _id: string;
+          }>,
+        never
+      >,
+  ) {
+    const deliveredBy: IUserRef = {
+      fullName: `${currentUser.name} ${currentUser.lastName}`,
+      _id: currentUser._id,
+      email: currentUser.email,
+    };
+    const updatedPackages = [];
+    const missingPackages = [];
+
+    for (let i = 0; i < packages.length; i++) {
+      const pack = await this.packageRepository.findById(packages[i]);
+      if (!pack) {
+        missingPackages.push(`El paquete ${packages[i]} no existe.`);
+      } else {
+        if (pack.deliveredBy) {
+          missingPackages.push(`El paquete  ${packages[i]}  ya fue asignado.`);
+        } else {
+          pack.deliveredBy = deliveredBy;
+          pack.status = PackageStatus.Delivering;
+          pack.save();
+          updatedPackages.push(pack);
+        }
+      }
+    }
+
+    return { updatedPackages, missingPackages };
   }
 
   async unassignFromUser(_id: string) {

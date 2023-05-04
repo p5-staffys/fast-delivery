@@ -1,13 +1,4 @@
-import {
-  Get,
-  Param,
-  Put,
-  Query,
-  UseInterceptors,
-  Req,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Get, Param, Put, Query, Delete, UseGuards } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { PackageService } from './package.service';
 import {
@@ -22,24 +13,14 @@ import { QueryPaginationDto } from '../../common/dto/pagination.dto';
 import { ValidateMongoId } from '../../common/pipe/validate-mongoid.pipe';
 
 import { Package } from './entities/package.entity';
-import {
-  CurrentUserInterceptor,
-  CurrentUserRequest,
-} from '../user/interceptors/current-user.interceptor';
+
 import { AdminGuard } from '../../common/guards/admin.guard';
 import { QueryPaginationWithDateAndStatusDto } from './dto/pagination-status-date.dto';
-import { IUserRef } from '../user/interfaces/user.interface';
-import { IPackageRef } from './interface/package.interface';
-import { UserService } from '../user/user.service';
-import { IClientRef } from 'src/common/modules/client/interface/client.interface';
 
 @ApiTags('Package')
 @Controller()
 export class PackageController {
-  constructor(
-    private readonly packageService: PackageService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly packageService: PackageService) {}
 
   // Funcionalidad movida al modulo de admin
   /*@Post()
@@ -101,6 +82,8 @@ export class PackageController {
     );
   }
 
+  // Funcionalidad movida a Admin
+  /*
   @Put(':_id/assign/')
   @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'EndPoint to assing package to currentUser' })
@@ -110,19 +93,6 @@ export class PackageController {
     @Param('_id', ValidateMongoId) _id: Types.ObjectId,
     @Req() { currentUser }: CurrentUserRequest,
   ): Promise<Package> {
-    /*const form = await this.userRepository.foundUserAndValidateForm(user._id);
-    if (!form)
-      throw new BadRequestException(
-        'No hiciste tu formulario de hoy, tenes que hacerlo para poder continuar',
-      );
-
-    const { bebidasAlcoholicas, medicamentosPsicoactivos, problemaEmocional } =
-      form.forms[form.forms.length - 1];
-
-    if (bebidasAlcoholicas || medicamentosPsicoactivos || problemaEmocional)
-      throw new BadRequestException(
-        'No cumplis los requisitos minimos para trabajar durante el dia de hoy, proba nuevamente en 24hs',
-      );*/
     const deliveredBy: IUserRef = {
       fullName: `${currentUser.name} ${currentUser.lastName}`,
       _id: currentUser._id,
@@ -147,7 +117,7 @@ export class PackageController {
     await this.userService.assignPackage(currentUser, packageRef);
     return updatePackage;
   }
-
+*/
   // Funcionalidad obsoleta
   /*  @ApiOperation({ description: 'Get Package History by currentUser' })
   @ApiBearerAuth('idToken')

@@ -10,6 +10,7 @@ import {
   HttpStatus,
   Headers,
   Param,
+  Put,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -35,8 +36,9 @@ import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import { User } from './entities/user.entity';
 import { GeneralError } from '../../common/error-handlers/exceptions';
 import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
-import { IUserRef } from './interfaces/user.interface';
+import { assignPacakges, IUserRef } from './interfaces/user.interface';
 import { Types } from 'mongoose';
+import { PackageService } from '../package/package.service';
 
 @ApiTags('User')
 @Controller()
@@ -45,6 +47,7 @@ export class UserController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly userLogsService: UserLogsService,
+    private readonly packageService: PackageService,
   ) {}
 
   @ApiOperation({ description: 'Crear nuevo usuario en la DB' })
@@ -139,6 +142,22 @@ export class UserController {
     }
   }
 
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @ApiOperation({ description: 'Delete package from history' })
+  @UseInterceptors(CurrentUserInterceptor)
+  @Delete('package/:_id')
+  async deleteFromHistory(
+    @Param('_id') _id: Types.ObjectId,
+    @Req() { currentUser }: CurrentUserRequest,
+  ): Promise<User> {
+    const updatedUser = await this.userService.deteleteFromHistory(
+      _id,
+      currentUser,
+    );
+    return updatedUser;
+  }
+
   @ApiOperation({ description: 'Agrega el formulario al usuario logueado' })
   @ApiBearerAuth('idToken')
   @ApiBody({ type: FormAplyDto })
@@ -165,19 +184,40 @@ export class UserController {
     }
   }
 
+  @Put('package/assign')
   @ApiBearerAuth('idToken')
-  @ApiParam({ name: '_id', required: true, type: String })
-  @ApiOperation({ description: 'Delete package from history' })
+  @ApiOperation({ description: 'Agrega paquetes al usuario logueado.' })
+  @ApiBody({ type: Array, description: 'Array de Ids de paquetes' })
   @UseInterceptors(CurrentUserInterceptor)
-  @Delete('package/:_id')
-  async deleteFromHistory(
-    @Param('_id') _id: Types.ObjectId,
+  async assignToUser(
     @Req() { currentUser }: CurrentUserRequest,
-  ): Promise<User> {
-    const updatedUser = await this.userService.deteleteFromHistory(
-      _id,
-      currentUser,
-    );
-    return updatedUser;
+    @Body() packages: Types.ObjectId[],
+  ): Promise<assignPacakges> {
+    try {
+      const { updatedPackages, missingPackages } =
+        await this.packageService.assignPackagesToUser(packages, currentUser);
+      const packagesRef = updatedPackages.map((pack) => {
+        return {
+          _id: pack._id,
+          client: {
+            fullName: pack.client.fullName,
+            address: `${pack.client.address.street} ${pack.client.address.number}, ${pack.client.address.city}, ${pack.client.address.state}, ${pack.client.address.country}`,
+          },
+          deliveryDate: pack.deliveryDate,
+          status: pack.status,
+        };
+      });
+      const { updatedUser, alreadyAssigned } =
+        await this.userService.assignPackagesToHistory(
+          currentUser,
+          packagesRef,
+        );
+
+      const errors = [...missingPackages, ...alreadyAssigned];
+
+      return { updatedUser, errors };
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
   }
 }

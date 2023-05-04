@@ -1,5 +1,6 @@
 import { IPackageRef } from '../../package/interface/package.interface';
 import { IFormApply } from '../../../common/modules/formApply/interface/form-apply.interface';
+import { User } from '../entities/user.entity';
 
 export interface IUser {
   _id: string;
@@ -22,4 +23,9 @@ export interface IUserRef {
   _id: string;
   email: string;
   fullName: string;
+}
+
+export interface assignPacakges {
+  updatedUser: User;
+  errors: string[];
 }
