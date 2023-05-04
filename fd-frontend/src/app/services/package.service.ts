@@ -17,10 +17,10 @@ export const getPackageById = async (_id: string): Promise<Package> => {
   }
 };
 
-export const getAllPackages = async (): Promise<Package[]> => {
+export const getAllPackages = async (date: string): Promise<Package[]> => {
   try {
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.get(`https://backend-buhubxjtrq-ue.a.run.app/package/`, {
+    const response: AxiosResponse = await axios.get(`https://backend-buhubxjtrq-ue.a.run.app/package?date=${date}`, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
@@ -68,6 +68,20 @@ export const createPackage = async (
       headers: { Authorization: idToken },
     });
     const packet: Package = response.data;
+    return packet;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const deletePackage = async (_id: string): Promise<string> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.delete(`https://backend-buhubxjtrq-ue.a.run.app/package/${_id}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const packet: string = response.data;
     return packet;
   } catch (error: unknown) {
     throw error;

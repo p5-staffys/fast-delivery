@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { startOfWeek, addDays, format } from "date-fns";
@@ -59,12 +59,25 @@ const settings = {
 
 const items = [...days];
 
-function DayList(): JSX.Element {
+type Props = {
+  handleDate: (date: string) => void;
+};
+
+function DayList({ handleDate }: Props): JSX.Element {
   const [selected, setSelected] = useState<number>(days.findIndex((day) => day.date === format(today, "d")));
 
   const handleSelect = (i: number): void => {
     setSelected(i);
+    const selectedDate = format(addDays(startOfCurrentWeek, i), "yyyy-MM-dd");
+    handleDate(selectedDate);
+    localStorage.setItem("selectedDate", selectedDate);
   };
+
+  useEffect(() => {
+    const date = format(today, "yyyy-MM-dd");
+    handleDate(date);
+    localStorage.setItem("selectedDate", date);
+  }, []);
 
   return (
     <Slider {...settings}>

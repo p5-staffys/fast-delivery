@@ -63,7 +63,7 @@ const Home = (): JSX.Element => {
         </Box>
         <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} sx={{ width: "90vw", m: "auto" }}>
           <TextField
-            id="standard-basic"
+            id="email"
             label="Usuario"
             variant="standard"
             fullWidth
@@ -74,7 +74,7 @@ const Home = (): JSX.Element => {
             onChange={handleEmail}
           />
           <TextField
-            id="standard-basic"
+            id="password"
             label="Contraseña"
             variant="standard"
             type={eye}
