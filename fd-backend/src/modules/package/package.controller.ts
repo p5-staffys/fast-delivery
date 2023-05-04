@@ -92,9 +92,13 @@ export class PackageController {
     @Query() queryPaginateDto: QueryPaginationDto,
     @Param('date') date: string,
   ): Promise<Package[]> {
-    //const { limit, page } = queryPaginateDto;
+    const { limit, page } = queryPaginateDto;
     const deliveryDate = new Date(date);
-    return await this.packageService.getPendingPackageByClient(deliveryDate);
+    return await this.packageService.getPendingPackageByClient(
+      deliveryDate,
+      limit,
+      page,
+    );
   }
 
   @Put(':_id/assign/')

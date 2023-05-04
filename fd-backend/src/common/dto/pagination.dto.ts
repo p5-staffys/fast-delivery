@@ -8,7 +8,7 @@ export class QueryPaginationDto {
   @Type(() => Number)
   @IsNumber()
   @Min(1)
-  @ApiProperty({ type: Number, required: false })
+  @ApiProperty({ type: Number, required: false, default: 1 })
   page?: number;
 
   @IsOptional()
@@ -16,6 +16,6 @@ export class QueryPaginationDto {
   @Type(() => Number)
   @IsNumber()
   @Min(1)
-  @ApiProperty({ type: Number, required: false })
+  @ApiProperty({ type: Number, required: false, default: 3 })
   limit?: number;
 }

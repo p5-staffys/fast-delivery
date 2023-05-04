@@ -26,7 +26,11 @@ export class PackageService {
     return await this.packageRepository.findPendingPackages(page, limit);
   }
 
-  async getPendingPackageByClient(deliveryDate: Date): Promise<Package[]> {
+  async getPendingPackageByClient(
+    deliveryDate: Date,
+    limit = 3,
+    page = 1,
+  ): Promise<Package[]> {
     const packages = await this.packageRepository.aggregate([
       {
         $match: {
@@ -38,8 +42,8 @@ export class PackageService {
       {
         $group: { _id: '$client', packages: { $addToSet: '$$ROOT' } },
       },
-      /*{ $skip: limit * page },
-      { $limit: 4 },*/
+      { $skip: limit * (page - 1) },
+      { $limit: 4 },
     ]);
     return packages;
   }
