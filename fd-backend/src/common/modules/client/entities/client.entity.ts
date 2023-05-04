@@ -21,3 +21,16 @@ export class Client {
 }
 
 export const ClientSchema = SchemaFactory.createForClass(Client);
+
+export type ClientRefDocument = HydratedDocument<ClientRef>;
+
+@Schema({ _id: false })
+export class ClientRef {
+  @Prop({ required: true, type: String })
+  fullName: string;
+
+  @Prop({ required: true, type: String })
+  address: string;
+}
+
+export const ClientRefSchema = SchemaFactory.createForClass(ClientRef);

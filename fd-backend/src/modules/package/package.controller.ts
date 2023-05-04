@@ -34,11 +34,18 @@ import {
 } from '../user/interceptors/current-user.interceptor';
 import { AdminGuard } from '../../common/guards/admin.guard';
 import { QueryPaginationWithDateAndStatusDto } from './dto/pagination-status-date.dto';
+import { IUserRef } from '../user/interfaces/user.interface';
+import { IPackageRef } from './interface/package.interface';
+import { UserService } from '../user/user.service';
+import { IClientRef } from 'src/common/modules/client/interface/client.interface';
 
 @ApiTags('Package')
 @Controller()
 export class PackageController {
-  constructor(private readonly packageService: PackageService) {}
+  constructor(
+    private readonly packageService: PackageService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
   @ApiBearerAuth('idToken')
@@ -79,7 +86,46 @@ export class PackageController {
     @Param('_id', ValidateMongoId) _id: Types.ObjectId,
     @Req() { currentUser }: CurrentUserRequest,
   ): Promise<Package> {
-    return await this.packageService.assignToUser(_id, currentUser);
+    /*const form = await this.userRepository.foundUserAndValidateForm(user._id);
+    if (!form)
+      throw new BadRequestException(
+        'No hiciste tu formulario de hoy, tenes que hacerlo para poder continuar',
+      );
+
+    const { bebidasAlcoholicas, medicamentosPsicoactivos, problemaEmocional } =
+      form.forms[form.forms.length - 1];
+
+    if (bebidasAlcoholicas || medicamentosPsicoactivos || problemaEmocional)
+      throw new BadRequestException(
+        'No cumplis los requisitos minimos para trabajar durante el dia de hoy, proba nuevamente en 24hs',
+      );*/
+    const deliveredBy: IUserRef = {
+      fullName: `${currentUser.name} ${currentUser.lastName}`,
+      _id: currentUser._id,
+      email: currentUser.email,
+    };
+
+    const updatePackage = await this.packageService.assignToUser(
+      _id,
+      deliveredBy,
+    );
+
+    const client: IClientRef = {
+      fullName: updatePackage.client.fullName,
+      address: `${updatePackage.client.address.street} ${updatePackage.client.address.number}, ${updatePackage.client.address.city}, ${updatePackage.client.address.state}, ${updatePackage.client.address.country}`,
+    };
+
+    const packageRef: IPackageRef = {
+      _id: updatePackage._id,
+      client,
+      deliveryDate: updatePackage.deliveryDate,
+      status: updatePackage.status,
+      quantity: updatePackage.quantity,
+    };
+
+    await this.userService.assignPackage(currentUser, packageRef);
+
+    return updatePackage;
   }
 
   @ApiOperation({ description: 'Get Package History by currentUser' })

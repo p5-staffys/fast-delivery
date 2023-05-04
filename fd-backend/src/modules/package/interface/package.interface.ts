@@ -1,12 +1,12 @@
-import { AddressDTO } from '../../../common/modules/address/dto/Address.dto';
-import { IClient } from '../../../common/modules/client/interface/client.interface';
+import { ObjectId } from 'mongoose';
+import { IClientRef } from '../../../common/modules/client/interface/client.interface';
 import { IUserRef } from '../../user/interfaces/user.interface';
 
 export interface IPackage {
   _id: string;
   weight: number;
   deliveredBy: IUserRef;
-  client: IClient;
+  client: IClientRef;
   deliveryDate: Date;
   deliveredOn: Date;
   status: PackageStatus;
@@ -14,8 +14,8 @@ export interface IPackage {
 }
 
 export interface IPackageRef {
-  _id: string;
-  address: AddressDTO;
+  _id: ObjectId;
+  client: IClientRef;
   deliveryDate: Date;
   status: PackageStatus;
   quantity: number;

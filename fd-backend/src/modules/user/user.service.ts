@@ -6,6 +6,8 @@ import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserRepository } from './repository/user.repository';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
+import { IPackageRef } from '../package/interface/package.interface';
+import { Document } from 'mongoose';
 
 @Injectable()
 export class UserService {
@@ -34,7 +36,7 @@ export class UserService {
     return this.userRepository.findOneByIdAndDelete(_id);
   }
 
-  async findById(_id: string): Promise<User> {
+  async findById(_id: string) {
     return this.userRepository.findOneById(_id);
   }
 
@@ -83,5 +85,26 @@ export class UserService {
 
   async countUsers() {
     return this.userRepository.findAndCountOrFail({});
+  }
+
+  async assignPackage(
+    user: Document<unknown, User> &
+      Omit<
+        User &
+          Required<{
+            _id: string;
+          }>,
+        never
+      >,
+    packageRef: IPackageRef,
+  ) {
+    const checkRepeted = user.packages.find(
+      (pack) => pack._id == packageRef._id,
+    );
+
+    if (checkRepeted) throw 'Este paquete ya está asignado a este usuario';
+    user.packages = [...user.packages, packageRef];
+    const updateUser = await user.save();
+    return updateUser;
   }
 }
