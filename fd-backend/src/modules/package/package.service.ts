@@ -43,7 +43,7 @@ export class PackageService {
         $group: { _id: '$client', packages: { $addToSet: '$$ROOT' } },
       },
       { $skip: limit * (page - 1) },
-      { $limit: 4 },
+      { $limit: limit },
     ]);
     return packages;
   }
