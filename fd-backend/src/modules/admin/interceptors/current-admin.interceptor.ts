@@ -6,9 +6,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { IAdmin } from '../interfaces/admin.interface';
 import { AdminService } from '../admin.service';
 import { AuthService } from '../../../common/modules/firebase/auth.service';
+import { AdminDocument } from '../entities/admin.entity';
 
 @Injectable()
 export class CurrentAdminInterceptor implements NestInterceptor {
@@ -35,5 +35,5 @@ export class CurrentAdminInterceptor implements NestInterceptor {
 }
 
 export interface CurrentAdminRequest extends Request {
-  currentAdmin?: IAdmin;
+  currentAdmin?: AdminDocument;
 }

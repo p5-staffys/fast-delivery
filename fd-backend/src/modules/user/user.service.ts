@@ -151,19 +151,21 @@ export class UserService {
     _id: Types.ObjectId,
     user: UserDocument,
   ): Promise<UserDocument> {
-    user.packages = user.packages.filter((pack) => pack._id != _id);
+    user.packages = user.packages.filter(
+      (pack) => pack._id.toString() != _id.toString(),
+    );
     await user.save();
     return user;
   }
 
   async changePackageRefStatus(
     user: UserDocument,
-    packages: Types.ObjectId[],
+    packagesIds: Types.ObjectId[],
     status: PackageStatus,
   ) {
     for (let i = 0; i < user.packages.length; i++) {
-      for (let j = 0; j < packages.length; j++) {
-        if (user.packages[i]._id == packages[j])
+      for (let j = 0; j < packagesIds.length; j++) {
+        if (user.packages[i]._id.toString() == packagesIds[j].toString())
           user.packages[i].status = status;
       }
     }
