@@ -89,6 +89,7 @@ export class PackageService {
       fullName: `${currentUser.name} ${currentUser.lastName}`,
       _id: currentUser._id,
       email: currentUser.email,
+      avatar: currentUser.avatar,
     };
     const updatedPackages = [];
     const missingPackages = [];

@@ -16,6 +16,7 @@ export interface IUser {
   rating: number;
   packages: IPackageRef[];
   forms: IFormDB[];
+  avatar: string;
 }
 
 export enum UserStatus {
@@ -27,6 +28,7 @@ export interface IUserRef {
   _id: string;
   email: string;
   fullName: string;
+  avatar: string;
 }
 
 export interface IAssignPacakges {

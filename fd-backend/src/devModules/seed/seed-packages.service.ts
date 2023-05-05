@@ -24,22 +24,8 @@ export class SeedPackagesService {
       _id: 'tAOHWYOyM8ZsgELhvLxvnaauKqf2',
       fullName: 'admin admin',
       email: 'admin@admin.com',
+      avatar: '',
     };
-    /* const userA = {
-      _id: 'AxUd8B5XTvb66tzpDZaRrXPVzDH3',
-      fullName: 'Francisco Alvarez Raineri',
-      email: 'franciscoalvarezraineri@gmail.com',
-    };
-    const userB = {
-      _id: 'BNfnN82tepaHviOmnzXyfROWNAi2',
-      fullName: 'Pablo Burgos',
-      email: 'pablo@gmail.com ',
-    };
-    const userC = {
-      _id: 'CCs3cBEwGXcYNwKvTfBB49nFTfG2',
-      fullName: 'German Rivarola',
-      email: 'german@gmail.com',
-    };*/
     const clientA = {
       fullName: 'Cliente A',
       address: {

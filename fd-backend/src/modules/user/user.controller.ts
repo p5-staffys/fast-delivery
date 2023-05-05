@@ -204,6 +204,7 @@ export class UserController {
         fullName: `${updatedUser.name} ${updatedUser.lastName}`,
         _id: updatedUser._id,
         email: updatedUser.email,
+        avatar: updatedUser.avatar,
       };
       await this.userLogsService.recordUser(date, userRef);
       return {
