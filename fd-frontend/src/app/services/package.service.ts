@@ -2,11 +2,12 @@ import axios, { AxiosResponse } from "axios";
 import { Client, Package, PackageCreate } from "../../utils/interfaces/package.interfaces";
 
 const googleMapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
+const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "";
 
 export const getPackageById = async (_id: string): Promise<Package> => {
   try {
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.get(`https://backend-buhubxjtrq-ue.a.run.app/package/${_id}`, {
+    const response: AxiosResponse = await axios.get(`${path}/package/${_id}`, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
@@ -20,7 +21,7 @@ export const getPackageById = async (_id: string): Promise<Package> => {
 export const getAllPackages = async (date: string): Promise<Package[]> => {
   try {
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.get(`https://backend-buhubxjtrq-ue.a.run.app/package?date=${date}`, {
+    const response: AxiosResponse = await axios.get(`${path}/package?date=${date}`, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
@@ -63,7 +64,7 @@ export const createPackage = async (
     };
 
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.post("https://backend-buhubxjtrq-ue.a.run.app/package/", newPackage, {
+    const response: AxiosResponse = await axios.post(`${path}/package/`, newPackage, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
@@ -77,7 +78,7 @@ export const createPackage = async (
 export const deletePackage = async (_id: string): Promise<string> => {
   try {
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.delete(`https://backend-buhubxjtrq-ue.a.run.app/package/${_id}`, {
+    const response: AxiosResponse = await axios.delete(`${path}/package/${_id}`, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
