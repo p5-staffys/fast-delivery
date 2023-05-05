@@ -37,8 +37,9 @@ import { User } from './entities/user.entity';
 import { GeneralError } from '../../common/error-handlers/exceptions';
 import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
 import {
-  assignPacakges,
-  deliverPackages,
+  IAddForm,
+  IAssignPacakges,
+  IDeliverPackages,
   IUserRef,
 } from './interfaces/user.interface';
 import { Types } from 'mongoose';
@@ -172,21 +173,41 @@ export class UserController {
   @UseInterceptors(CurrentUserInterceptor)
   @Post('/addForm')
   async addForm(
-    @Body() form: FormAplyDto,
+    @Body() formAply: FormAplyDto,
     @Req() { currentUser }: CurrentUserRequest,
-  ): Promise<User> {
+  ): Promise<IAddForm> {
     try {
-      const updatedUser = await this.userService.addForm(currentUser._id, form);
-      const date = updatedUser.forms[updatedUser.forms.length - 1].createdAt
-        .toJSON()
-        .split('T')[0];
+      const date = new Date(formAply.date);
+      const checkForm = await this.userService.checkForm24h(currentUser, date);
+      if (!checkForm)
+        return {
+          ok: false,
+          message: 'El usuario ya tiene un formulario en las ultimas 24hs.',
+        };
+
+      const form = formAply.form;
+      const ok = await this.userService.checkForm(form);
+      const updatedUser = await this.userService.addForm(
+        currentUser,
+        form,
+        date,
+        ok,
+      );
+      if (!ok)
+        return {
+          ok: false,
+          message: 'Falló la validación del formulario, no puede trabajar hoy.',
+        };
       const userRef: IUserRef = {
         fullName: `${updatedUser.name} ${updatedUser.lastName}`,
         _id: updatedUser._id,
         email: updatedUser.email,
       };
       await this.userLogsService.recordUser(date, userRef);
-      return updatedUser;
+      return {
+        ok: true,
+        message: 'Aprobó la validación del formulario, puede trabajar hoy.',
+      };
     } catch (error: unknown) {
       throw new GeneralError(error);
     }
@@ -200,7 +221,7 @@ export class UserController {
   async assignToUser(
     @Req() { currentUser }: CurrentUserRequest,
     @Body() packages: Types.ObjectId[],
-  ): Promise<assignPacakges> {
+  ): Promise<IAssignPacakges> {
     try {
       const { updatedPackages, missingPackages } =
         await this.packageService.assignPackagesToUser(packages, currentUser);
@@ -237,7 +258,7 @@ export class UserController {
   async delivered(
     @Req() { currentUser }: CurrentUserRequest,
     @Body() packages: Types.ObjectId[],
-  ): Promise<deliverPackages> {
+  ): Promise<IDeliverPackages> {
     try {
       const updatedPackages = await this.packageService.deliverPackages(
         packages,

@@ -9,7 +9,7 @@ import {
 import { IUser } from '../interfaces/user.interface';
 import { IPackageRef } from '../../package/interface/package.interface';
 import { UserStatus } from '../interfaces/user.interface';
-import { IFormApply } from '../../../common/modules/formApply/interface/form-apply.interface';
+import { IFormDB } from '../../../common/modules/formApply/interface/form-apply.interface';
 
 export class ReponseUserDto implements Partial<IUser> {
   @IsNotEmpty()
@@ -46,5 +46,5 @@ export class ReponseUserDto implements Partial<IUser> {
 
   @IsNotEmpty()
   @IsArray()
-  forms: IFormApply[];
+  forms: IFormDB[];
 }

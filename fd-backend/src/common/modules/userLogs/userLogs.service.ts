@@ -7,8 +7,7 @@ import { UserLogsRepository } from './repository/userLogs.repository';
 export class UserLogsService {
   constructor(private readonly userLogsRepository: UserLogsRepository) {}
 
-  async recordUser(stringDate: string, user: IUserRef) {
-    const date = new Date(stringDate);
+  async recordUser(date: Date, user: IUserRef) {
     const logEntry = await this.userLogsRepository.findOrCreate({ date });
     logEntry.activeUsers = [...logEntry.activeUsers, user];
     await logEntry.save();
