@@ -33,13 +33,13 @@ import {
 } from '@nestjs/swagger';
 import { Public } from '../../common/guards/auth.guard';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
-import { User } from './entities/user.entity';
 import { GeneralError } from '../../common/error-handlers/exceptions';
 import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
 import {
   IAddForm,
   IAssignPacakges,
   IDeliverPackages,
+  IUnassignPackage,
   IUserRef,
 } from './interfaces/user.interface';
 import { Types } from 'mongoose';
@@ -159,12 +159,14 @@ export class UserController {
   async deleteFromHistory(
     @Param('_id') _id: Types.ObjectId,
     @Req() { currentUser }: CurrentUserRequest,
-  ): Promise<User> {
+  ): Promise<IUnassignPackage> {
     const updatedUser = await this.userService.deteleteFromHistory(
       _id,
       currentUser,
     );
-    return updatedUser;
+    const updatedPacakge = await this.packageService.unassignFromUser(_id);
+
+    return { updatedUser, updatedPacakge };
   }
 
   @ApiOperation({ description: 'Agregar el formulario al usuario logueado.' })
