@@ -9,6 +9,8 @@ import {
   UseInterceptors,
   HttpStatus,
   Headers,
+  Param,
+  Put,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -27,13 +29,21 @@ import {
   ApiTags,
   ApiOperation,
   ApiResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 import { Public } from '../../common/guards/auth.guard';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import { User } from './entities/user.entity';
 import { GeneralError } from '../../common/error-handlers/exceptions';
 import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
-import { IUserRef } from './interfaces/user.interface';
+import {
+  assignPacakges,
+  deliverPackages,
+  IUserRef,
+} from './interfaces/user.interface';
+import { Types } from 'mongoose';
+import { PackageService } from '../package/package.service';
+import { PackageStatus } from '../package/interface/package.interface';
 
 @ApiTags('User')
 @Controller()
@@ -42,6 +52,7 @@ export class UserController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly userLogsService: UserLogsService,
+    private readonly packageService: PackageService,
   ) {}
 
   @ApiOperation({ description: 'Crear nuevo usuario en la DB' })
@@ -78,7 +89,7 @@ export class UserController {
     return currentUser;
   }
 
-  @ApiOperation({ description: 'Autenticar el usuario logueado' })
+  @ApiOperation({ description: 'Autenticar el usuario logueado.' })
   @ApiBearerAuth('idToken')
   @ApiResponse({
     status: 200,
@@ -96,7 +107,7 @@ export class UserController {
     }
   }
 
-  @ApiOperation({ description: 'Borrar el usuario logueado' })
+  @ApiOperation({ description: 'Borrar el usuario logueado.' })
   @ApiBearerAuth('idToken')
   @ApiResponse({
     status: 200,
@@ -114,7 +125,7 @@ export class UserController {
     }
   }
 
-  @ApiOperation({ description: 'Atualizar los datos del usuario logueado' })
+  @ApiOperation({ description: 'Atualizar los datos del usuario logueado.' })
   @ApiBearerAuth('idToken')
   @ApiBody({ type: UpdateUserDto })
   @ApiResponse({
@@ -136,7 +147,26 @@ export class UserController {
     }
   }
 
-  @ApiOperation({ description: 'Agrega el formulario al usuario logueado' })
+  @ApiOperation({
+    description:
+      'Borrar el paquete pasado por Id del historial del usuario logueado.',
+  })
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @UseInterceptors(CurrentUserInterceptor)
+  @Delete('package/:_id')
+  async deleteFromHistory(
+    @Param('_id') _id: Types.ObjectId,
+    @Req() { currentUser }: CurrentUserRequest,
+  ): Promise<User> {
+    const updatedUser = await this.userService.deteleteFromHistory(
+      _id,
+      currentUser,
+    );
+    return updatedUser;
+  }
+
+  @ApiOperation({ description: 'Agregar el formulario al usuario logueado.' })
   @ApiBearerAuth('idToken')
   @ApiBody({ type: FormAplyDto })
   @UseInterceptors(CurrentUserInterceptor)
@@ -157,6 +187,68 @@ export class UserController {
       };
       await this.userLogsService.recordUser(date, userRef);
       return updatedUser;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
+  }
+
+  @ApiOperation({ description: 'Agregar paquetes al usuario logueado.' })
+  @ApiBearerAuth('idToken')
+  @ApiBody({ type: Array, description: 'Array de Ids de paquetes' })
+  @UseInterceptors(CurrentUserInterceptor)
+  @Put('package/assign')
+  async assignToUser(
+    @Req() { currentUser }: CurrentUserRequest,
+    @Body() packages: Types.ObjectId[],
+  ): Promise<assignPacakges> {
+    try {
+      const { updatedPackages, missingPackages } =
+        await this.packageService.assignPackagesToUser(packages, currentUser);
+      const packagesRef = updatedPackages.map((pack) => {
+        return {
+          _id: pack._id,
+          client: {
+            fullName: pack.client.fullName,
+            address: `${pack.client.address.street} ${pack.client.address.number}, ${pack.client.address.city}, ${pack.client.address.state}, ${pack.client.address.country}`,
+          },
+          deliveryDate: pack.deliveryDate,
+          status: pack.status,
+        };
+      });
+      const { updatedUser, alreadyAssigned } =
+        await this.userService.assignPackagesToHistory(
+          currentUser,
+          packagesRef,
+        );
+
+      const errors = [...missingPackages, ...alreadyAssigned];
+
+      return { updatedUser, errors };
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
+  }
+
+  @ApiOperation({ description: 'Marcar paquetes como entregados.' })
+  @ApiBearerAuth('idToken')
+  @ApiBody({ type: Array, description: 'Array de Ids de paquetes entregados.' })
+  @UseInterceptors(CurrentUserInterceptor)
+  @Put('package/delivered')
+  async delivered(
+    @Req() { currentUser }: CurrentUserRequest,
+    @Body() packages: Types.ObjectId[],
+  ): Promise<deliverPackages> {
+    try {
+      const updatedPackages = await this.packageService.deliverPackages(
+        packages,
+      );
+      const updatedUser = await this.userService.changePackageRefStatus(
+        currentUser,
+        packages,
+        PackageStatus.Delivered,
+      );
+
+      return { updatedUser, updatedPackages };
     } catch (error: unknown) {
       throw new GeneralError(error);
     }

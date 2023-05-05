@@ -36,6 +36,8 @@ import { IAdmin } from './interfaces/admin.interface';
 import { AdminGuard } from '../../common/guards/admin.guard';
 import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
 import { PackageService } from '../package/package.service';
+import { CreatePackageDto } from '../package/dto/create-package.dto';
+import { Package } from '../package/entities/package.entity';
 
 @ApiTags('Admin')
 @UseGuards(AdminGuard)
@@ -206,4 +208,73 @@ export class AdminController {
       throw new GeneralError(error);
     }
   }
+
+  @ApiBearerAuth('idToken')
+  @ApiResponse({
+    status: 201,
+    // type: dto de rta,
+  })
+  @ApiBody({ type: [CreatePackageDto] })
+  @ApiOperation({ description: 'Create package' })
+  @UseGuards(AdminGuard)
+  @UseInterceptors(CurrentAdminInterceptor)
+  @Post('package')
+  async createPackage(
+    @Body() body: CreatePackageDto[],
+    @Req() { currentAdmin }: CurrentAdminRequest,
+  ): Promise<Package[]> {
+    try {
+      const createdBy = {
+        fullName: `${currentAdmin.name} ${currentAdmin.lastName}`,
+        _id: currentAdmin._id,
+        email: currentAdmin.email,
+      };
+      const newPackage = body.map((pack) => {
+        return {
+          ...pack,
+          createdBy,
+        };
+      });
+      const createdPackage = await this.packageService.createMany(newPackage);
+      return createdPackage;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
+  }
+
+  // TERMINAR ESTA RUTA!
+  /*
+  @Put('package/:_id/assignToUser/')
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'EndPoint to assing package to currentUser' })
+  @ApiParam({ name: '_id', required: true, type: String })
+  @UseInterceptors(CurrentUserInterceptor)
+  async assignToUser(
+    @Param('_id') _id: Types.ObjectId,
+    @Req() { currentUser }: CurrentUserRequest,
+  ): Promise<Package> {
+    const deliveredBy: IUserRef = {
+      fullName: `${currentUser.name} ${currentUser.lastName}`,
+      _id: currentUser._id,
+      email: currentUser.email,
+    };
+    const updatePackage = await this.packageService.assignToUser(
+      _id,
+      deliveredBy,
+    );
+
+    const client: IClientRef = {
+      fullName: updatePackage.client.fullName,
+      address: `${updatePackage.client.address.street} ${updatePackage.client.address.number}, ${updatePackage.client.address.city}, ${updatePackage.client.address.state}, ${updatePackage.client.address.country}`,
+    };
+    const packageRef: IPackageRef = {
+      _id: updatePackage._id,
+      client,
+      deliveryDate: updatePackage.deliveryDate,
+      status: updatePackage.status,
+    };
+
+    await this.userService.assignPackage(currentUser, packageRef);
+    return updatePackage;
+  }*/
 }

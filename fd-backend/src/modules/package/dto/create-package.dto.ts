@@ -35,10 +35,4 @@ export class CreatePackageDto {
   @AutoMap()
   @ApiProperty({ type: Date, example: '2022-03-04' })
   deliveryDate: Date;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @AutoMap()
-  @ApiProperty({ type: Number, example: 1 })
-  quantity: number;
 }

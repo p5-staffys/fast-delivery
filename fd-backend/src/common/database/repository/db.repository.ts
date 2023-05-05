@@ -68,7 +68,13 @@ export abstract class EntityRepository<T extends Document> {
 
   createEntity = async (createEntityData: unknown): Promise<T> => {
     const entity = new this.entityModel(createEntityData);
-    return await entity.save();
+    await entity.save();
+    return entity;
+  };
+
+  createEntities = async (createEntitiesData: unknown[]): Promise<T[]> => {
+    const entities = this.entityModel.create(createEntitiesData);
+    return entities;
   };
 
   findOrCreate = async (

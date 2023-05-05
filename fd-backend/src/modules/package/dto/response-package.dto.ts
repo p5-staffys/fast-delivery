@@ -6,7 +6,6 @@ type arrResponsePackageDto = keyof CreatePackageDto;
 export const arrResponsePackage: arrResponsePackageDto[] = [
   'client',
   'deliveryDate',
-  'quantity',
   'weight',
 ];
 

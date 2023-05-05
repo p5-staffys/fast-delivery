@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { PipelineStage, Types } from 'mongoose';
+import { Types, PipelineStage } from 'mongoose';
 import { Model } from '../../../common/database/softdelete/softDelete.interface';
 import { EntityRepository } from '../../../common/database/repository/db.repository';
 import { Package, PackageDocument } from '../entities/package.entity';
@@ -18,7 +18,7 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
   async findPendingPackages(page?: number, limit?: number): Promise<Package[]> {
     return await this.find(
       {
-        status: { $in: [PackageStatus.New, PackageStatus.Pending] },
+        status: PackageStatus.Pending,
         deliveredBy: null,
       },
       page,
@@ -26,8 +26,8 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
     );
   }
 
-  async getPackageById(_id: Types.ObjectId): Promise<Package> {
-    return await this.findOne({ _id });
+  async getPackageById(_id: Types.ObjectId) {
+    return await this.findById(_id);
   }
 
   async findPendingPackageById(_id: Types.ObjectId): Promise<Package> {
@@ -35,7 +35,7 @@ export class PackageRepository extends EntityRepository<PackageDocument> {
       $and: [
         { _id },
         {
-          status: { $in: [PackageStatus.New, PackageStatus.Pending] },
+          status: PackageStatus.Pending,
         },
         {
           deliveredBy: { $eq: null },

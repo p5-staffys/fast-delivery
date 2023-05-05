@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Document } from 'mongoose';
 
 import { CreatePackageDto } from './dto/create-package.dto';
 import { Package } from './entities/package.entity';
@@ -6,6 +7,7 @@ import { Package } from './entities/package.entity';
 import { PackageRepository } from './repository/package.repository';
 import { Types } from 'mongoose';
 import { IUser, IUserRef } from '../user/interfaces/user.interface';
+import { User } from '../user/entities/user.entity';
 import { IPackageQuery, PackageStatus } from './interface/package.interface';
 
 @Injectable()
@@ -13,21 +15,46 @@ export class PackageService {
   constructor(private readonly packageRepository: PackageRepository) {}
 
   async create(newPackage: CreatePackageDto): Promise<Package> {
-    return await this.packageRepository.createEntity(newPackage);
+    const pack = await this.packageRepository.createEntity(newPackage);
+    return pack;
+  }
+
+  async createMany(newPackages: CreatePackageDto[]) {
+    const packages = await this.packageRepository.createEntities(newPackages);
+    return packages;
   }
 
   async getPendingPackage(page?: number, limit?: number): Promise<Package[]> {
     return await this.packageRepository.findPendingPackages(page, limit);
   }
 
-  async getById(_id: Types.ObjectId): Promise<Package> {
+  async getPendingPackageByClient(
+    deliveryDate: Date,
+    limit = 3,
+    page = 1,
+  ): Promise<Package[]> {
+    const packages = await this.packageRepository.aggregate([
+      {
+        $match: {
+          status: PackageStatus.Pending,
+          deliveredBy: null,
+          deliveryDate,
+        },
+      },
+      {
+        $group: { _id: '$client', packages: { $addToSet: '$$ROOT' } },
+      },
+      { $skip: limit * (page - 1) },
+      { $limit: limit },
+    ]);
+    return packages;
+  }
+
+  async getById(_id: Types.ObjectId) {
     return await this.packageRepository.getPackageById(_id);
   }
 
-  async assignToUser(
-    _id: Types.ObjectId,
-    deliveredBy: IUserRef,
-  ): Promise<Package> {
+  async assignToUser(_id: Types.ObjectId, deliveredBy: IUserRef) {
     const updatePack = {
       deliveredBy,
       status: PackageStatus.Delivering,
@@ -35,7 +62,7 @@ export class PackageService {
 
     const actualPackageFilter = {
       _id,
-      status: { $in: [PackageStatus.New, PackageStatus.Pending] },
+      status: PackageStatus.Pending,
       deliveredBy: null,
     };
 
@@ -45,6 +72,43 @@ export class PackageService {
       null,
       'Package ID o Status invalido, solo puede ser "new" o "pending" y no tener ningun repartidor asignado',
     );
+  }
+
+  async assignPackagesToUser(
+    packages: Types.ObjectId[],
+    currentUser: Document<unknown, User> &
+      Omit<
+        User &
+          Required<{
+            _id: string;
+          }>,
+        never
+      >,
+  ) {
+    const deliveredBy: IUserRef = {
+      fullName: `${currentUser.name} ${currentUser.lastName}`,
+      _id: currentUser._id,
+      email: currentUser.email,
+    };
+    const updatedPackages = [];
+    const missingPackages = [];
+    for (let i = 0; i < packages.length; i++) {
+      const pack = await this.packageRepository.findById(packages[i]);
+      if (!pack) {
+        missingPackages.push(`El paquete ${packages[i]} no existe.`);
+      } else {
+        if (pack.deliveredBy) {
+          missingPackages.push(`El paquete  ${packages[i]}  ya fue asignado.`);
+        } else {
+          pack.deliveredBy = deliveredBy;
+          pack.status = PackageStatus.Delivering;
+          pack.save();
+          updatedPackages.push(pack);
+        }
+      }
+    }
+
+    return { updatedPackages, missingPackages };
   }
 
   async unassignFromUser(_id: string) {
@@ -72,6 +136,18 @@ export class PackageService {
       null,
       `ID o Status invalido, solo puede ser "${PackageStatus.Delivering}"`,
     );
+  }
+
+  async deliverPackages(packages: Types.ObjectId[]): Promise<Package[]> {
+    const updatedPacakges: Package[] = [];
+    for (let i = 0; i < packages.length; i++) {
+      const pack = await this.packageRepository.findById(packages[i]);
+      if (!pack) throw `El paquete ${packages[i]} no existe.`;
+      pack.status = PackageStatus.Delivered;
+      await pack.save();
+      updatedPacakges.push(pack);
+    }
+    return updatedPacakges;
   }
 
   async getPackageHistory(

@@ -1,28 +1,28 @@
-import { ObjectId } from 'mongoose';
-import { IClientRef } from '../../../common/modules/client/interface/client.interface';
+import { Types } from 'mongoose';
+import {
+  IClientRef,
+  IClient,
+} from '../../../common/modules/client/interface/client.interface';
 import { IUserRef } from '../../user/interfaces/user.interface';
 
 export interface IPackage {
   _id: string;
   weight: number;
   deliveredBy: IUserRef;
-  client: IClientRef;
+  client: IClient;
   deliveryDate: Date;
   deliveredOn: Date;
   status: PackageStatus;
-  quantity: number;
 }
 
 export interface IPackageRef {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   client: IClientRef;
   deliveryDate: Date;
   status: PackageStatus;
-  quantity: number;
 }
 
 export enum PackageStatus {
-  New = 'new',
   Pending = 'pending',
   Delivering = 'delivering',
   Delivered = 'delivered',
