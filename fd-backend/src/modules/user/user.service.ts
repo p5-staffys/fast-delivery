@@ -6,7 +6,10 @@ import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserRepository } from './repository/user.repository';
 import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
-import { IPackageRef } from '../package/interface/package.interface';
+import {
+  IPackageRef,
+  PackageStatus,
+} from '../package/interface/package.interface';
 import { Document, Types } from 'mongoose';
 
 @Injectable()
@@ -124,7 +127,7 @@ export class UserService {
       >,
     packageRef: IPackageRef[],
   ) {
-    const packages = [];
+    const packages: IPackageRef[] = [];
     const alreadyAssigned = [];
 
     for (let i = 0; i < packageRef.length; i++) {
@@ -140,7 +143,7 @@ export class UserService {
       }
     }
 
-    user.packages = packages;
+    user.packages = [...user.packages, ...packages];
     const updatedUser = await user.save();
     return { updatedUser, alreadyAssigned };
   }
@@ -158,6 +161,28 @@ export class UserService {
   ): Promise<User> {
     user.packages = user.packages.filter((pack) => pack._id != _id);
     await user.save();
+    return user;
+  }
+
+  async changePackageRefStatus(
+    user: Document<unknown, User> &
+      Omit<
+        User &
+          Required<{
+            _id: string;
+          }>,
+        never
+      >,
+    packages: Types.ObjectId[],
+    status: PackageStatus,
+  ) {
+    for (let i = 0; i < user.packages.length; i++) {
+      for (let j = 0; j < packages.length; j++) {
+        if (user.packages[i]._id == packages[j])
+          user.packages[i].status = status;
+      }
+    }
+    user.save();
     return user;
   }
 }

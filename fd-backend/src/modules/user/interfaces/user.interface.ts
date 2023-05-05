@@ -1,6 +1,7 @@
 import { IPackageRef } from '../../package/interface/package.interface';
 import { IFormApply } from '../../../common/modules/formApply/interface/form-apply.interface';
 import { User } from '../entities/user.entity';
+import { Package } from 'src/modules/package/entities/package.entity';
 
 export interface IUser {
   _id: string;
@@ -28,4 +29,9 @@ export interface IUserRef {
 export interface assignPacakges {
   updatedUser: User;
   errors: string[];
+}
+
+export interface deliverPackages {
+  updatedUser: User;
+  updatedPackages: Package[];
 }

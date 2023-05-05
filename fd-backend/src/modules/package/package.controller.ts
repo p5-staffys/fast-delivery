@@ -63,12 +63,12 @@ export class PackageController {
     return await this.packageService.getPendingPackage(page, limit);
   }*/
 
-  @Get('pending/:date')
-  @ApiBearerAuth('idToken')
   @ApiOperation({
     description: 'Package are wating for taken but dont have any delivery ',
   })
+  @ApiBearerAuth('idToken')
   @ApiParam({ name: 'date', required: true, type: String })
+  @Get('pending/:date')
   async getPendingPackageByClient(
     @Query() queryPaginateDto: QueryPaginationDto,
     @Param('date') date: string,
@@ -177,20 +177,20 @@ export class PackageController {
     return this.packageService.deleteFromHistory(_id, currentUser);
   }*/
 
-  @Delete(':_id')
+  @ApiOperation({ description: 'Delete package by admin' })
   @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
-  @ApiOperation({ description: 'Delete package by admin' })
   @UseGuards(AdminGuard)
+  @Delete(':_id')
   async deletePackage(@Param('_id', ValidateMongoId) _id): Promise<string> {
     await this.packageService.deletePackage(_id);
     return 'Package deleted';
   }
 
-  @Get()
-  @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'Get Package by date' })
+  @ApiBearerAuth('idToken')
   @UseGuards(AdminGuard)
+  @Get()
   async getPackage(
     @Query() queryParams: QueryPaginationWithDateAndStatusDto,
   ): Promise<Package[]> {

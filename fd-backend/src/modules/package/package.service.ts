@@ -92,7 +92,6 @@ export class PackageService {
     };
     const updatedPackages = [];
     const missingPackages = [];
-
     for (let i = 0; i < packages.length; i++) {
       const pack = await this.packageRepository.findById(packages[i]);
       if (!pack) {
@@ -137,6 +136,18 @@ export class PackageService {
       null,
       `ID o Status invalido, solo puede ser "${PackageStatus.Delivering}"`,
     );
+  }
+
+  async deliverPackages(packages: Types.ObjectId[]): Promise<Package[]> {
+    const updatedPacakges: Package[] = [];
+    for (let i = 0; i < packages.length; i++) {
+      const pack = await this.packageRepository.findById(packages[i]);
+      if (!pack) throw `El paquete ${packages[i]} no existe.`;
+      pack.status = PackageStatus.Delivered;
+      await pack.save();
+      updatedPacakges.push(pack);
+    }
+    return updatedPacakges;
   }
 
   async getPackageHistory(

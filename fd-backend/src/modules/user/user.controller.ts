@@ -36,9 +36,14 @@ import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import { User } from './entities/user.entity';
 import { GeneralError } from '../../common/error-handlers/exceptions';
 import { UserLogsService } from '../../common/modules/userLogs/userLogs.service';
-import { assignPacakges, IUserRef } from './interfaces/user.interface';
+import {
+  assignPacakges,
+  deliverPackages,
+  IUserRef,
+} from './interfaces/user.interface';
 import { Types } from 'mongoose';
 import { PackageService } from '../package/package.service';
+import { PackageStatus } from '../package/interface/package.interface';
 
 @ApiTags('User')
 @Controller()
@@ -84,7 +89,7 @@ export class UserController {
     return currentUser;
   }
 
-  @ApiOperation({ description: 'Autenticar el usuario logueado' })
+  @ApiOperation({ description: 'Autenticar el usuario logueado.' })
   @ApiBearerAuth('idToken')
   @ApiResponse({
     status: 200,
@@ -102,7 +107,7 @@ export class UserController {
     }
   }
 
-  @ApiOperation({ description: 'Borrar el usuario logueado' })
+  @ApiOperation({ description: 'Borrar el usuario logueado.' })
   @ApiBearerAuth('idToken')
   @ApiResponse({
     status: 200,
@@ -120,7 +125,7 @@ export class UserController {
     }
   }
 
-  @ApiOperation({ description: 'Atualizar los datos del usuario logueado' })
+  @ApiOperation({ description: 'Atualizar los datos del usuario logueado.' })
   @ApiBearerAuth('idToken')
   @ApiBody({ type: UpdateUserDto })
   @ApiResponse({
@@ -142,9 +147,12 @@ export class UserController {
     }
   }
 
+  @ApiOperation({
+    description:
+      'Borrar el paquete pasado por Id del historial del usuario logueado.',
+  })
   @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
-  @ApiOperation({ description: 'Delete package from history' })
   @UseInterceptors(CurrentUserInterceptor)
   @Delete('package/:_id')
   async deleteFromHistory(
@@ -158,7 +166,7 @@ export class UserController {
     return updatedUser;
   }
 
-  @ApiOperation({ description: 'Agrega el formulario al usuario logueado' })
+  @ApiOperation({ description: 'Agregar el formulario al usuario logueado.' })
   @ApiBearerAuth('idToken')
   @ApiBody({ type: FormAplyDto })
   @UseInterceptors(CurrentUserInterceptor)
@@ -184,11 +192,11 @@ export class UserController {
     }
   }
 
-  @Put('package/assign')
+  @ApiOperation({ description: 'Agregar paquetes al usuario logueado.' })
   @ApiBearerAuth('idToken')
-  @ApiOperation({ description: 'Agrega paquetes al usuario logueado.' })
   @ApiBody({ type: Array, description: 'Array de Ids de paquetes' })
   @UseInterceptors(CurrentUserInterceptor)
+  @Put('package/assign')
   async assignToUser(
     @Req() { currentUser }: CurrentUserRequest,
     @Body() packages: Types.ObjectId[],
@@ -216,6 +224,31 @@ export class UserController {
       const errors = [...missingPackages, ...alreadyAssigned];
 
       return { updatedUser, errors };
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
+  }
+
+  @ApiOperation({ description: 'Marcar paquetes como entregados.' })
+  @ApiBearerAuth('idToken')
+  @ApiBody({ type: Array, description: 'Array de Ids de paquetes entregados.' })
+  @UseInterceptors(CurrentUserInterceptor)
+  @Put('package/delivered')
+  async delivered(
+    @Req() { currentUser }: CurrentUserRequest,
+    @Body() packages: Types.ObjectId[],
+  ): Promise<deliverPackages> {
+    try {
+      const updatedPackages = await this.packageService.deliverPackages(
+        packages,
+      );
+      const updatedUser = await this.userService.changePackageRefStatus(
+        currentUser,
+        packages,
+        PackageStatus.Delivered,
+      );
+
+      return { updatedUser, updatedPackages };
     } catch (error: unknown) {
       throw new GeneralError(error);
     }
