@@ -7,6 +7,10 @@ import {
   Package,
   PackageSchema,
 } from '../../modules/package/entities/package.entity';
+import {
+  UserLogs,
+  UserLogsSchema,
+} from '../../common/modules/userLogs/entities/userLogs.entities';
 import { SeedController } from './seed.controller';
 import { SeedUsersService } from './seed-users.service';
 import { SeedPackagesService } from './seed-packages.service';
@@ -30,6 +34,12 @@ import { SeedPackagesService } from './seed-packages.service';
       {
         name: Package.name,
         schema: PackageSchema,
+      },
+    ]),
+    MongooseModule.forFeature([
+      {
+        name: UserLogs.name,
+        schema: UserLogsSchema,
       },
     ]),
   ],

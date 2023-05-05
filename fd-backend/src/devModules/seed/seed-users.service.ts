@@ -7,6 +7,11 @@ import {
   Admin,
   AdminDocument,
 } from '../../modules/admin/entities/admin.entity';
+import { CreateDBUserDto } from '../../modules/user/dtos/create-user.dto';
+import {
+  UserLogs,
+  UserLogsDocument,
+} from '../../common/modules/userLogs/entities/userLogs.entities';
 
 @Injectable()
 export class SeedUsersService {
@@ -15,6 +20,8 @@ export class SeedUsersService {
     private readonly userModel: Model<UserDocument>,
     @InjectModel(Admin.name)
     private readonly adminModel: Model<AdminDocument>,
+    @InjectModel(UserLogs.name)
+    private readonly userLogsModel: Model<UserLogsDocument>,
   ) {}
 
   async dropUsers() {
@@ -22,48 +29,40 @@ export class SeedUsersService {
   }
 
   async createUsers() {
-    this.userModel.create([
+    const users: CreateDBUserDto[] = [
       {
         _id: 'AxUd8B5XTvb66tzpDZaRrXPVzDH3',
         name: 'Francisco',
         lastName: 'Alvarez Raineri',
         email: 'franciscoalvarezraineri@gmail.com',
-        packages: [
-          {
-            _id: '',
-            status: 'delivering',
-            address: 'calle falsa 123',
-            deliveryDate: new Date(),
-          },
-          {
-            _id: '',
-            status: 'delivering',
-            address: 'calle false 124',
-            deliveryDate: new Date(),
-          },
-          {
-            _id: '',
-            status: 'delivered',
-            address: 'calle false 125',
-            deliveryDate: new Date(),
-          },
-        ],
       },
       {
         _id: 'CCs3cBEwGXcYNwKvTfBB49nFTfG2',
-        name: 'Juan Carlos',
-        lastName: 'Macanudo',
-        email: 'juancarlosmacanudo@gmail.com',
-        status: 'active',
+        name: 'German',
+        lastName: 'Rivarola',
+        email: 'german@gmail.com',
+      },
+      {
+        _id: 'BNfnN82tepaHviOmnzXyfROWNAi2',
+        name: 'Pablo',
+        lastName: 'Burgos',
+        email: 'pablo@gmail.com ',
       },
       {
         _id: 'DYHhm16IteZ5AZcyRZL9ite6iFz2',
         name: 'John',
         lastName: 'Doe',
         email: 'johndoe@gmail.com',
-        rating: 2,
       },
-    ]);
+      {
+        _id: '5xkuSzPwZ0dwv6vdwRcwriGBYlz1',
+        name: 'Gabriel',
+        lastName: 'Penise',
+        email: 'penise.gabriel@gmail.com',
+      },
+    ];
+
+    this.userModel.create(users);
   }
 
   async dropAdmins() {
@@ -71,11 +70,30 @@ export class SeedUsersService {
   }
 
   async createAdmin() {
-    this.adminModel.create({
-      _id: 'mDcPQJT4kTRyKCHfzQv5Qk0jbbd2',
-      name: 'admin',
-      lastName: 'admin',
-      email: 'admin@admin.com',
-    });
+    const admins: CreateDBUserDto[] = [
+      {
+        _id: 'tAOHWYOyM8ZsgELhvLxvnaauKqf2',
+        name: 'admin',
+        lastName: 'admin',
+        email: 'admin@admin.com',
+      },
+      {
+        _id: 'fzIGiTIyx9WQmFVWIINGLcLRaZ32',
+        name: 'German',
+        lastName: 'admin',
+        email: 'german_admin@gmail.com',
+      },
+      {
+        _id: 'hYWhfVJGGYQwwPucWgu3wLdGoVi2',
+        name: 'Pablo',
+        lastName: 'admin',
+        email: 'pablo_admin@gmail.com',
+      },
+    ];
+    this.adminModel.create(admins);
+  }
+
+  async dropUserLogs() {
+    this.userLogsModel.collection.drop();
   }
 }

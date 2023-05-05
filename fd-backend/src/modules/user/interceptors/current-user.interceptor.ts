@@ -6,11 +6,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { Document } from 'mongoose';
 
 import { AuthService } from '../../../common/modules/firebase/auth.service';
 import { UserService } from '../user.service';
-import { User } from '../entities/user.entity';
+import { UserDocument } from '../entities/user.entity';
 
 @Injectable()
 export class CurrentUserInterceptor implements NestInterceptor {
@@ -37,15 +36,5 @@ export class CurrentUserInterceptor implements NestInterceptor {
 }
 
 export interface CurrentUserRequest extends Request {
-  currentUser?: Document<unknown, User> &
-    Omit<
-      User &
-        Required<{
-          _id: string;
-        }>,
-      never
-    > &
-    Required<{
-      _id: string;
-    }>;
+  currentUser?: UserDocument;
 }
