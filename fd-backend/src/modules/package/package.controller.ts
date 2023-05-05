@@ -22,47 +22,6 @@ import { QueryPaginationWithDateAndStatusDto } from './dto/pagination-status-dat
 export class PackageController {
   constructor(private readonly packageService: PackageService) {}
 
-  // Funcionalidad movida al modulo de admin
-  /*@Post()
-  @ApiBearerAuth('idToken')
-  @ApiResponse({
-    status: 201,
-    // type: dto de rta,
-  })
-  @ApiBody({ type: CreatePackageDto })
-  @ApiOperation({ description: 'Create package' })
-  @UseGuards(AdminGuard)
-  @UseInterceptors(CurrentAdminInterceptor)
-  async create(
-    @Body() body: CreatePackageDto,
-    @Req() { currentAdmin }: CurrentAdminRequest,
-  ): Promise<Package> {
-    try {
-      const createdBy = {
-        fullName: `${currentAdmin.name} ${currentAdmin.lastName}`,
-        _id: currentAdmin._id,
-        email: currentAdmin.email,
-      };
-      const newPackage = { ...body, createdBy };
-      const createdPackage = await this.packageService.create(newPackage);
-      return createdPackage;
-    } catch (error: unknown) {
-      throw new GeneralError(error);
-    }
-  }*/
-
-  /*@Get('pending')
-  @ApiBearerAuth('idToken')
-  @ApiOperation({
-    description: 'Package are wating for taken but dont have any delivery ',
-  })
-  async getPendingPackage(
-    @Query() queryPaginateDto: QueryPaginationDto,
-  ): Promise<Package[]> {
-    const { limit, page } = queryPaginateDto;
-    return await this.packageService.getPendingPackage(page, limit);
-  }*/
-
   @ApiOperation({
     description: 'Package are wating for taken but dont have any delivery ',
   })
@@ -82,68 +41,6 @@ export class PackageController {
     );
   }
 
-  // Funcionalidad movida a Admin
-  /*
-  @Put(':_id/assign/')
-  @ApiBearerAuth('idToken')
-  @ApiOperation({ description: 'EndPoint to assing package to currentUser' })
-  @ApiParam({ name: '_id', required: true, type: String })
-  @UseInterceptors(CurrentUserInterceptor)
-  async assignToUser(
-    @Param('_id', ValidateMongoId) _id: Types.ObjectId,
-    @Req() { currentUser }: CurrentUserRequest,
-  ): Promise<Package> {
-    const deliveredBy: IUserRef = {
-      fullName: `${currentUser.name} ${currentUser.lastName}`,
-      _id: currentUser._id,
-      email: currentUser.email,
-    };
-    const updatePackage = await this.packageService.assignToUser(
-      _id,
-      deliveredBy,
-    );
-
-    const client: IClientRef = {
-      fullName: updatePackage.client.fullName,
-      address: `${updatePackage.client.address.street} ${updatePackage.client.address.number}, ${updatePackage.client.address.city}, ${updatePackage.client.address.state}, ${updatePackage.client.address.country}`,
-    };
-    const packageRef: IPackageRef = {
-      _id: updatePackage._id,
-      client,
-      deliveryDate: updatePackage.deliveryDate,
-      status: updatePackage.status,
-    };
-
-    await this.userService.assignPackage(currentUser, packageRef);
-    return updatePackage;
-  }
-*/
-  // Funcionalidad obsoleta
-  /*  @ApiOperation({ description: 'Get Package History by currentUser' })
-  @ApiBearerAuth('idToken')
-  @Get('/history')
-  @UseInterceptors(CurrentUserInterceptor)
-  async getPackageHistory(
-    @Query() queryPaginateDto: QueryPaginationDto,
-    @Req() { currentUser }: CurrentUserRequest,
-  ): Promise<Package[]> {
-    const { page, limit } = queryPaginateDto;
-    return await this.packageService.getPackageHistory(
-      currentUser,
-      page,
-      limit,
-    );
-  }*/
-  // @Put(':_id/unassign')
-  // async unassignFromUser(@Param('_id') _id) {
-  //   return this.packageService.unassignFromUser(_id);
-  // }
-
-  // @Put('_id')
-  // async modifyPackage(@Param('_id') _id, @Body() newPackage) {
-  //   return this.packageService.modifyPackage(_id, newPackage);
-  // }
-
   @Put(':_id/delivered')
   @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
@@ -162,20 +59,6 @@ export class PackageController {
   ): Promise<Package> {
     return await this.packageService.getById(_id);
   }
-
-  //To see What happend if package is delivering
-  //This is not what the "delete" button should do
-  /*@Delete(':_id/history')
-  @ApiBearerAuth('idToken')
-  @ApiParam({ name: '_id', required: true, type: String })
-  @ApiOperation({ description: 'Delete package from history' })
-  @UseInterceptors(CurrentUserInterceptor)
-  async deleteFromHistory(
-    @Param('_id', ValidateMongoId) _id,
-    @Req() { currentUser }: CurrentUserRequest,
-  ): Promise<Package> {
-    return this.packageService.deleteFromHistory(_id, currentUser);
-  }*/
 
   @ApiOperation({ description: 'Delete package by admin' })
   @ApiBearerAuth('idToken')

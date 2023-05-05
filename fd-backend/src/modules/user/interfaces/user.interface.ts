@@ -1,7 +1,10 @@
 import { IPackageRef } from '../../package/interface/package.interface';
 import { IFormDB } from '../../../common/modules/formApply/interface/form-apply.interface';
-import { User } from '../entities/user.entity';
-import { Package } from 'src/modules/package/entities/package.entity';
+import { User, UserDocument } from '../entities/user.entity';
+import {
+  Package,
+  PackageDocument,
+} from 'src/modules/package/entities/package.entity';
 
 export interface IUser {
   _id: string;
@@ -34,6 +37,11 @@ export interface IAssignPacakges {
 export interface IDeliverPackages {
   updatedUser: User;
   updatedPackages: Package[];
+}
+
+export interface IUnassignPackage {
+  updatedUser: UserDocument;
+  updatedPacakge: PackageDocument;
 }
 
 export interface IAddForm {

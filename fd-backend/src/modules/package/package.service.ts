@@ -111,14 +111,6 @@ export class PackageService {
     return { updatedPackages, missingPackages };
   }
 
-  async unassignFromUser(_id: string) {
-    return `Unassign package from user. id: ${_id}`;
-  }
-
-  async modifyPackage(_id: string, newPackage) {
-    return `Package modified. id: ${_id}, changes: ${newPackage}`;
-  }
-
   async delivered(_id: Types.ObjectId): Promise<Package> {
     const actualPackage = {
       _id,
@@ -253,5 +245,14 @@ export class PackageService {
       totalPackages: activePackages + deliveredPackages.total,
     };
     return response;
+  }
+
+  async unassignFromUser(_id: Types.ObjectId) {
+    const pack = await this.packageRepository.findById(_id);
+    if (pack && pack.status == PackageStatus.Delivered) return;
+    pack.status = PackageStatus.Pending;
+    pack.deliveredBy = null;
+    await pack.save();
+    return pack;
   }
 }

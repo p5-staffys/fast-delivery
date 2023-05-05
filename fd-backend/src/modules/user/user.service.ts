@@ -150,7 +150,7 @@ export class UserService {
   async deteleteFromHistory(
     _id: Types.ObjectId,
     user: UserDocument,
-  ): Promise<User> {
+  ): Promise<UserDocument> {
     user.packages = user.packages.filter(
       (pack) => pack._id.toString() != _id.toString(),
     );
