@@ -1,13 +1,15 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { firebaseSignIn, firebaseSignOut, IAuth } from "../../services/firebase.service";
 import { User } from "@/utils/interfaces/user.interfaces";
+
+const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "";
 
 export const signIn = async (email: string, password: string): Promise<User> => {
   try {
     const auth: IAuth = await firebaseSignIn(email, password);
     const idToken: string = auth.idToken;
     localStorage.setItem("idToken", idToken);
-    const response: AxiosResponse = await axios.get("https://backend-buhubxjtrq-ue.a.run.app/admin", {
+    const response: AxiosResponse = await axios.get(`${path}/admin`, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
@@ -31,7 +33,7 @@ export const signOut = async (): Promise<void> => {
 export const signUp = async (email: string, password: string, name: string, lastName: string): Promise<User> => {
   try {
     const response: AxiosResponse = await axios.post(
-      "https://backend-buhubxjtrq-ue.a.run.app/admin",
+      `${path}/admin`,
       { email, name, lastName, password },
       { withCredentials: true },
     );
@@ -43,31 +45,10 @@ export const signUp = async (email: string, password: string, name: string, last
   }
 };
 
-export const checkAdmin = async (): Promise<boolean | void> => {
-  try {
-    const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.get("https://backend-buhubxjtrq-ue.a.run.app/admin/authenticate", {
-      withCredentials: true,
-      headers: { Authorization: idToken },
-    });
-
-    if (!response) {
-      return false;
-    }
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      const axiosError: AxiosError = error;
-      if (axiosError.response?.status === 401) {
-        return false;
-      }
-    }
-  }
-};
-
 export const getAuthorization = async (): Promise<boolean> => {
   try {
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.get("https://backend-buhubxjtrq-ue.a.run.app/admin/authenticate", {
+    const response: AxiosResponse = await axios.get(`${path}/admin/authenticate`, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
