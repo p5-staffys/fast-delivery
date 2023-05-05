@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { firebaseSignIn, firebaseSignOut, IAuth } from "../../services/firebase.service";
-import { User } from "@/utils/interfaces/user.interfaces";
+import { Logs, User } from "@/utils/interfaces/user.interfaces";
 
 const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "";
 
@@ -54,6 +54,21 @@ export const getAuthorization = async (): Promise<boolean> => {
     });
     const authorization = response.data;
     return authorization;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const getLogs = async (date: string): Promise<Logs> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get(`${path}/admin/getLogs/${date}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+
+    const logs = response.data;
+    return logs;
   } catch (error: unknown) {
     throw error;
   }

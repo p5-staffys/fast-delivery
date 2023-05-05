@@ -20,7 +20,6 @@ export interface Package {
 export interface PackageCreate {
   weight: number;
   client: Client;
-  quantity: number;
   deliveryDate: string;
 }
 
@@ -36,4 +35,9 @@ export interface Address {
   city: string;
   state: string;
   country: string;
+}
+
+export interface PackageLogs {
+  activePackages: number;
+  totalPackages: number;
 }

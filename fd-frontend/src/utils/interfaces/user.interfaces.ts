@@ -1,4 +1,4 @@
-import { PackageRef } from "./package.interfaces";
+import { PackageRef, PackageLogs } from "./package.interfaces";
 
 export interface Form {
   bebidasAlcoholicas: boolean;
@@ -18,4 +18,15 @@ export interface User {
   forms: Form[];
   __v: number;
   packages: PackageRef[];
+}
+
+export interface UserLogs {
+  activeUsers: number;
+  totalUsersCount: number;
+}
+
+export interface Logs {
+  date: string;
+  users: UserLogs;
+  packages: PackageLogs;
 }

@@ -4,22 +4,35 @@ import Image from "next/image";
 import logoAdmin from "../../../asset/ImgAdmin.png";
 import logo1 from "../../../asset/logito1.png";
 import logo2 from "../../../asset/logito2.jpg";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Link from "next/link";
 import DayList from "./components/carousel";
 import Progress from "./components/progress";
 import AdminGuard from "../adminGuard";
+import { getLogs } from "../services/admin.service";
+import { Logs } from "@/utils/interfaces/user.interfaces";
 
 const Agenda = (): JSX.Element => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString("es-ES", { dateStyle: "short" });
   const [date, setDate] = useState<string>("");
+  const [logs, setLogs] = useState<Logs>();
 
   const handleDate = (date: string): void => {
     setDate(date);
   };
+
+  useEffect(() => {
+    const getAllLogsAsync = async (): Promise<void> => {
+      if (date !== "") {
+        const getAllLogs = await getLogs(date);
+        setLogs(getAllLogs);
+      }
+    };
+    getAllLogsAsync();
+  }, [date]);
 
   return (
     <AdminGuard>
@@ -48,7 +61,10 @@ const Agenda = (): JSX.Element => {
                     </Box>
                     <Box sx={{ ml: 3 }}>
                       <Typography sx={{ fontWeight: 700, fontSize: "15px" }}> Repartidores</Typography>
-                      <Typography sx={{ fontWeight: 200, fontSize: "13px" }}> 2/10 activos</Typography>
+                      <Typography sx={{ fontWeight: 200, fontSize: "13px" }}>
+                        {" "}
+                        {`${logs?.users.activeUsers}/${logs?.users.totalUsersCount} activos`}
+                      </Typography>
                     </Box>
                     <Box>
                       <Box sx={{ mr: 3 }}>
@@ -72,7 +88,9 @@ const Agenda = (): JSX.Element => {
                     </Box>
                     <Box sx={{ mr: 12 }}>
                       <Typography sx={{ fontWeight: 700, fontSize: "15px" }}> Paquetes</Typography>
-                      <Typography sx={{ fontWeight: 400, fontSize: "13px" }}>16/20 repartidos</Typography>
+                      <Typography
+                        sx={{ fontWeight: 400, fontSize: "13px" }}
+                      >{`${logs?.packages.activePackages}/${logs?.packages.totalPackages} repartidos`}</Typography>
                     </Box>
                     <Box></Box>
                   </Box>
