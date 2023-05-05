@@ -60,11 +60,12 @@ export const createPackage = async (
       weight,
       client,
       deliveryDate,
-      quantity,
     };
 
+    const arrPackage: PackageCreate[] = Array.from({ length: quantity }, () => ({ ...newPackage }));
+
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.post(`${path}/package/`, newPackage, {
+    const response: AxiosResponse = await axios.post(`${path}/admin/package/`, arrPackage, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
