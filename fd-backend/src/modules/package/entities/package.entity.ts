@@ -29,7 +29,7 @@ export class Package implements Partial<IPackage> {
   readonly createdBy: IUserRef;
 
   @Prop({ default: null, type: UserRefSchema })
-  deliveredBy: IUserRef | null;
+  deliveredBy?: IUserRef | null;
 
   @Prop({ required: true, type: ClientSchema })
   readonly client: IClient;
@@ -38,16 +38,13 @@ export class Package implements Partial<IPackage> {
   readonly deliveryDate: Date;
 
   @Prop({ type: Date, default: null })
-  readonly deliveredOn: Date | null;
+  readonly deliveredOn?: Date | null;
 
   @Prop({ type: String, default: PackageStatus.Pending })
-  status: PackageStatus;
-
-  @Prop({ type: Number, default: 1 })
-  readonly quantity: number;
+  status?: PackageStatus;
 
   @Prop({ type: Boolean, default: true })
-  showHistory: boolean;
+  showHistory?: boolean;
 }
 
 export const PackageSchema = SchemaFactory.createForClass(Package);
@@ -65,9 +62,6 @@ export class PackageRef implements IPackageRef {
 
   @Prop({ type: String, default: PackageStatus.Pending })
   readonly status: PackageStatus;
-
-  @Prop({ type: Number, default: 1 })
-  readonly quantity: number;
 }
 
 export const PackageRefSchema = SchemaFactory.createForClass(PackageRef);
