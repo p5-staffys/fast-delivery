@@ -10,7 +10,7 @@ import {
   IPackageRef,
   PackageStatus,
 } from '../package/interface/package.interface';
-import { Document, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { IFormDB } from 'src/common/modules/formApply/interface/form-apply.interface';
 
 @Injectable()
@@ -114,17 +114,7 @@ export class UserService {
     return this.userRepository.findAndCountOrFail({});
   }
 
-  async assignPackage(
-    user: Document<unknown, User> &
-      Omit<
-        User &
-          Required<{
-            _id: string;
-          }>,
-        never
-      >,
-    packageRef: IPackageRef,
-  ) {
+  async assignPackage(user: UserDocument, packageRef: IPackageRef) {
     const checkRepeted = user.packages.find(
       (pack) => pack._id == packageRef._id,
     );
@@ -135,17 +125,7 @@ export class UserService {
     return updateUser;
   }
 
-  async assignPackagesToHistory(
-    user: Document<unknown, User> &
-      Omit<
-        User &
-          Required<{
-            _id: string;
-          }>,
-        never
-      >,
-    packageRef: IPackageRef[],
-  ) {
+  async assignPackagesToHistory(user: UserDocument, packageRef: IPackageRef[]) {
     const packages: IPackageRef[] = [];
     const alreadyAssigned = [];
 
@@ -169,35 +149,23 @@ export class UserService {
 
   async deteleteFromHistory(
     _id: Types.ObjectId,
-    user: Document<unknown, User> &
-      Omit<
-        User &
-          Required<{
-            _id: string;
-          }>,
-        never
-      >,
+    user: UserDocument,
   ): Promise<User> {
-    user.packages = user.packages.filter((pack) => pack._id != _id);
+    user.packages = user.packages.filter(
+      (pack) => pack._id.toString() != _id.toString(),
+    );
     await user.save();
     return user;
   }
 
   async changePackageRefStatus(
-    user: Document<unknown, User> &
-      Omit<
-        User &
-          Required<{
-            _id: string;
-          }>,
-        never
-      >,
-    packages: Types.ObjectId[],
+    user: UserDocument,
+    packagesIds: Types.ObjectId[],
     status: PackageStatus,
   ) {
     for (let i = 0; i < user.packages.length; i++) {
-      for (let j = 0; j < packages.length; j++) {
-        if (user.packages[i]._id == packages[j])
+      for (let j = 0; j < packagesIds.length; j++) {
+        if (user.packages[i]._id.toString() == packagesIds[j].toString())
           user.packages[i].status = status;
       }
     }
