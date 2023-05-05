@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Document } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
 import { IUser, IUserRef, UserStatus } from '../interfaces/user.interface';
 import { IPackageRef } from '../../package/interface/package.interface';
-import { formRefSchema } from '../../../common/modules/formApply/entities/form-apply.entitie';
-import { IFormApply } from '../../../common/modules/formApply/interface/form-apply.interface';
+import { FormSchema } from '../../../common/modules/formApply/entities/form-apply.entitie';
+import { IFormDB } from '../../../common/modules/formApply/interface/form-apply.interface';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -38,13 +38,13 @@ export class User implements Partial<IUser> {
   @Prop({ type: Array, default: [] })
   packages: IPackageRef[];
 
-  @Prop({ type: [formRefSchema], default: [] })
-  forms: IFormApply[];
+  @Prop({ type: [FormSchema], default: [] })
+  forms: IFormDB[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-export type IUserDocument = Document<User>;
+export type UserRefDocument = HydratedDocument<UserRef>;
 
 @Schema()
 export class UserRef implements IUserRef {

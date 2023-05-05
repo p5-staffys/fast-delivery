@@ -1,5 +1,5 @@
 import { IPackageRef } from '../../package/interface/package.interface';
-import { IFormApply } from '../../../common/modules/formApply/interface/form-apply.interface';
+import { IFormDB } from '../../../common/modules/formApply/interface/form-apply.interface';
 import { User } from '../entities/user.entity';
 import { Package } from 'src/modules/package/entities/package.entity';
 
@@ -12,7 +12,7 @@ export interface IUser {
   active: boolean;
   rating: number;
   packages: IPackageRef[];
-  forms: IFormApply[];
+  forms: IFormDB[];
 }
 
 export enum UserStatus {
@@ -26,12 +26,17 @@ export interface IUserRef {
   fullName: string;
 }
 
-export interface assignPacakges {
+export interface IAssignPacakges {
   updatedUser: User;
   errors: string[];
 }
 
-export interface deliverPackages {
+export interface IDeliverPackages {
   updatedUser: User;
   updatedPackages: Package[];
+}
+
+export interface IAddForm {
+  ok: boolean;
+  message: string;
 }

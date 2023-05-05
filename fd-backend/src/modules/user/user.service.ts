@@ -2,15 +2,16 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateDBUserDto } from './dtos/create-user.dto';
 import { ReponseUserDto } from './dtos/response-user.dto';
 
-import { User } from './entities/user.entity';
+import { User, UserDocument } from './entities/user.entity';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserRepository } from './repository/user.repository';
-import { FormAplyDto } from '../../common/modules/formApply/dto/form-apply.dto';
+import { FormDto } from '../../common/modules/formApply/dto/form-apply.dto';
 import {
   IPackageRef,
   PackageStatus,
 } from '../package/interface/package.interface';
 import { Document, Types } from 'mongoose';
+import { IFormDB } from 'src/common/modules/formApply/interface/form-apply.interface';
 
 @Injectable()
 export class UserService {
@@ -55,23 +56,41 @@ export class UserService {
     return user;
   }
 
-  async addForm(_id: string, form: FormAplyDto): Promise<User> {
-    const latestForm = await this.userRepository.foundUserAndValidateForm(_id);
+  async checkForm24h(user: UserDocument, date: Date) {
+    /*const latestForm = await this.userRepository.foundUserAndValidateForm(
+      user._id,
+    );*/
+    const latestForm =
+      user.forms[user.forms.length - 1]?.date.getTime() == date.getTime();
 
-    if (latestForm)
-      throw 'El usuario ya tiene un formulario en las ultimas 24hs.';
+    if (latestForm) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  async checkForm(form: FormDto) {
+    let ok = false;
 
     if (
-      form.bebidasAlcoholicas ||
-      form.medicamentosPsicoactivos ||
-      form.problemaEmocional
+      !form.bebidasAlcoholicas &&
+      !form.medicamentosPsicoactivos &&
+      !form.problemaEmocional
     )
-      throw 'El usuario falló la aprobación del formulario.';
+      ok = true;
 
-    const user = await this.userRepository.findOneById(_id);
+    return ok;
+  }
 
-    user.forms.push(form);
-
+  async addForm(
+    user: UserDocument,
+    form: FormDto,
+    date: Date,
+    ok: boolean,
+  ): Promise<User> {
+    const newForm: IFormDB = { form, date, ok };
+    user.forms = [...user.forms, newForm];
     const updatedUser = await user.save();
     return updatedUser;
   }
