@@ -4,12 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import logo from "../asset/logoMoto.png";
+import logo from "../../asset/logoMoto.png";
 
 import Box from "@mui/material/Box";
-import SignInForm from "./components/SignInForm";
+import RegisterForm from "../components/RegisterForm";
 
-import { getAuthorization } from "./services/auth.service";
+import { getAuthorization } from "../services/auth.service";
 
 const DeliveryMan = (): JSX.Element => {
   const router = useRouter();
@@ -40,10 +40,10 @@ const DeliveryMan = (): JSX.Element => {
             <Image src={logo} alt="logo" width={149} height={94} />
           </Link>
         </Box>
-        <SignInForm />
+        <RegisterForm />
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
-          <Link href="/register" className="linkLogin">
-            <strong style={{ textUnderlineOffset: "off" }}>Registrarse</strong>
+          <Link href="/" className="linkLogin">
+            <strong style={{ textUnderlineOffset: "off" }}>Ingresar</strong>
           </Link>
         </Box>
       </main>

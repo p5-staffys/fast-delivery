@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { ChangeEventHandler, ReactElement, useState } from "react";
+import { ReactElement, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Button from "@mui/material/Button";
@@ -11,45 +11,26 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 
-import { useGlobalContext } from "@/context/store";
-import { signIn } from "../services/auth.service";
+import { signUp } from "../services/auth.service";
 
-const SignInForm = (): ReactElement => {
+const RegisterForm = (): ReactElement => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
-  const { setUser } = useGlobalContext();
   const router = useRouter();
-
-  const handleEmail: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    const inputElement = e.currentTarget as HTMLInputElement;
-    setEmail(inputElement.value);
-  };
-
-  const handlePassword: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    const inputElement = e.currentTarget as HTMLInputElement;
-    setPassword(inputElement.value);
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    const response = await signIn(email, password);
-    setUser(response.user);
-    if (response.isAdmin) {
-      router.push("/management/scheduleManagement");
-    } else {
-      router.push("/deliveryMan/workingDay");
-    }
-  };
-
-  const handleVisibility = (e: React.FormEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-    if (visibility) {
-      setVisibility(false);
-    } else {
-      setVisibility(true);
+    try {
+      const response = await signUp(email, password, name, lastName);
+      if (response) {
+        alert("Usuario creado con éxito.");
+        router.push("/");
+      }
+    } catch (error: unknown) {
+      alert(error);
     }
   };
 
@@ -57,7 +38,35 @@ const SignInForm = (): ReactElement => {
     <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} sx={{ width: "90vw", m: "auto" }}>
       <TextField
         id="standard-basic"
-        label="Usuario"
+        label="Nombre"
+        variant="standard"
+        fullWidth
+        type="name"
+        InputLabelProps={{
+          style: { color: "#f5bd09" },
+        }}
+        value={name}
+        onChange={(e): void => {
+          setName(e.target.value);
+        }}
+      />
+      <TextField
+        id="standard-basic"
+        label="Apellido"
+        variant="standard"
+        fullWidth
+        type="lastName"
+        InputLabelProps={{
+          style: { color: "#f5bd09" },
+        }}
+        value={lastName}
+        onChange={(e): void => {
+          setLastName(e.target.value);
+        }}
+      />
+      <TextField
+        id="standard-basic"
+        label="E-Mail"
         variant="standard"
         fullWidth
         type="email"
@@ -65,7 +74,9 @@ const SignInForm = (): ReactElement => {
           style: { color: "#f5bd09" },
         }}
         value={email}
-        onChange={handleEmail}
+        onChange={(e): void => {
+          setEmail(e.target.value);
+        }}
       />
       <TextField
         id="password"
@@ -76,7 +87,9 @@ const SignInForm = (): ReactElement => {
         InputLabelProps={{
           style: { color: "#f5bd09" },
         }}
-        onChange={handlePassword}
+        onChange={(e): void => {
+          setPassword(e.target.value);
+        }}
         sx={{
           mt: 2,
           mb: 1,
@@ -84,7 +97,13 @@ const SignInForm = (): ReactElement => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton aria-label="toggle password visibility" onClick={handleVisibility} edge="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={(): void => {
+                  setVisibility(!visibility);
+                }}
+                edge="end"
+              >
                 {visibility ? <VisibilityIcon sx={{ color: "grey" }} /> : <VisibilityOffIcon sx={{ color: "grey" }} />}
               </IconButton>
             </InputAdornment>
@@ -92,10 +111,10 @@ const SignInForm = (): ReactElement => {
         }}
       />
       <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
-        <strong>Ingresar</strong>
+        <strong>Registrarse</strong>
       </Button>
     </Box>
   );
 };
 
-export default SignInForm;
+export default RegisterForm;
