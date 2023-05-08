@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { ChangeEventHandler, ReactElement, useState } from "react";
+import { ReactElement, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Button from "@mui/material/Button";
@@ -20,18 +20,6 @@ const SignInForm = (): ReactElement => {
   const [visibility, setVisibility] = useState<boolean>(false);
   const { setUser } = useGlobalContext();
   const router = useRouter();
-
-  const handleEmail: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    const inputElement = e.currentTarget as HTMLInputElement;
-    setEmail(inputElement.value);
-  };
-
-  const handlePassword: ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    const inputElement = e.currentTarget as HTMLInputElement;
-    setPassword(inputElement.value);
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -65,7 +53,9 @@ const SignInForm = (): ReactElement => {
           style: { color: "#f5bd09" },
         }}
         value={email}
-        onChange={handleEmail}
+        onChange={(e): void => {
+          setEmail(e.target.value);
+        }}
       />
       <TextField
         id="password"
@@ -76,7 +66,9 @@ const SignInForm = (): ReactElement => {
         InputLabelProps={{
           style: { color: "#f5bd09" },
         }}
-        onChange={handlePassword}
+        onChange={(e): void => {
+          setPassword(e.target.value);
+        }}
         sx={{
           mt: 2,
           mb: 1,
