@@ -45,7 +45,7 @@ export class AuthService {
     return auth.deleteUser(uid);
   }
 
-  async verifyAdmin(idToken: string) {
+  async verifyAdmin(idToken: string): Promise<boolean> {
     const admin = (await auth.verifyIdToken(idToken)).admin;
     return admin;
   }

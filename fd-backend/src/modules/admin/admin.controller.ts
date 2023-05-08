@@ -100,10 +100,10 @@ export class AdminController {
     @Headers('Authorization') authorization,
   ): Promise<boolean> {
     try {
-      await this.authService.verifyAdmin(authorization);
-      return true;
+      const isAdmin = await this.authService.verifyAdmin(authorization);
+      return isAdmin;
     } catch (error: unknown) {
-      return false;
+      throw new GeneralError(error);
     }
   }
 
@@ -148,7 +148,7 @@ export class AdminController {
   }
 
   @ApiBearerAuth('idToken')
-  @ApiOperation({ description: 'Get users logs of a day' })
+  @ApiOperation({ description: 'Get logs of a day' })
   @Get('getLogs/:date')
   async getLogs(@Param('date') requestDate: string) {
     try {
