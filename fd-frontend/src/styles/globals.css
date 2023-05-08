@@ -5,13 +5,23 @@
   box-sizing: border-box;
   text-decoration: none;
   font-family: "Open Sans", sans-serif;
+}
 
+.body {
+  height: 100vh;
 }
 
 .linkLogin {
   color: #217bce;
 }
 
+.box {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 @import url(./addPackage.css);
 @import url(./login.css);
-

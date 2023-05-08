@@ -1,13 +1,32 @@
 "use client";
-
+import React, { useEffect } from "react";
 import Image from "next/image";
-import logo from "../asset/logoMoto.png";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
 import Link from "next/link";
-import { Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 
-const App = (): JSX.Element => {
+import logo from "../asset/logoMoto.png";
+
+import Box from "@mui/material/Box";
+import SignInForm from "./components/SignInForm";
+
+import { getAuthorization } from "./services/auth.service";
+
+const DeliveryMan = (): JSX.Element => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const authorice = async (): Promise<void> => {
+      const auth = await getAuthorization();
+      if (!auth.authorice) return;
+      if (!auth.admin) {
+        router.push("/deliveryMan/workingDay");
+      } else {
+        router.push("/management/scheduleManagement");
+      }
+    };
+    authorice();
+  }, []);
+
   return (
     <>
       <main className="container-login">
@@ -17,22 +36,14 @@ const App = (): JSX.Element => {
           alignItems="center"
           sx={{ mt: "104px", width: "100vw", mb: "100px" }}
         >
-          <Image src={logo} alt="logo" width={149} height={94} />
-        </Box>
-        <Box sx={{ width: "90vw", m: "auto" }}>
-          <Typography sx={{ m: " 0 auto", fontSize: 40 }}>
-            <strong>Bienvenid@s</strong>
-          </Typography>
-          <Typography sx={{ m: " auto", fontSize: 20 }}>*Selecciona tu rol</Typography>
-          <Link href="/deliveryMan">
-            <Button variant="contained" fullWidth sx={{ m: " 5vh auto", fontSize: 17 }}>
-              <strong>Repartidor</strong>
-            </Button>
+          <Link href="/">
+            <Image src={logo} alt="logo" width={149} height={94} />
           </Link>
-          <Link href="/management">
-            <Button variant="contained" fullWidth sx={{ fontSize: 17 }}>
-              <strong>Administrador</strong>
-            </Button>
+        </Box>
+        <SignInForm />
+        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
+          <Link href="#" className="linkLogin">
+            <strong style={{ textUnderlineOffset: "off" }}>Registrarse</strong>
           </Link>
         </Box>
       </main>
@@ -40,4 +51,4 @@ const App = (): JSX.Element => {
   );
 };
 
-export default App;
+export default DeliveryMan;
