@@ -5,7 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import cookieParser from 'cookie-parser';
-import { setupSwagger } from './devModules/common/swagger/swagger';
+import { setupSwagger } from './devModules/swagger/swagger';
 import { setupSecurity } from './config/security/security';
 
 async function bootstrap(): Promise<void> {
