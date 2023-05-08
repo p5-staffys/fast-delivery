@@ -34,6 +34,14 @@ const Agenda = (): JSX.Element => {
     getAllLogsAsync();
   }, [date]);
 
+  const progressPackages: number = logs?.packages.activePackages
+    ? Math.round((logs.packages.activePackages * 100) / logs.packages.totalPackages)
+    : 0;
+
+  const progressUsers: number = logs?.packages.activePackages
+    ? Math.round((logs.users.activeUsers * 100) / logs.users.totalUsersCount)
+    : 0;
+
   return (
     <AdminGuard>
       <>
@@ -57,13 +65,13 @@ const Agenda = (): JSX.Element => {
                 <AccordionDetails>
                   <Box display="flex" justifyContent="space-between">
                     <Box>
-                      <Progress value={20} />
+                      <Progress value={progressUsers} />
                     </Box>
                     <Box sx={{ ml: 3 }}>
                       <Typography sx={{ fontWeight: 700, fontSize: "15px" }}> Repartidores</Typography>
                       <Typography sx={{ fontWeight: 200, fontSize: "13px" }}>
                         {" "}
-                        {`${logs?.users.activeUsers}/${logs?.users.totalUsersCount} activos`}
+                        {`${logs?.users?.activeUsers ?? 0}/${logs?.users?.totalUsersCount ?? 0} activos`}
                       </Typography>
                     </Box>
                     <Box>
@@ -84,13 +92,13 @@ const Agenda = (): JSX.Element => {
                 <AccordionDetails>
                   <Box display="flex" justifyContent="space-between">
                     <Box>
-                      <Progress value={80} />
+                      <Progress value={progressPackages} />
                     </Box>
                     <Box sx={{ mr: 12 }}>
                       <Typography sx={{ fontWeight: 700, fontSize: "15px" }}> Paquetes</Typography>
-                      <Typography
-                        sx={{ fontWeight: 400, fontSize: "13px" }}
-                      >{`${logs?.packages.activePackages}/${logs?.packages.totalPackages} repartidos`}</Typography>
+                      <Typography sx={{ fontWeight: 400, fontSize: "13px" }}>{`${logs?.packages?.activePackages ?? 0}/${
+                        logs?.packages?.totalPackages ?? 0
+                      } repartidos`}</Typography>
                     </Box>
                     <Box></Box>
                   </Box>

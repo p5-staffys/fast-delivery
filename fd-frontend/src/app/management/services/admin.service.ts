@@ -59,7 +59,7 @@ export const getAuthorization = async (): Promise<boolean> => {
   }
 };
 
-export const getLogs = async (date: string): Promise<Logs> => {
+export const getLogs = async (date: string): Promise<Logs | undefined> => {
   try {
     const idToken = localStorage.getItem("idToken");
     const response: AxiosResponse = await axios.get(`${path}/admin/getLogs/${date}`, {
@@ -70,6 +70,12 @@ export const getLogs = async (date: string): Promise<Logs> => {
     const logs = response.data;
     return logs;
   } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const { response } = error;
+      if (response && response.status === 400) {
+        return undefined;
+      }
+    }
     throw error;
   }
 };

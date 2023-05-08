@@ -7,20 +7,22 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
-interface Day {
+export interface Day {
   day: string;
+  number: string;
   date: string;
 }
 
 const today = new Date();
-const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 1 });
+const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 0 });
 const days: Day[] = [];
 
-for (let i = 0; i < 30; i++) {
+for (let i = -15; i <= 15; i++) {
   const currentDate = addDays(startOfCurrentWeek, i);
-  const day = format(currentDate, "EEE", { locale: es });
-  const date = format(currentDate, "d");
-  days.push({ day, date });
+  const day = format(currentDate, "EEE", { locale: es, weekStartsOn: 0 });
+  const number = format(currentDate, "d", { locale: es });
+  const date = format(currentDate, "yyyy-MM-dd");
+  days.push({ day, number, date });
 }
 
 const settings = {
@@ -31,7 +33,7 @@ const settings = {
   slidesToScroll: 1,
   swipeToSlide: true,
   centerMode: true,
-  initialSlide: days.findIndex((day) => day.date === format(today, "d")),
+  initialSlide: days.findIndex((day) => day.number === format(today, "d", { weekStartsOn: 0 })),
   responsive: [
     {
       breakpoint: 1280,
@@ -64,19 +66,17 @@ type Props = {
 };
 
 function DayList({ handleDate }: Props): JSX.Element {
-  const [selected, setSelected] = useState<number>(days.findIndex((day) => day.date === format(today, "d")));
+  const [selected, setSelected] = useState<number>(days.findIndex((day) => day.number === format(today, "d")));
 
   const handleSelect = (i: number): void => {
     setSelected(i);
-    const selectedDate = format(addDays(startOfCurrentWeek, i), "yyyy-MM-dd");
-    handleDate(selectedDate);
-    localStorage.setItem("selectedDate", selectedDate);
+    const selectedDay = days[i];
+    handleDate(selectedDay.date);
   };
 
   useEffect(() => {
     const date = format(today, "yyyy-MM-dd");
     handleDate(date);
-    localStorage.setItem("selectedDate", date);
   }, []);
 
   return (
@@ -99,7 +99,7 @@ function DayList({ handleDate }: Props): JSX.Element {
             onClick={(): void => handleSelect(i)}
           >
             <Typography color={"white"} variant="h6" align="center">
-              {item.date}
+              {item.number}
             </Typography>
             <Typography color={"white"} variant="h6" align="center">
               {item.day}
