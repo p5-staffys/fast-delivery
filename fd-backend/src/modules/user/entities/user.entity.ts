@@ -40,6 +40,13 @@ export class User implements Partial<IUser> {
 
   @Prop({ type: [FormSchema], default: [] })
   forms: IFormDB[];
+
+  @Prop({
+    type: URL,
+    default:
+      'https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png',
+  })
+  avatarURL: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
@@ -56,6 +63,13 @@ export class UserRef implements IUserRef {
 
   @Prop({ required: [true, 'Please enter a fullName'], type: String })
   readonly fullName: string;
+
+  @Prop({
+    type: URL,
+    default:
+      'https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png',
+  })
+  avatarURL: string;
 }
 
 export const UserRefSchema = SchemaFactory.createForClass(UserRef);

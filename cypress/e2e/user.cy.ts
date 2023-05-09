@@ -2,18 +2,13 @@ describe("Full User App Run", () => {
   it("User Log In", () => {
     cy.visit("/");
 
-    cy.get('[href="/deliveryMan"] > .MuiButtonBase-root').click();
+    cy.get("#standard-basic").type(Cypress.env("USER_EMAIL"));
+    cy.get("#standard-basic").should("have.value", Cypress.env("USER_EMAIL"));
 
-    cy.url().should("include", "/deliveryMan");
+    cy.get("#password").type(Cypress.env("USER_PASSWORD"));
+    cy.get("#password").should("have.value", Cypress.env("USER_PASSWORD"));
 
-    //  Verify that the value has been updated
-    cy.get(":nth-child(1) > .MuiInputBase-root > #standard-basic").type(Cypress.env("USER_EMAIL"));
-    cy.get(":nth-child(1) > .MuiInputBase-root > #standard-basic").should("have.value", Cypress.env("USER_EMAIL"));
-
-    cy.get(":nth-child(2) > .MuiInputBase-root > #standard-basic").type(Cypress.env("USER_PASSWORD"));
-    cy.get(":nth-child(2) > .MuiInputBase-root > #standard-basic").should("have.value", Cypress.env("USER_PASSWORD"));
-
-    cy.get(".MuiButtonBase-root").click();
+    cy.get(".MuiButton-root").click();
     cy.url().should("include", "/deliveryMan/workingDay");
 
     cy.get('[style="text-decoration: none;"] > .MuiButtonBase-root').click();
