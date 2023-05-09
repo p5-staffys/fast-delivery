@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { firebaseSignIn, firebaseSignOut, IAuth } from "../services/firebase.service";
 import { User } from "@/utils/interfaces/user.interfaces";
+import { uploadAvatar } from "./storage.service";
 
 const back = process.env.NEXT_PUBLIC_PATH_TO_BACK || "";
 
@@ -36,7 +37,13 @@ export const signOut = async (): Promise<void> => {
   }
 };
 
-export const signUp = async (email: string, password: string, name: string, lastName: string): Promise<User> => {
+export const signUp = async (
+  email: string,
+  password: string,
+  name: string,
+  lastName: string,
+  avatar: Blob | false,
+): Promise<User> => {
   try {
     const response: AxiosResponse = await axios.post(
       `${back}/user`,
@@ -45,6 +52,21 @@ export const signUp = async (email: string, password: string, name: string, last
     );
     if (response.status != 201) throw response.data;
     const user: User = response.data;
+
+    if (avatar) {
+      const auth: IAuth = await firebaseSignIn(email, password);
+      const idToken: string = auth.idToken;
+      const avatarURL = await uploadAvatar(avatar, user._id);
+      await axios.patch(
+        `${back}/user`,
+        { avatarURL },
+        {
+          withCredentials: true,
+          headers: { Authorization: idToken },
+        },
+      );
+    }
+
     return user;
   } catch (error: unknown) {
     throw error;

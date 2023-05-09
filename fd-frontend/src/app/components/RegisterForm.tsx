@@ -12,19 +12,33 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 
 import { signUp } from "../services/auth.service";
+import { uploadAvatarTemp } from "../services/storage.service";
 
 const RegisterForm = (): ReactElement => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
+  const [avatarURL, setAvatarURL] = useState<string>(
+    "https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png",
+  );
+  const [avatar, setAvatar] = useState<Blob | false>(false);
   const [visibility, setVisibility] = useState<boolean>(false);
   const router = useRouter();
+
+  const handleUpload = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
+    if (e.currentTarget.files?.length) {
+      const file = e.currentTarget.files[0];
+      setAvatar(file);
+      const avatarURL = await uploadAvatarTemp(file);
+      setAvatarURL(avatarURL);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     try {
-      const response = await signUp(email, password, name, lastName);
+      const response = await signUp(email, password, name, lastName, avatar);
       if (response) {
         alert("Usuario creado con éxito.");
         router.push("/");
@@ -36,6 +50,11 @@ const RegisterForm = (): ReactElement => {
 
   return (
     <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} sx={{ width: "90vw", m: "auto" }}>
+      <img src={avatarURL} alt="avatar" width={200} height={200}></img>
+      <Button variant="contained" fullWidth component="label">
+        Subir foto
+        <input type="file" accept=".jpg" hidden onChange={handleUpload} />
+      </Button>
       <TextField
         id="standard-basic"
         label="Nombre"
