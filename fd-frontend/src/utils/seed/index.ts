@@ -81,7 +81,20 @@ function createPackRef(): PackageRef {
   return {
     _id: faker.datatype.uuid(),
     status: faker.helpers.arrayElement(["pending", "delivered", "delivering"]),
-    address: "calle falsa 123",
+    client: {
+      fullName: "Pepe Argento",
+      address: {
+        number: "123",
+        street: "Calle Falsa",
+        city: "Springfield",
+        state: "Massachusetts",
+        country: "EE.UU.",
+      },
+      latlng: {
+        lat: -34.6275341,
+        lng: -58.42854939999999,
+      },
+    },
     deliveryDate: faker.date.recent(3),
   };
 }
