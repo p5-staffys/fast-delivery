@@ -75,13 +75,36 @@ export class UserController {
     }
   }
 
+  @ApiOperation({ description: 'Crear nuevo usuario en la DB' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({
+    status: 201,
+    type: ReponseUserDto,
+  })
+  @Public()
+  @Post('create/:_id')
+  async createWithId(
+    @Param('_id') _id: string,
+    @Body() newUser: Partial<{ email: string; fullName: string }>,
+  ): Promise<ReponseUserDto> {
+    const { email, fullName } = newUser;
+    //await this.userService.checkUserEmail(email);
+    try {
+      const name = fullName.split(' ')[0];
+      const lastName = fullName.split(' ')[1];
+      return this.userService.create({ email, name, lastName, _id });
+    } catch (error: unknown) {
+      throw new GeneralError(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   @ApiOperation({ description: 'Obtener los datos del usuario logueado' })
   @ApiBearerAuth('idToken')
-  @UseInterceptors(CurrentUserInterceptor)
   @ApiResponse({
     status: 200,
     type: ReponseUserDto,
   })
+  @UseInterceptors(CurrentUserInterceptor)
   @Get()
   async getCurrent(
     @Req() request: CurrentUserRequest,
@@ -103,6 +126,27 @@ export class UserController {
     try {
       await this.authService.authenticate(authorization);
       return true;
+    } catch (error: unknown) {
+      return false;
+    }
+  }
+
+  @ApiOperation({ description: 'Autenticar el usuario logueado.' })
+  @ApiBearerAuth('idToken')
+  @ApiResponse({
+    status: 200,
+  })
+  @Public()
+  @Get('isInDB')
+  async checkIfUserIsInDB(
+    @Headers('Authorization') authorization,
+  ): Promise<boolean> {
+    try {
+      const auth = await this.authService.authenticate(authorization);
+      const _id = auth.uid;
+      const user = await this.userService.findById(_id);
+      if (user) return true;
+      return false;
     } catch (error: unknown) {
       return false;
     }

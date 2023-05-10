@@ -10,7 +10,7 @@ const AdminGuard = ({ children }: { children: JSX.Element }): JSX.Element => {
   useEffect(() => {
     getAuthorization().then((result) => {
       if (!result) {
-        router.push("/management");
+        router.push("/");
       }
       setAuthenticated(result);
     });

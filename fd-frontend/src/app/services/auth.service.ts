@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { firebaseSignIn, firebaseSignOut, IAuth } from "../services/firebase.service";
+import { firebaseSignIn, firebaseSignOut, IAuth, signInWithGoogle } from "../services/firebase.service";
 import { User } from "@/utils/interfaces/user.interfaces";
 import { uploadAvatar } from "./storage.service";
 
@@ -90,6 +90,41 @@ export const getAuthorization = async (): Promise<Partial<{ authorice: boolean; 
     const authorice = user || admin;
 
     return { authorice, admin };
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const GoogleSignIn = async (): Promise<User> => {
+  try {
+    const userCredentials = await signInWithGoogle();
+    const idToken = await userCredentials.user.getIdToken();
+    const authResponse: AxiosResponse<boolean> = await axios.get(`${back}/user/isInDB`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    let userResponse: AxiosResponse;
+    if (authResponse.data) {
+      userResponse = await axios.get(`${back}/user`, {
+        withCredentials: true,
+        headers: { Authorization: idToken },
+      });
+    } else {
+      const _id = userCredentials.user.uid;
+      const email = userCredentials.user.email;
+      const fullName = userCredentials.user.displayName;
+      userResponse = await axios.post(
+        `${back}/user/create/${_id}`,
+        { _id, email, fullName },
+        {
+          withCredentials: true,
+          headers: { Authorization: idToken },
+        },
+      );
+    }
+    localStorage.setItem("idToken", idToken);
+    const user: User = userResponse.data;
+    return user;
   } catch (error: unknown) {
     throw error;
   }
