@@ -8,6 +8,7 @@ import logo from "../asset/logoMoto.png";
 
 import Box from "@mui/material/Box";
 import SignInForm from "./components/SignInForm";
+import GoogleButton from "./components/GoogleButton";
 
 import { getAuthorization } from "./services/auth.service";
 
@@ -45,6 +46,7 @@ const DeliveryMan = (): JSX.Element => {
           <Link href="/register" className="linkLogin">
             <strong style={{ textUnderlineOffset: "off" }}>Registrarse</strong>
           </Link>
+          <GoogleButton />
         </Box>
       </main>
     </>
