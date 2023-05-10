@@ -49,6 +49,8 @@ export class Package implements Partial<IPackage> {
 
 export const PackageSchema = SchemaFactory.createForClass(Package);
 
+export type PackageRefDocument = HydratedDocument<PackageRef>;
+
 @Schema()
 export class PackageRef implements IPackageRef {
   @Prop({ required: true, type: Types.ObjectId })

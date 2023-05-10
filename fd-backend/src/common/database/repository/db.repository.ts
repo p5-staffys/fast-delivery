@@ -4,6 +4,7 @@ import {
   FilterQuery,
   HydratedDocument, //instancia de un modelo
   QueryOptions,
+  Types,
   UpdateQuery,
 } from 'mongoose';
 import { EntityNotFound } from '../../../common/error-handlers/exceptions';
@@ -94,7 +95,7 @@ export abstract class EntityRepository<T extends Document> {
   };
 
   findById = async (
-    _id: FilterQuery<T>,
+    _id: Types.ObjectId,
     projection?: Record<string, unknown>,
   ): Promise<HydratedDocument<T>> => {
     const data = await this.entityModel
