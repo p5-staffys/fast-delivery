@@ -44,7 +44,7 @@ import {
 } from './interfaces/user.interface';
 import { Types } from 'mongoose';
 import { PackageService } from '../package/package.service';
-import { PackageStatus } from '../package/interface/package.interface';
+import { UserDocument } from './entities/user.entity';
 
 @ApiTags('User')
 @Controller()
@@ -200,6 +200,7 @@ export class UserController {
           ok: false,
           message: 'Falló la validación del formulario, no puede trabajar hoy.',
         };
+      await this.userService.activate(currentUser);
       const userRef: IUserRef = {
         fullName: `${updatedUser.name} ${updatedUser.lastName}`,
         _id: updatedUser._id,
@@ -259,18 +260,25 @@ export class UserController {
   @Put('package/delivered')
   async delivered(
     @Req() { currentUser }: CurrentUserRequest,
-    @Body() packages: Types.ObjectId[],
+    @Body() packagesIds: Types.ObjectId[],
   ): Promise<IDeliverPackages> {
     try {
       const updatedPackages = await this.packageService.deliverPackages(
-        packages,
+        packagesIds,
       );
-      const updatedUser = await this.userService.changePackageRefStatus(
-        currentUser,
-        packages,
-        PackageStatus.Delivered,
-      );
+      let updatedUser: UserDocument;
+      for (let i = 0; i < packagesIds.length; i++) {
+        updatedUser = await this.userService.changePackageRefStatusToDelivered(
+          currentUser,
+          packagesIds[i].toString(),
+        );
+      }
 
+      const checkRemainingPacakges =
+        await this.userService.checkRemainingPacakges(updatedUser);
+      if (!checkRemainingPacakges) this.userService.deActivate(updatedUser);
+
+      updatedUser = await this.userService.findById(currentUser._id);
       return { updatedUser, updatedPackages };
     } catch (error: unknown) {
       throw new GeneralError(error);
