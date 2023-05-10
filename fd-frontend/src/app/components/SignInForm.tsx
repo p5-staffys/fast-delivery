@@ -10,6 +10,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
+import { alert, toast } from "@/utils/alerts/alerts";
 
 import { useGlobalContext } from "@/context/store";
 import { signIn } from "../services/auth.service";
@@ -23,12 +24,21 @@ const SignInForm = (): ReactElement => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    const response = await signIn(email, password);
-    setUser(response.user);
-    if (response.isAdmin) {
-      router.push("/management/scheduleManagement");
-    } else {
-      router.push("/deliveryMan/workingDay");
+    try {
+      const response = await signIn(email, password);
+      setUser(response.user);
+      toast.fire({ icon: "success", title: "Bienvenido!" });
+      if (response.isAdmin) {
+        router.push("/management/scheduleManagement");
+      } else {
+        router.push("/deliveryMan/workingDay");
+      }
+    } catch {
+      alert.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un error de valicadión. Por favor, intentelo de nuevo.",
+      });
     }
   };
 
