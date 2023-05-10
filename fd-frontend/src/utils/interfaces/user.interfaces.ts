@@ -9,6 +9,8 @@ export interface Form {
 }
 
 export interface User {
+  active: boolean;
+  avatarURL: string;
   _id: string;
   name: string;
   lastName: string;

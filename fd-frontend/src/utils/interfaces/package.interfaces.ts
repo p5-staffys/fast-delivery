@@ -1,7 +1,7 @@
 export interface PackageRef {
   _id: string;
   status: string;
-  address: string;
+  client: Client;
   deliveryDate: Date;
 }
 
