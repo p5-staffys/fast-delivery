@@ -79,3 +79,17 @@ export const getLogs = async (date: string): Promise<Logs | undefined> => {
     throw error;
   }
 };
+
+export const getAllUsers = async (): Promise<User[]> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get(`${path}/admin/users`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const users: User[] = response.data;
+    return users;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
