@@ -19,4 +19,13 @@ export class UserRefDTO implements IUserRef {
   @IsString()
   @ApiProperty({ type: String, example: 'Juan Carlos Macanudo' })
   fullName: string;
+
+  @AutoMap()
+  @IsString()
+  @ApiProperty({
+    type: String,
+    example:
+      'https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png',
+  })
+  avatarURL: string;
 }

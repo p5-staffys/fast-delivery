@@ -51,14 +51,14 @@ export class AdminController {
     private readonly packageService: PackageService,
   ) {}
 
-  @Public()
-  @Post()
-  @ApiOperation({ description: 'Create admin' })
+  @ApiOperation({ description: 'Creater un admin.' })
   @ApiBody({ type: CreateAdminDto })
   @ApiResponse({
     status: 201,
     // type,
   })
+  @Public()
+  @Post()
   async create(@Body() body: CreateAdminDto): Promise<IAdmin> {
     const { password, email, name, lastName } = body;
     try {
@@ -79,8 +79,8 @@ export class AdminController {
     }
   }
 
+  @ApiOperation({ description: 'Obtener los datos del admin logueado.' })
   @ApiBearerAuth('idToken')
-  @ApiOperation({ description: 'Get current admin' })
   @UseInterceptors(CurrentAdminInterceptor)
   @Get()
   async getAdmin(@Req() request: CurrentAdminRequest) {
@@ -93,7 +93,7 @@ export class AdminController {
   }
 
   @ApiBearerAuth('idToken')
-  @ApiOperation({ description: 'Authenticate current admin' })
+  @ApiOperation({ description: 'Autenticar el admin logueado.' })
   @Public()
   @Get('authenticate')
   async authenticate(
@@ -107,11 +107,11 @@ export class AdminController {
     }
   }
 
-  @ApiBearerAuth('idToken')
   @ApiOperation({
     description:
       'Cambia el estado del usuario. Modifica la propiedad "active" y funciona como un "toggle", cambiando de estado de true a false y de false a true',
   })
+  @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
   @Put('status/:_id')
   async changeUserStatus(@Param('_id') _id: string): Promise<boolean> {
@@ -124,7 +124,7 @@ export class AdminController {
   }
 
   @ApiBearerAuth('idToken')
-  @ApiOperation({ description: 'Get all users' })
+  @ApiOperation({ description: 'Obtener los datos de todos los repartidores.' })
   @Get('users')
   async getUsers() {
     try {
@@ -136,7 +136,9 @@ export class AdminController {
   }
 
   @ApiBearerAuth('idToken')
-  @ApiOperation({ description: 'Get all active users' })
+  @ApiOperation({
+    description: 'Obtener los datos de todos los repartidores activos.',
+  })
   @Get('active_users')
   async getActiveUsers() {
     try {
@@ -147,8 +149,21 @@ export class AdminController {
     }
   }
 
+  @ApiOperation({ description: 'Obtener los datos de un usuario.' })
   @ApiBearerAuth('idToken')
-  @ApiOperation({ description: 'Get logs of a day' })
+  @UseInterceptors(CurrentAdminInterceptor)
+  @Get('user/:_id')
+  async getUser(@Param('_id') _id: string) {
+    try {
+      const user = await this.userService.findById(_id);
+      return user;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
+  }
+
+  @ApiBearerAuth('idToken')
+  @ApiOperation({ description: 'Obtener los resgistros por día.' })
   @Get('getLogs/:date')
   async getLogs(@Param('date') requestDate: string) {
     try {
@@ -176,7 +191,9 @@ export class AdminController {
   }
 
   @ApiBearerAuth('idToken')
-  @ApiOperation({ description: 'Get users logs of a day' })
+  @ApiOperation({
+    description: 'Obtener el resgistro de repartidores activos por día.',
+  })
   @Get('getUserLogs/:date')
   async getUserLogs(@Param('date') requestDate: string) {
     try {
@@ -196,8 +213,10 @@ export class AdminController {
     }
   }
 
+  @ApiOperation({
+    description: 'Obtener el resgistro de paquetes entregados por día.',
+  })
   @ApiBearerAuth('idToken')
-  @ApiOperation({ description: 'Get packages logs of a day' })
   @Get('getPackageLogs/:date')
   async getPackageLogs(@Param('date') requestDate: string) {
     try {
@@ -209,13 +228,13 @@ export class AdminController {
     }
   }
 
+  @ApiOperation({ description: 'Crear paquetes.' })
   @ApiBearerAuth('idToken')
+  @ApiBody({ type: [CreatePackageDto] })
   @ApiResponse({
     status: 201,
     // type: dto de rta,
   })
-  @ApiBody({ type: [CreatePackageDto] })
-  @ApiOperation({ description: 'Create package' })
   @UseGuards(AdminGuard)
   @UseInterceptors(CurrentAdminInterceptor)
   @Post('package')
