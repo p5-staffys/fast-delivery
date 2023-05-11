@@ -1,3 +1,4 @@
+import { User } from "@/utils/seed";
 import axios, { AxiosResponse } from "axios";
 import { Client, Package, PackageCreate } from "../../utils/interfaces/package.interfaces";
 
@@ -85,6 +86,21 @@ export const deletePackage = async (_id: string): Promise<string> => {
     });
     const packet: string = response.data;
     return packet;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const deliverPackage = async (
+  pacakgesIds: string[],
+): Promise<{ updatedUser: User; updatedPackages: Package[] }> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.put(`${path}/user/package/delivered`, pacakgesIds, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    return response.data;
   } catch (error: unknown) {
     throw error;
   }

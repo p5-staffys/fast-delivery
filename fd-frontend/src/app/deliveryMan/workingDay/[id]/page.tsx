@@ -16,21 +16,45 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Package } from "@/utils/interfaces/package.interfaces";
-import { getPackageById } from "../../../services/package.service";
+import { deliverPackage, getPackageById } from "../../../services/package.service";
+
+import { useGlobalContext } from "@/context/store";
 
 import Map from "../components/map";
 import AuthGuard from "../../authGuard";
 import CardTypography from "./commons/cardTypography";
+import { alert, toast } from "@/utils/alerts/alerts";
 
 const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
   const [paquete, setPaquete] = useState<Package>();
+  const router = useRouter();
+  const { setUser } = useGlobalContext();
 
   useEffect(() => {
     getPackageById(params.id).then((packet: Package) => {
       setPaquete(packet);
     });
   }, []);
+
+  const handleDeliver = async (_id: string): Promise<void> => {
+    try {
+      const delivered = await deliverPackage([_id]);
+      setUser(delivered.updatedUser);
+      toast.fire({
+        icon: "success",
+        title: "Paquete entregado con éxito!",
+      });
+      router.push("deliveryMan/workingDay");
+    } catch {
+      alert.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema con la confirmación de la entrega. Por favor, intentelo de nuevo.",
+      });
+    }
+  };
 
   return (
     <AuthGuard>
@@ -59,12 +83,16 @@ const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
                 <CardTypography title={"Cliente"} content={paquete.client.fullName} />
                 <CardTypography title={"Fecha de entrega"} content={paquete.deliveryDate.toString().split("T")[0]} />
               </CardContent>
-              <CardActions sx={{ flexDirection: "column-reverse", alignItems: "flex-end" }}>
-                <Link href={`deliveryMan/workingDay`}>
-                  <Button sx={{}} variant="contained" size="small">
-                    Finalizar
-                  </Button>
-                </Link>
+              <CardActions sx={{ flexDirection: "row-reverse", alignItems: "flex-end" }}>
+                <Button
+                  variant="contained"
+                  size="medium"
+                  onClick={(): void => {
+                    handleDeliver(paquete._id);
+                  }}
+                >
+                  Paquete Entregado
+                </Button>
               </CardActions>
             </Card>
           ) : null}
