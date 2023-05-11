@@ -2,10 +2,12 @@
 import {
   Accordion,
   AccordionSummary,
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
+  CardMedia,
   Container,
   IconButton,
   Typography,
@@ -19,9 +21,11 @@ import { getPackageById } from "../../../services/package.service";
 
 import Map from "../components/map";
 import AuthGuard from "../../authGuard";
+import CardTypography from "./commons/cardTypography";
 
 const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
   const [paquete, setPaquete] = useState<Package>();
+
   useEffect(() => {
     getPackageById(params.id).then((packet: Package) => {
       setPaquete(packet);
@@ -42,20 +46,18 @@ const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
           </AccordionSummary>
           {paquete ? (
             <Card>
-              <Map destination={paquete.client.latlng} />
+              <CardMedia>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Map destination={paquete.client.latlng} />
+                </Box>
+              </CardMedia>
               <CardContent>
-                <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
-                  <span style={{ fontWeight: 700 }}>Destino: </span>
-                  {paquete?.client.address.street}
-                </Typography>
-                <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
-                  <span style={{ fontWeight: 700 }}>Numero del paquete: </span>
-                  {paquete?._id}
-                </Typography>
-                <Typography sx={{ mt: 1 }} variant="subtitle2" color="text.secondary">
-                  <span style={{ fontWeight: 700 }}>Recibe: </span>
-                  {paquete?.deliveryDate.toString()}
-                </Typography>
+                <CardTypography
+                  title={"Destino"}
+                  content={`${paquete.client.address.street} ${paquete.client.address.number}`}
+                />
+                <CardTypography title={"Cliente"} content={paquete.client.fullName} />
+                <CardTypography title={"Fecha de entrega"} content={paquete.deliveryDate.toString().split("T")[0]} />
               </CardContent>
               <CardActions sx={{ flexDirection: "column-reverse", alignItems: "flex-end" }}>
                 <Link href={`deliveryMan/workingDay`}>
