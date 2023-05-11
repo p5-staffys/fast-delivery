@@ -1,4 +1,5 @@
 "use client";
+import { Box } from "@mui/material";
 import { useLoadScript, GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 import { useState, useEffect, ReactElement } from "react";
 
@@ -11,7 +12,7 @@ const mapOptions = {
 const googleMapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
 
 const Map = ({ destination }: { destination: google.maps.LatLngLiteral }): ReactElement => {
-  const [origin, setOrigin] = useState({ lat: 1, lng: 1 });
+  const [origin, setOrigin] = useState<google.maps.LatLngLiteral | null>(null);
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   // const [distance, setDistance] = useState<google.maps.DistanceMatrixResponse | null>(null);
 
@@ -37,7 +38,7 @@ const Map = ({ destination }: { destination: google.maps.LatLngLiteral }): React
   }, []);
 
   useEffect(() => {
-    if (!window.google) {
+    if (!window.google || !origin) {
       return;
     }
 
@@ -82,15 +83,14 @@ const Map = ({ destination }: { destination: google.maps.LatLngLiteral }): React
         <GoogleMap
           options={mapOptions}
           zoom={14}
-          center={origin}
+          center={origin ? origin : { lat: -34.60376, lng: -58.38162 }}
           mapTypeId={google.maps.MapTypeId.ROADMAP}
-          mapContainerStyle={{ width: "800px", height: "800px" }}
-          // onLoad={() => console.log("Map Component Loaded...")}
+          mapContainerStyle={{ width: "640px", height: "640px" }}
         >
           {directions ? <DirectionsRenderer options={{ directions }} /> : <p>Calculando Ruta...</p>}
         </GoogleMap>
       ) : (
-        <p>Cargando Mapa...</p>
+        <Box width="640px" height="640px" sx={{ backgroundColor: "primary" }}></Box>
       )}
     </>
   );
