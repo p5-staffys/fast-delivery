@@ -92,8 +92,8 @@ export class AdminController {
     }
   }
 
-  @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'Autenticar el admin logueado.' })
+  @ApiBearerAuth('idToken')
   @Public()
   @Get('authenticate')
   async authenticate(
@@ -123,8 +123,8 @@ export class AdminController {
     }
   }
 
-  @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'Obtener los datos de todos los repartidores.' })
+  @ApiBearerAuth('idToken')
   @Get('users')
   async getUsers() {
     try {
@@ -135,10 +135,10 @@ export class AdminController {
     }
   }
 
-  @ApiBearerAuth('idToken')
   @ApiOperation({
     description: 'Obtener los datos de todos los repartidores activos.',
   })
+  @ApiBearerAuth('idToken')
   @Get('active_users')
   async getActiveUsers() {
     try {
@@ -162,8 +162,8 @@ export class AdminController {
     }
   }
 
-  @ApiBearerAuth('idToken')
   @ApiOperation({ description: 'Obtener los resgistros por día.' })
+  @ApiBearerAuth('idToken')
   @Get('getLogs/:date')
   async getLogs(@Param('date') requestDate: string) {
     try {
@@ -172,7 +172,7 @@ export class AdminController {
       const userLogs = await this.userLogsService.getRecordByDate(date);
       const totalUsersCount = await this.userService.countUsers();
       const users = {
-        activeUsers: userLogs.activeUsers.length,
+        activeUsers: userLogs.activeUsers,
         totalUsersCount,
       };
 
@@ -203,7 +203,7 @@ export class AdminController {
       const totalUsersCount = await this.userService.countUsers();
       const response = {
         date,
-        activeUsers: userLogs.activeUsers.length,
+        activeUsers: userLogs.activeUsers,
         totalUsersCount,
       };
 

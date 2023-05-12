@@ -23,7 +23,7 @@ export interface User {
 }
 
 export interface UserLogs {
-  activeUsers: number;
+  activeUsers: Partial<User>[];
   totalUsersCount: number;
 }
 
