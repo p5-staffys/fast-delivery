@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { Client, Package, PackageCreate } from "../../utils/interfaces/package.interfaces";
+import { User } from "@/utils/interfaces/user.interfaces";
 
 const googleMapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
 const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "";
@@ -27,6 +28,33 @@ export const getAllPackages = async (date: string): Promise<Package[]> => {
     });
     const packets: Package[] = response.data;
     return packets;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const getAllPackagesPending = async (date: string): Promise<Package[]> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get(`${path}/package/pending/${date}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const packets: Package[] = response.data;
+    return packets;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const assignPackages = async (packagesIds: string[]): Promise<User> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.put(`${path}/user/package/assign`, packagesIds, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    return response.data;
   } catch (error: unknown) {
     throw error;
   }
