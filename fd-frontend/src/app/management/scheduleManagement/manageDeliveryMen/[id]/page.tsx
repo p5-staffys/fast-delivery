@@ -25,7 +25,7 @@ const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => 
     getUserAsync();
   }, [params.id]);
 
-  const colorStatus = user?.active ? "#96DB76" : "#FF6B6B";
+  const colorStatus = statusUser ? "#96DB76" : "#FF6B6B";
   const deliveredPackages = user?.packages.filter((pack) => pack.status === "delivered");
   const deliveringPackages = user?.packages.filter((pack) => pack.status === "delivering");
 
@@ -61,7 +61,7 @@ const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => 
                       {user?.name}
                     </Typography>
                     <Typography sx={{ fontWeight: 500, fontSize: "14px", color: colorStatus }}>
-                      • {user?.active ? "Activo" : "Inactivo"}
+                      • {statusUser ? "Activo" : "Inactivo"}
                     </Typography>
                   </Box>
                   <Box sx={{ ml: 15 }}>

@@ -106,8 +106,8 @@ export class UserService {
   async changeUserStatus(_id: string) {
     const user = await this.userRepository.findOneById(_id);
     user.active = !user.active;
-    user.save();
-    return true;
+    await user.save();
+    return user;
   }
 
   async countUsers() {

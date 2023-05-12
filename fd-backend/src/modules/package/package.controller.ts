@@ -1,4 +1,4 @@
-import { Get, Param, Query, Delete, UseGuards } from '@nestjs/common';
+import { Get, Param, Query, UseGuards } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { PackageService } from './package.service';
 import {
@@ -41,17 +41,6 @@ export class PackageController {
       page,
     );
   }
-  /*
-  @ApiOperation({ description: 'Marca un paquete como enviado.' })
-  @ApiBearerAuth('idToken')
-  @ApiParam({ name: '_id', required: true, type: String })
-  @Put(':_id/delivered')
-  async delivered(
-    @Param('_id', ValidateMongoId) _id: Types.ObjectId,
-  ): Promise<Package> {
-    return await this.packageService.delivered(_id);
-  }
-  */
 
   @ApiOperation({ description: 'Devuelve un paquete.' })
   @ApiBearerAuth('idToken')
@@ -61,16 +50,6 @@ export class PackageController {
     @Param('_id', ValidateMongoId) _id: Types.ObjectId,
   ): Promise<Package> {
     return await this.packageService.getById(_id);
-  }
-
-  @ApiOperation({ description: 'Borra un paquete.' })
-  @ApiBearerAuth('idToken')
-  @ApiParam({ name: '_id', required: true, type: String })
-  @UseGuards(AdminGuard)
-  @Delete(':_id')
-  async deletePackage(@Param('_id', ValidateMongoId) _id): Promise<string> {
-    await this.packageService.deletePackage(_id);
-    return 'Package deleted';
   }
 
   @ApiOperation({ description: 'Devuelve los paquetes por fecha' })
@@ -84,4 +63,31 @@ export class PackageController {
 
     return await this.packageService.getPackage(date, page, limit, status);
   }
+
+  /*
+  @ApiOperation({ description: 'Marca un paquete como enviado.' })
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @Put(':_id/delivered')
+  async delivered(
+    @Param('_id', ValidateMongoId) _id: Types.ObjectId,
+  ): Promise<Package> {
+    return await this.packageService.delivered(_id);
+  }
+  */
+
+  // Funcionalidad movida a Admin controller
+  /*
+  @ApiOperation({ description: 'Borra un paquete.' })
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @UseGuards(AdminGuard)
+  @Delete(':package_id')
+  async deletePackage(
+    @Param('package_id', ValidateMongoId) package_id,
+  ): Promise<string> {
+    await this.packageService.deletePackage(package_id);
+    return 'Package deleted';
+  }
+  */
 }
