@@ -1,6 +1,6 @@
-import { User } from "@/utils/seed";
 import axios, { AxiosResponse } from "axios";
 import { Client, IPackagesByClient, Package, PackageCreate } from "../../utils/interfaces/package.interfaces";
+import { User } from "@/utils/interfaces/user.interfaces";
 
 const googleMapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
 const path = "https://backend-buhubxjtrq-ue.a.run.app";

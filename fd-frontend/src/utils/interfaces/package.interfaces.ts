@@ -1,7 +1,7 @@
 export interface PackageRef {
   _id: string;
   status: string;
-  client: Client;
+  client: ClientRef;
   deliveryDate: Date;
 }
 
@@ -27,6 +27,11 @@ export interface Client {
   fullName: string;
   address: Address;
   latlng: google.maps.LatLngLiteral;
+}
+
+export interface ClientRef {
+  fullName: string;
+  address: string;
 }
 
 export interface Address {

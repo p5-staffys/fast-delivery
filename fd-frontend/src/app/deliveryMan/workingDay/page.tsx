@@ -12,10 +12,10 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import Card from "./components/card";
 import { getCurrentUser } from "../services/user.services";
 import { User } from "@/utils/interfaces/user.interfaces";
 import { alert } from "@/utils/alerts/alerts";
+import CardManagePackage from "./components/card";
 
 const WorkingDay = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<PackageRef[]>([]);
@@ -60,7 +60,7 @@ const WorkingDay = (): JSX.Element => {
           {paquetesPending.length ? (
             paquetesPending.map((paquete, i) => (
               <AccordionDetails key={i}>
-                <Card paquete={paquete} />
+                <CardManagePackage paquete={paquete} />
               </AccordionDetails>
             ))
           ) : (
@@ -75,7 +75,7 @@ const WorkingDay = (): JSX.Element => {
           </AccordionSummary>
           {paquetes.map((paquete, i) => (
             <AccordionDetails key={i}>
-              <Card paquete={paquete} />
+              <CardManagePackage paquete={paquete} />
             </AccordionDetails>
           ))}
         </Accordion>

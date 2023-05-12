@@ -49,7 +49,7 @@ const CardManagePackage: React.FC<Props> = ({ paquete }) => {
             component="div"
             variant="subtitle1"
           >
-            {paquete.client.address.street}
+            {`${paquete.client.address}`}
           </Typography>
 
           <IconButton sx={{ textAlign: "right" }} aria-label="previous">
