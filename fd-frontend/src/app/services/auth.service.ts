@@ -3,7 +3,7 @@ import { firebaseSignIn, firebaseSignOut, IAuth, signInWithGoogle } from "../ser
 import { User } from "@/utils/interfaces/user.interfaces";
 import { uploadAvatar } from "./storage.service";
 
-const back = process.env.NEXT_PUBLIC_PATH_TO_BACK || "";
+const back = process.env.NEXT_PUBLIC_PATH_TO_BACK || "https://backend-buhubxjtrq-ue.a.run.app";
 
 export const signIn = async (email: string, password: string): Promise<{ user: User; isAdmin: boolean }> => {
   try {
