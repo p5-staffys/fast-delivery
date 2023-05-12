@@ -10,6 +10,7 @@ import {
   Req,
   UseGuards,
   Headers,
+  Delete,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import {
@@ -38,6 +39,7 @@ import { UserLogsService } from '../../common/modules/userLogs/userLogs.service'
 import { PackageService } from '../package/package.service';
 import { CreatePackageDto } from '../package/dto/create-package.dto';
 import { Package } from '../package/entities/package.entity';
+import { UserDocument } from '../user/entities/user.entity';
 
 @ApiTags('Admin')
 @UseGuards(AdminGuard)
@@ -114,7 +116,7 @@ export class AdminController {
   @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
   @Put('status/:_id')
-  async changeUserStatus(@Param('_id') _id: string): Promise<boolean> {
+  async changeUserStatus(@Param('_id') _id: string): Promise<UserDocument> {
     try {
       const updatedUser = await this.userService.changeUserStatus(_id);
       return updatedUser;
@@ -256,6 +258,29 @@ export class AdminController {
       });
       const createdPackage = await this.packageService.createMany(newPackage);
       return createdPackage;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
+  }
+
+  @ApiOperation({ description: 'Borra un paquete.' })
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: 'user_id', required: true, type: String })
+  @ApiParam({ name: 'package_id', required: true, type: String })
+  @UseGuards(AdminGuard)
+  @Delete(':user_id/:package_id')
+  async deletePackage(
+    @Param('package_id') package_id,
+    @Param('user_id') user_id,
+  ): Promise<UserDocument> {
+    try {
+      // await this.packageService.deletePackage(package_id);
+      const user = await this.userService.findById(user_id);
+      const updatedUser = await this.userService.deteleteFromHistory(
+        package_id,
+        user,
+      );
+      return updatedUser;
     } catch (error: unknown) {
       throw new GeneralError(error);
     }

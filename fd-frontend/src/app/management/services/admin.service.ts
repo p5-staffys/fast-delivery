@@ -111,11 +111,15 @@ export const getUserById = async (id: string): Promise<User> => {
 export const getStatus = async (id: string): Promise<boolean> => {
   try {
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.put(`${path}/admin/status/${id}`, {
-      withCredentials: true,
-      headers: { Authorization: idToken },
-    });
-    const status: boolean = response.data;
+    const response: AxiosResponse = await axios.put(
+      `${path}/admin/status/${id}`,
+      {},
+      {
+        withCredentials: true,
+        headers: { Authorization: idToken },
+      },
+    );
+    const status: boolean = response.data.active;
     return status;
   } catch (error: unknown) {
     throw error;
