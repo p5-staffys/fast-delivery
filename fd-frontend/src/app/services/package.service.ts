@@ -147,16 +147,3 @@ export const getPendingPackages = async (date: string, page: number): Promise<IP
     throw error;
   }
 };
-
-export const assignPackages = async (packagesIds: string[]): Promise<User> => {
-  try {
-    const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.put(`${path}/user/package/assign`, packagesIds, {
-      withCredentials: true,
-      headers: { Authorization: idToken },
-    });
-    return response.data;
-  } catch (error: unknown) {
-    throw error;
-  }
-};
