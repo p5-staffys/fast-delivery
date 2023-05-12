@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import { Client, Package, PackageCreate } from "../../utils/interfaces/package.interfaces";
 
 const googleMapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
-const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "";
+const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "https://backend-buhubxjtrq-ue.a.run.app";
 
 export const getPackageById = async (_id: string): Promise<Package> => {
   try {
