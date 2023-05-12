@@ -33,6 +33,33 @@ export const getAllPackages = async (date: string): Promise<Package[]> => {
   }
 };
 
+export const getAllPackagesPending = async (date: string): Promise<Package[]> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get(`${path}/package/pending/${date}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const packets: Package[] = response.data;
+    return packets;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const assignPackages = async (packagesIds: string[]): Promise<User> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.put(`${path}/user/package/assign`, packagesIds, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    return response.data;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
 export const createPackage = async (
   weight: number,
   fullName: string,
@@ -112,19 +139,6 @@ export const getPendingPackages = async (date: string, page: number): Promise<IP
   try {
     const idToken = localStorage.getItem("idToken");
     const response: AxiosResponse = await axios.get(`${path}/package/pending/${date}?page=${page}&limit=3`, {
-      withCredentials: true,
-      headers: { Authorization: idToken },
-    });
-    return response.data;
-  } catch (error: unknown) {
-    throw error;
-  }
-};
-
-export const assignPackages = async (packagesIds: string[]): Promise<User> => {
-  try {
-    const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.put(`${path}/user/package/assign`, packagesIds, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
