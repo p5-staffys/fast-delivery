@@ -1,6 +1,6 @@
 import { User } from "@/utils/seed";
 import axios, { AxiosResponse } from "axios";
-import { Client, Package, PackageCreate } from "../../utils/interfaces/package.interfaces";
+import { Client, IPackagesByClient, Package, PackageCreate } from "../../utils/interfaces/package.interfaces";
 
 const googleMapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
 const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "https://backend-buhubxjtrq-ue.a.run.app";
@@ -97,6 +97,34 @@ export const deliverPackage = async (
   try {
     const idToken = localStorage.getItem("idToken");
     const response: AxiosResponse = await axios.put(`${path}/user/package/delivered`, pacakgesIds, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    return response.data;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+//http://localhost:8000/package/pending/2023-05-05?page=1&limit=3
+
+export const getPendingPackages = async (date: string, page: number): Promise<IPackagesByClient[]> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get(`${path}/package/pending/${date}?page=${page}&limit=3`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    return response.data;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const assignPackages = async (packagesIds: string[]): Promise<User> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.put(`${path}/user/package/assign`, packagesIds, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });

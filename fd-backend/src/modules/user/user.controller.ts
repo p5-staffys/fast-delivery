@@ -131,7 +131,7 @@ export class UserController {
     }
   }
 
-  @ApiOperation({ description: 'Autenticar el usuario logueado.' })
+  @ApiOperation({ description: 'Buscar el usuario logueado en la db.' })
   @ApiBearerAuth('idToken')
   @ApiResponse({
     status: 200,

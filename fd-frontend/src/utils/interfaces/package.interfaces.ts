@@ -41,3 +41,8 @@ export interface PackageLogs {
   activePackages: number;
   totalPackages: number;
 }
+
+export interface IPackagesByClient {
+  _id: Client;
+  packages: Package[];
+}
