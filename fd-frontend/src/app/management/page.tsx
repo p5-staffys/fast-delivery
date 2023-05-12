@@ -68,9 +68,7 @@ const Home = (): JSX.Element => {
             variant="standard"
             fullWidth
             type="email"
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
+            color="primary"
             onChange={handleEmail}
           />
           <TextField
@@ -79,9 +77,7 @@ const Home = (): JSX.Element => {
             variant="standard"
             type={eye}
             fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
+            color="primary"
             onChange={handlePassword}
             sx={{
               mt: 2,

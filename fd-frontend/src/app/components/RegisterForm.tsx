@@ -61,9 +61,7 @@ const RegisterForm = (): ReactElement => {
         variant="standard"
         fullWidth
         type="name"
-        InputLabelProps={{
-          style: { color: "#f5bd09" },
-        }}
+        color="primary"
         value={name}
         onChange={(e): void => {
           setName(e.target.value);
@@ -75,9 +73,7 @@ const RegisterForm = (): ReactElement => {
         variant="standard"
         fullWidth
         type="lastName"
-        InputLabelProps={{
-          style: { color: "#f5bd09" },
-        }}
+        color="primary"
         value={lastName}
         onChange={(e): void => {
           setLastName(e.target.value);
@@ -89,9 +85,7 @@ const RegisterForm = (): ReactElement => {
         variant="standard"
         fullWidth
         type="email"
-        InputLabelProps={{
-          style: { color: "#f5bd09" },
-        }}
+        color="primary"
         value={email}
         onChange={(e): void => {
           setEmail(e.target.value);
@@ -103,9 +97,7 @@ const RegisterForm = (): ReactElement => {
         variant="standard"
         type={visibility ? "text" : "password"}
         fullWidth
-        InputLabelProps={{
-          style: { color: "#f5bd09" },
-        }}
+        color="primary"
         onChange={(e): void => {
           setPassword(e.target.value);
         }}

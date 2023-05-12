@@ -69,9 +69,7 @@ const DeliveryMan = (): JSX.Element => {
             variant="standard"
             fullWidth
             type="email"
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
+            color="primary"
             value={email}
             onChange={handleEmail}
           />
@@ -81,9 +79,7 @@ const DeliveryMan = (): JSX.Element => {
             variant="standard"
             type={eye}
             fullWidth
-            InputLabelProps={{
-              style: { color: "#f5bd09" },
-            }}
+            color="primary"
             value={password}
             onChange={handlePassword}
           />

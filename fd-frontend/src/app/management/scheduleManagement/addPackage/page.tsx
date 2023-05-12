@@ -92,9 +92,7 @@ const addPackage = (): JSX.Element => {
               label="Nombre de quien recibe"
               variant="standard"
               fullWidth
-              InputLabelProps={{
-                style: { color: "#f5bd09" },
-              }}
+              color="primary"
               onChange={handleFullName}
               name="fullName"
             />
@@ -103,9 +101,7 @@ const addPackage = (): JSX.Element => {
               label="Calle"
               variant="standard"
               fullWidth
-              InputLabelProps={{
-                style: { color: "#f5bd09" },
-              }}
+              color="primary"
               onChange={handleStreet}
               name="street"
             />
@@ -114,9 +110,7 @@ const addPackage = (): JSX.Element => {
               label="Altura"
               variant="standard"
               fullWidth
-              InputLabelProps={{
-                style: { color: "#f5bd09" },
-              }}
+              color="primary"
               onChange={handleNumber}
               name="number"
             />
@@ -125,9 +119,7 @@ const addPackage = (): JSX.Element => {
               label="Ciudad"
               variant="standard"
               fullWidth
-              InputLabelProps={{
-                style: { color: "#f5bd09" },
-              }}
+              color="primary"
               onChange={handleCity}
               name="city"
             />
@@ -136,9 +128,7 @@ const addPackage = (): JSX.Element => {
               label="Provincia"
               variant="standard"
               fullWidth
-              InputLabelProps={{
-                style: { color: "#f5bd09" },
-              }}
+              color="primary"
               onChange={handleState}
               name="state"
             />
@@ -147,9 +137,7 @@ const addPackage = (): JSX.Element => {
               label="País"
               variant="standard"
               fullWidth
-              InputLabelProps={{
-                style: { color: "#f5bd09" },
-              }}
+              color="primary"
               onChange={handleCountry}
               name="country"
               defaultValue={country}
@@ -159,19 +147,17 @@ const addPackage = (): JSX.Element => {
               label="Peso (Kg)"
               variant="standard"
               fullWidth
-              InputLabelProps={{
-                style: { color: "#f5bd09" },
-              }}
+              color="primary"
               type="number"
               onChange={handleWeight}
             />
-            <Typography sx={{ mt: "1em", mb: "0.5vh", fontSize: "1em", color: "#f5bd09" }}>
+            <Typography sx={{ mt: "1em", mb: "0.5vh", fontSize: "1em", color: "primary" }}>
               Fecha en la que debe ser repartido{" "}
             </Typography>
-            <input type="date" value={deliveryDate} onChange={handleDate} style={{ color: "#f5bd09" }} />
+            <input type="date" value={deliveryDate} onChange={handleDate} style={{ color: "primary" }} />
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", mb: "0.5vh", mt: "1em" }}>
-            <Typography variant="body1" sx={{ color: "#f5bd09", mr: "12px" }}>
+            <Typography variant="body1" sx={{ color: "primary", mr: "12px" }}>
               Cantidad
             </Typography>
             <Box className="quantity" sx={{ display: "flex", alignItems: "center" }}>
