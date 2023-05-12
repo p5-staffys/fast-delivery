@@ -17,19 +17,34 @@ import { assignPackages } from "@/app/services/package.service";
 import ErrorRadios from "./components/radioGroup";
 
 const Paquetes = (): JSX.Element => {
-  const [packages, setPackages] = useState<IPackagesByClient[] | null>(null);
+  const [packages, setPackages] = useState<IPackagesByClient[]>([]);
   const [packagesIds, setPackagesIds] = useState<string[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [asks, setAsks] = useState(inicial);
   const router = useRouter();
+  const date = new Date().toJSON().split("T")[0];
 
   useEffect(() => {
     const getPackages = async (): Promise<void> => {
-      const pendingPackages = await getPendingPackages("2023-05-06", 1);
-      setPackages(pendingPackages);
+      try {
+        const pendingPackages = await getPendingPackages(date, 1);
+        setPackages(pendingPackages);
+      } catch {
+        alert.fire({ icon: "error", title: "Error", text: "Hubo un problema. Por favor vuelva a intentarlo." });
+      }
     };
     getPackages();
   }, []);
+
+  const handleLoadMore = async (): Promise<void> => {
+    try {
+      const pendingPackages = await getPendingPackages(date, 1);
+      const newPackages: IPackagesByClient[] = packages.concat(pendingPackages);
+      setPackages(newPackages);
+    } catch {
+      alert.fire({ icon: "error", title: "Error", text: "Hubo un problema. Por favor vuelva a intentarlo." });
+    }
+  };
 
   const handleSubmit = async (): Promise<void> => {
     setOpen(true);
@@ -86,7 +101,10 @@ const Paquetes = (): JSX.Element => {
         {packages?.map((client, i) => (
           <PackageCard client={client} key={i} packagesIds={packagesIds} setPackagesIds={setPackagesIds} />
         ))}
-        <Button variant="contained" sx={{ m: "0 2.5vw", mt: 5, width: "95vw" }} onClick={handleSubmit}>
+        <Button variant="contained" sx={{ m: "0 2.5vw", mt: 5, width: "95vw" }} onClick={handleLoadMore}>
+          cargar más
+        </Button>
+        <Button variant="contained" sx={{ m: "0 2.5vw", mt: 2, width: "95vw" }} onClick={handleSubmit}>
           Iniciar jornada
         </Button>
         <Dialog open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
