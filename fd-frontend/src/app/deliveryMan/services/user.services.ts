@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { firebaseSignIn, firebaseSignOut, IAuth } from "../../services/firebase.service";
-import { User } from "@/utils/interfaces/user.interfaces";
+import { Form, User } from "@/utils/interfaces/user.interfaces";
 
 const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "";
 
@@ -54,6 +54,43 @@ export const getAuthorization = async (): Promise<boolean> => {
     });
     const authorization = response.data;
     return authorization;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const getCurrentUser = async (): Promise<User> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get(`${path}/user`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const user: User = response.data;
+    return user;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const sendForm = async (
+  form: Form,
+): Promise<{
+  ok: boolean;
+  message: string;
+}> => {
+  try {
+    const date = new Date().toDateString().split("T")[0];
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.post(
+      `${path}/user/addForm`,
+      { date, form },
+      {
+        withCredentials: true,
+        headers: { Authorization: idToken },
+      },
+    );
+    return response.data;
   } catch (error: unknown) {
     throw error;
   }
