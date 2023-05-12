@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { firebaseSignIn, firebaseSignOut, IAuth } from "../../services/firebase.service";
 import { Form, User } from "@/utils/interfaces/user.interfaces";
 
-const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "https://backend-buhubxjtrq-ue.a.run.app";
+const path = "https://backend-buhubxjtrq-ue.a.run.app";
 
 export const signIn = async (email: string, password: string): Promise<User> => {
   try {
