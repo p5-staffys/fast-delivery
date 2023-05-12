@@ -40,9 +40,10 @@ const Repartidores = (): JSX.Element => {
             {users.map((user) => {
               const colorStatus = user.active ? "#96DB76" : "#FF6B6B";
               const deliveredPackages = user.packages.filter((pack) => pack.status === "delivered");
-              const progressDelivered = Math.round((deliveredPackages.length / user.packages.length) * 100) ?? 0;
+              const progressDelivered =
+                deliveredPackages.length > 0 ? Math.round((deliveredPackages.length / user.packages.length) * 100) : 0;
               return (
-                <Link href={`management/scheduleManagement/deliveryDetail/${user._id}`} key={user._id}>
+                <Link href={`management/scheduleManagement/manageDeliveryMen/${user._id}`} key={user._id}>
                   <AccordionDetails>
                     <Box display="flex" justifyContent="space-between" sx={{ m: "0 10px" }}>
                       <Box>

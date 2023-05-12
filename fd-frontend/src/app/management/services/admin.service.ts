@@ -93,3 +93,31 @@ export const getAllUsers = async (): Promise<User[]> => {
     throw error;
   }
 };
+
+export const getUserById = async (id: string): Promise<User> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get(`${path}/admin/user/${id}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const user: User = response.data;
+    return user;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const getStatus = async (id: string): Promise<boolean> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.put(`${path}/admin/status/${id}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const status: boolean = response.data;
+    return status;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
