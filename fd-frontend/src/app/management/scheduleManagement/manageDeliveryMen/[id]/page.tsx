@@ -9,7 +9,9 @@ import { useEffect, useState } from "react";
 import Card from "../../../../deliveryMan/workingDay/components/card";
 import AdminGuard from "../../../adminGuard";
 import { User } from "@/utils/interfaces/user.interfaces";
-import { getStatus, getUserById } from "@/app/management/services/admin.service";
+import { deletePackageByUser, getStatus, getUserById } from "@/app/management/services/admin.service";
+import Swal from "sweetalert2";
+import { alert } from "@/utils/alerts/alerts";
 
 const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => {
   const [user, setUser] = useState<User>();
@@ -32,6 +34,26 @@ const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => 
   const handleStatus = async (id: string): Promise<void> => {
     const status = await getStatus(id);
     setStatusUser(status);
+  };
+
+  const handleDelete = async (idPackage: string): Promise<void> => {
+    const result = await alert.fire({
+      title: "Estas seguro que queres borrar este paquete?",
+      text: "Esto no se puede revertir!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Si, borralo!",
+      cancelButtonText: "No, cancelar!",
+      reverseButtons: true,
+    });
+
+    if (result.isConfirmed) {
+      const deletePackage = await deletePackageByUser(user?._id, idPackage);
+      setUser(deletePackage);
+      await alert.fire("Borrado!", "El paquete ha sido borrado.", "success");
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      await alert.fire("Cancelado", "El paquete está a salvo :)", "error");
+    }
   };
 
   return (
@@ -82,13 +104,13 @@ const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => 
                         Repartos pendientes
                       </Typography>
                       <Typography sx={{ fontWeight: 400, fontSize: "12px", lineHeight: "20px" }}>
-                        {`Te faltan repartir ${deliveringPackages?.length} paquetes`}
+                        {`Le faltan repartir ${deliveringPackages?.length} paquetes`}
                       </Typography>
                     </Box>
                   </AccordionSummary>
                   {deliveringPackages?.map((pack) => (
                     <AccordionDetails key={pack._id}>
-                      <Card paquete={pack} />
+                      <Card paquete={pack} handleDelete={handleDelete} />
                     </AccordionDetails>
                   ))}
                 </Accordion>
@@ -101,13 +123,13 @@ const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => 
                         Historial de repartos
                       </Typography>
                       <Typography sx={{ fontWeight: 400, fontSize: "12px", lineHeight: "20px" }}>
-                        {`Ya repartiste ${deliveredPackages?.length} paquetes`}
+                        {`Ya repartió ${deliveredPackages?.length} paquetes`}
                       </Typography>
                     </Box>
                   </AccordionSummary>
                   {deliveredPackages?.map((pack) => (
                     <AccordionDetails key={pack._id}>
-                      <Card paquete={pack} />
+                      <Card paquete={pack} handleDelete={handleDelete} />
                     </AccordionDetails>
                   ))}
                 </Accordion>
