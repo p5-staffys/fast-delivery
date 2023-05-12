@@ -1,4 +1,4 @@
-import { Get, Param, Put, Query, Delete, UseGuards } from '@nestjs/common';
+import { Get, Param, Query, UseGuards } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { PackageService } from './package.service';
 import {
@@ -23,7 +23,8 @@ export class PackageController {
   constructor(private readonly packageService: PackageService) {}
 
   @ApiOperation({
-    description: 'Package are wating for taken but dont have any delivery ',
+    description:
+      'Devuelve los paquetes que están esperando para ser enviados por cliente.',
   })
   @ApiBearerAuth('idToken')
   @ApiParam({ name: 'date', required: true, type: String })
@@ -41,36 +42,17 @@ export class PackageController {
     );
   }
 
-  @Put(':_id/delivered')
+  @ApiOperation({ description: 'Devuelve un paquete.' })
   @ApiBearerAuth('idToken')
   @ApiParam({ name: '_id', required: true, type: String })
-  async delivered(
-    @Param('_id', ValidateMongoId) _id: Types.ObjectId,
-  ): Promise<Package> {
-    return await this.packageService.delivered(_id);
-  }
-
   @Get(':_id')
-  @ApiBearerAuth('idToken')
-  @ApiParam({ name: '_id', required: true, type: String })
-  @ApiOperation({ description: 'Get Package by id' })
   async getById(
     @Param('_id', ValidateMongoId) _id: Types.ObjectId,
   ): Promise<Package> {
     return await this.packageService.getById(_id);
   }
 
-  @ApiOperation({ description: 'Delete package by admin' })
-  @ApiBearerAuth('idToken')
-  @ApiParam({ name: '_id', required: true, type: String })
-  @UseGuards(AdminGuard)
-  @Delete(':_id')
-  async deletePackage(@Param('_id', ValidateMongoId) _id): Promise<string> {
-    await this.packageService.deletePackage(_id);
-    return 'Package deleted';
-  }
-
-  @ApiOperation({ description: 'Get Package by date' })
+  @ApiOperation({ description: 'Devuelve los paquetes por fecha' })
   @ApiBearerAuth('idToken')
   @UseGuards(AdminGuard)
   @Get()
@@ -81,4 +63,31 @@ export class PackageController {
 
     return await this.packageService.getPackage(date, page, limit, status);
   }
+
+  /*
+  @ApiOperation({ description: 'Marca un paquete como enviado.' })
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @Put(':_id/delivered')
+  async delivered(
+    @Param('_id', ValidateMongoId) _id: Types.ObjectId,
+  ): Promise<Package> {
+    return await this.packageService.delivered(_id);
+  }
+  */
+
+  // Funcionalidad movida a Admin controller
+  /*
+  @ApiOperation({ description: 'Borra un paquete.' })
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: '_id', required: true, type: String })
+  @UseGuards(AdminGuard)
+  @Delete(':package_id')
+  async deletePackage(
+    @Param('package_id', ValidateMongoId) package_id,
+  ): Promise<string> {
+    await this.packageService.deletePackage(package_id);
+    return 'Package deleted';
+  }
+  */
 }

@@ -8,7 +8,7 @@ describe("Full User App Run", () => {
     cy.get("#password").type(Cypress.env("USER_PASSWORD"));
     cy.get("#password").should("have.value", Cypress.env("USER_PASSWORD"));
 
-    cy.get(".MuiButton-root").click();
+    cy.get(".css-1q78wrw > .MuiButton-root").click();
     cy.url().should("include", "/deliveryMan/workingDay");
 
     cy.get('[style="text-decoration: none;"] > .MuiButtonBase-root').click();

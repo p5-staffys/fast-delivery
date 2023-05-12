@@ -24,6 +24,7 @@ export class SeedPackagesService {
       _id: 'tAOHWYOyM8ZsgELhvLxvnaauKqf2',
       fullName: 'admin admin',
       email: 'admin@admin.com',
+      avatarURL: '',
     };
     /* const userA = {
       _id: 'AxUd8B5XTvb66tzpDZaRrXPVzDH3',

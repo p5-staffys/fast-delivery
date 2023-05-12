@@ -4,7 +4,7 @@ import { User, UserDocument } from '../entities/user.entity';
 import {
   Package,
   PackageDocument,
-} from 'src/modules/package/entities/package.entity';
+} from '../../../modules/package/entities/package.entity';
 
 export interface IUser {
   _id: string;
@@ -27,6 +27,7 @@ export interface IUserRef {
   _id: string;
   email: string;
   fullName: string;
+  avatarURL: string;
 }
 
 export interface IAssignPacakges {

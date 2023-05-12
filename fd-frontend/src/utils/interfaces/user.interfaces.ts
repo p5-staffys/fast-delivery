@@ -1,14 +1,16 @@
 import { PackageRef, PackageLogs } from "./package.interfaces";
 
 export interface Form {
-  bebidasAlcoholicas: boolean;
-  medicamentosPsicoactivos: boolean;
-  problemaEmocional: boolean;
-  createdAt: string;
-  updatedAt: string;
+  bebidasAlcoholicas: boolean | null;
+  medicamentosPsicoactivos: boolean | null;
+  problemaEmocional: boolean | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface User {
+  active: boolean;
+  avatarURL: string;
   _id: string;
   name: string;
   lastName: string;
@@ -21,7 +23,7 @@ export interface User {
 }
 
 export interface UserLogs {
-  activeUsers: number;
+  activeUsers: Partial<User>[];
   totalUsersCount: number;
 }
 

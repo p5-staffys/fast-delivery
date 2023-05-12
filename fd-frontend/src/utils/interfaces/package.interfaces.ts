@@ -1,7 +1,7 @@
 export interface PackageRef {
   _id: string;
   status: string;
-  address: string;
+  client: ClientRef;
   deliveryDate: Date;
 }
 
@@ -29,6 +29,11 @@ export interface Client {
   latlng: google.maps.LatLngLiteral;
 }
 
+export interface ClientRef {
+  fullName: string;
+  address: string;
+}
+
 export interface Address {
   number: string;
   street: string;
@@ -40,4 +45,9 @@ export interface Address {
 export interface PackageLogs {
   activePackages: number;
   totalPackages: number;
+}
+
+export interface IPackagesByClient {
+  _id: Client;
+  packages: Package[];
 }

@@ -10,7 +10,7 @@ const AuthGuard = ({ children }: { children: JSX.Element }): JSX.Element => {
   useEffect(() => {
     getAuthorization().then((result) => {
       if (!result) {
-        router.push("/deliveryMan");
+        router.push("/");
       }
       setAuthenticated(result);
     });

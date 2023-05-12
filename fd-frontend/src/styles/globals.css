@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap");
+
 * {
   padding: 0;
   margin: 0;
@@ -21,6 +22,10 @@
   align-content: center;
   align-items: center;
   height: 100vh;
+}
+
+.alertButton {
+  background-color: #42a5f5;
 }
 
 @import url(./addPackage.css);

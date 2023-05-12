@@ -40,7 +40,7 @@ export class UserService {
     return this.userRepository.findOneByIdAndDelete(_id);
   }
 
-  async findById(_id: string) {
+  async findById(_id: string): Promise<UserDocument> {
     return this.userRepository.findOneById(_id);
   }
 
@@ -106,8 +106,8 @@ export class UserService {
   async changeUserStatus(_id: string) {
     const user = await this.userRepository.findOneById(_id);
     user.active = !user.active;
-    user.save();
-    return true;
+    await user.save();
+    return user;
   }
 
   async countUsers() {
@@ -169,7 +169,45 @@ export class UserService {
           user.packages[i].status = status;
       }
     }
-    user.save();
-    return user;
+    const updatedUser = await user.save();
+    return updatedUser;
+  }
+
+  async changePackageRefStatusToDelivered(
+    user: UserDocument,
+    packageId: string,
+  ) {
+    for (let i = 0; i < user.packages.length; i++) {
+      if (user.packages[i]._id.toString() == packageId) {
+        const pack = user.packages[i];
+        const updatedPackage = { ...pack, status: PackageStatus.Delivered };
+        const otherPackages = user.packages.filter(
+          (pack) => pack._id.toString() != packageId,
+        );
+        user.packages = [...otherPackages, updatedPackage];
+      }
+    }
+    const updatedUser = await user.save();
+    return updatedUser;
+  }
+
+  async activate(user: UserDocument) {
+    user.active = true;
+    const updatedUser = await user.save();
+    return updatedUser;
+  }
+
+  async deActivate(user: UserDocument) {
+    user.active = false;
+    const updatedUser = await user.save();
+    return updatedUser;
+  }
+
+  async checkRemainingPacakges(user: UserDocument) {
+    const remaining = user.packages.find(
+      (pack) => pack.status == PackageStatus.Delivering,
+    );
+    if (remaining) return true;
+    return false;
   }
 }

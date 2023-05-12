@@ -81,7 +81,10 @@ function createPackRef(): PackageRef {
   return {
     _id: faker.datatype.uuid(),
     status: faker.helpers.arrayElement(["pending", "delivered", "delivering"]),
-    address: "calle falsa 123",
+    client: {
+      fullName: "Pepe Argento",
+      address: "hola",
+    },
     deliveryDate: faker.date.recent(3),
   };
 }

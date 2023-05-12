@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -7,15 +7,25 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Image from "next/image";
-import Logo1 from "../../../../asset/Ellipse-9.png";
-import Logo2 from "../../../../asset/Ellipse-92.png";
-import Logo3 from "../../../../asset/Ellipse93.png";
 import Link from "next/link";
 import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/backBtn";
 import Progress from "../components/progress";
 import AdminGuard from "../../adminGuard";
+import { getAllUsers } from "../../services/admin.service";
+import { User } from "@/utils/interfaces/user.interfaces";
 
 const Repartidores = (): JSX.Element => {
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const getAllUsersAsync = async (): Promise<void> => {
+      const allPackages = await getAllUsers();
+      setUsers(allPackages);
+    };
+
+    getAllUsersAsync();
+  }, []);
+
   return (
     <AdminGuard>
       <>
@@ -27,50 +37,36 @@ const Repartidores = (): JSX.Element => {
                 <strong>Repartidores</strong>
               </Typography>
             </AccordionSummary>
-            <Link href={"management/scheduleManagement/deliveryDetail"}>
-              <AccordionDetails>
-                <Box display="flex" justifyContent="space-between" sx={{ m: "0 10px" }}>
-                  <Box>
-                    <Progress value={60} />
-                  </Box>
-                  <Box>
-                    <Typography> Farid</Typography>
-                    <Typography sx={{ color: "#217bce" }}> • Viaje en curso</Typography>
-                  </Box>
-                  <Box>
-                    <Image alt="Remy Sharp" src={Logo1} width={50} height={50} />
-                  </Box>
-                </Box>
-              </AccordionDetails>
-            </Link>
-            <AccordionDetails>
-              <Box display="flex" justifyContent="space-between" sx={{ m: "0 10px" }}>
-                <Box>
-                  <Progress value={100} />
-                </Box>
-                <Box>
-                  <Typography>Luciana</Typography>
-                  <Typography sx={{ color: "#96db76", mr: "50px" }}> • Finalizo</Typography>
-                </Box>
-                <Box>
-                  <Image alt="Remy Sharp" src={Logo2} width={50} height={50} />
-                </Box>
-              </Box>
-            </AccordionDetails>
-            <AccordionDetails>
-              <Box display="flex" justifyContent="space-between" sx={{ m: "0 10px" }}>
-                <Box>
-                  <Progress value={65} />
-                </Box>
-                <Box>
-                  <Typography> Santiago</Typography>
-                  <Typography sx={{ color: "#ff6b6b", mr: "50px" }}> • Inactivo</Typography>
-                </Box>
-                <Box>
-                  <Image alt="Remy Sharp" src={Logo3} width={50} height={50} />
-                </Box>
-              </Box>
-            </AccordionDetails>
+            {users.map((user) => {
+              const colorStatus = user.active ? "#96DB76" : "#FF6B6B";
+              const deliveredPackages = user.packages.filter((pack) => pack.status === "delivered");
+              const progressDelivered =
+                deliveredPackages.length > 0 ? Math.round((deliveredPackages.length / user.packages.length) * 100) : 0;
+              return (
+                <Link href={`management/scheduleManagement/manageDeliveryMen/${user._id}`} key={user._id}>
+                  <AccordionDetails>
+                    <Box display="flex" justifyContent="space-between" sx={{ m: "0 10px" }}>
+                      <Box>
+                        <Progress value={progressDelivered} />
+                      </Box>
+                      <Box>
+                        <Typography sx={{ color: "#000000" }}> {user.name} </Typography>
+                        <Typography sx={{ color: colorStatus }}> • {user.active ? "Activo" : "Inactivo"}</Typography>
+                      </Box>
+                      <Box>
+                        <Image
+                          alt={user.name}
+                          src={user.avatarURL}
+                          width={50}
+                          height={50}
+                          style={{ borderRadius: "25px", objectPosition: "center right" }}
+                        />
+                      </Box>
+                    </Box>
+                  </AccordionDetails>
+                </Link>
+              );
+            })}
           </Accordion>
         </Box>
       </>

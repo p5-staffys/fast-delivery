@@ -44,7 +44,7 @@ import {
 } from './interfaces/user.interface';
 import { Types } from 'mongoose';
 import { PackageService } from '../package/package.service';
-import { PackageStatus } from '../package/interface/package.interface';
+import { UserDocument } from './entities/user.entity';
 
 @ApiTags('User')
 @Controller()
@@ -75,13 +75,36 @@ export class UserController {
     }
   }
 
+  @ApiOperation({ description: 'Crear nuevo usuario en la DB' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({
+    status: 201,
+    type: ReponseUserDto,
+  })
+  @Public()
+  @Post('create/:_id')
+  async createWithId(
+    @Param('_id') _id: string,
+    @Body() newUser: Partial<{ email: string; fullName: string }>,
+  ): Promise<ReponseUserDto> {
+    const { email, fullName } = newUser;
+    //await this.userService.checkUserEmail(email);
+    try {
+      const name = fullName.split(' ')[0];
+      const lastName = fullName.split(' ')[1];
+      return this.userService.create({ email, name, lastName, _id });
+    } catch (error: unknown) {
+      throw new GeneralError(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   @ApiOperation({ description: 'Obtener los datos del usuario logueado' })
   @ApiBearerAuth('idToken')
-  @UseInterceptors(CurrentUserInterceptor)
   @ApiResponse({
     status: 200,
     type: ReponseUserDto,
   })
+  @UseInterceptors(CurrentUserInterceptor)
   @Get()
   async getCurrent(
     @Req() request: CurrentUserRequest,
@@ -103,6 +126,27 @@ export class UserController {
     try {
       await this.authService.authenticate(authorization);
       return true;
+    } catch (error: unknown) {
+      return false;
+    }
+  }
+
+  @ApiOperation({ description: 'Buscar el usuario logueado en la db.' })
+  @ApiBearerAuth('idToken')
+  @ApiResponse({
+    status: 200,
+  })
+  @Public()
+  @Get('isInDB')
+  async checkIfUserIsInDB(
+    @Headers('Authorization') authorization,
+  ): Promise<boolean> {
+    try {
+      const auth = await this.authService.authenticate(authorization);
+      const _id = auth.uid;
+      const user = await this.userService.findById(_id);
+      if (user) return true;
+      return false;
     } catch (error: unknown) {
       return false;
     }
@@ -200,10 +244,12 @@ export class UserController {
           ok: false,
           message: 'Falló la validación del formulario, no puede trabajar hoy.',
         };
+      await this.userService.activate(currentUser);
       const userRef: IUserRef = {
         fullName: `${updatedUser.name} ${updatedUser.lastName}`,
         _id: updatedUser._id,
         email: updatedUser.email,
+        avatarURL: updatedUser.avatarURL,
       };
       await this.userLogsService.recordUser(date, userRef);
       return {
@@ -259,18 +305,25 @@ export class UserController {
   @Put('package/delivered')
   async delivered(
     @Req() { currentUser }: CurrentUserRequest,
-    @Body() packages: Types.ObjectId[],
+    @Body() packagesIds: Types.ObjectId[],
   ): Promise<IDeliverPackages> {
     try {
       const updatedPackages = await this.packageService.deliverPackages(
-        packages,
+        packagesIds,
       );
-      const updatedUser = await this.userService.changePackageRefStatus(
-        currentUser,
-        packages,
-        PackageStatus.Delivered,
-      );
+      let updatedUser: UserDocument;
+      for (let i = 0; i < packagesIds.length; i++) {
+        updatedUser = await this.userService.changePackageRefStatusToDelivered(
+          currentUser,
+          packagesIds[i].toString(),
+        );
+      }
 
+      const checkRemainingPacakges =
+        await this.userService.checkRemainingPacakges(updatedUser);
+      if (!checkRemainingPacakges) this.userService.deActivate(updatedUser);
+
+      updatedUser = await this.userService.findById(currentUser._id);
       return { updatedUser, updatedPackages };
     } catch (error: unknown) {
       throw new GeneralError(error);
