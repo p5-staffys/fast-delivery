@@ -213,15 +213,12 @@ export class PackageService {
 
   async getRecordByDate(
     deliveryDate: Date,
-  ): Promise<{ activePackages: number; totalPackages: number }> {
+  ): Promise<{ deliveredPackages: number; totalPackages: number }> {
     const packages = await this.packageRepository.aggregate([
       { $match: { deliveryDate } },
       { $group: { _id: '$status', total: { $sum: 1 } } },
     ]);
 
-    const newPackages = packages.find((pack) => pack._id == 'new') || {
-      total: 0,
-    };
     const pendingPackages = packages.find((pack) => pack._id == 'pending') || {
       total: 0,
     };
@@ -236,13 +233,10 @@ export class PackageService {
     ) || { total: 0 };
 
     const activePackages =
-      newPackages.total +
-      pendingPackages.total +
-      deliveringPackages.total +
-      failedPackages.total;
+      pendingPackages.total + deliveringPackages.total + failedPackages.total;
 
     const response = {
-      activePackages,
+      deliveredPackages: deliveredPackages.total,
       totalPackages: activePackages + deliveredPackages.total,
     };
     return response;
