@@ -125,3 +125,17 @@ export const getStatus = async (id: string): Promise<boolean> => {
     throw error;
   }
 };
+
+export const deletePackageByUser = async (idUser: string | undefined, idPackage: string): Promise<User> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.delete(`${path}/admin/${idUser}/${idPackage}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const user: User = response.data;
+    return user;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
