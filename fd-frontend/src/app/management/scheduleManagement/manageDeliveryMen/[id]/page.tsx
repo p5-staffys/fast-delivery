@@ -6,7 +6,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
-import Card from "../../../../deliveryMan/workingDay/components/card";
+import Card from "../../components/card";
 import AdminGuard from "../../../adminGuard";
 import { User } from "@/utils/interfaces/user.interfaces";
 import { deletePackageByUser, getStatus, getUserById } from "@/app/management/services/admin.service";
@@ -68,7 +68,7 @@ const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => 
           <Box>
             <Box boxShadow={"0px 2px 6px rgba(0, 0, 0, 0.14)"}>
               <Box>
-                <Box sx={{ width: "100%" }} display="flex" justifyContent="space-between">
+                <Box sx={{ width: "100%" }} display="flex" justifyContent="space-around">
                   <Box>
                     <Image
                       alt={user?.name || ""}
@@ -93,7 +93,6 @@ const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => 
                       onChange={async (): Promise<void> => handleStatus(params.id)}
                     />
                   </Box>
-                  <Box></Box>
                 </Box>
               </Box>
               <Container sx={{ mt: 2 }}>

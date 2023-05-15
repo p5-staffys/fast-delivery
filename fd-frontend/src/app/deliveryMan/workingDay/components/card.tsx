@@ -11,10 +11,9 @@ import { PackageRef } from "@/utils/interfaces/package.interfaces";
 
 interface Props {
   paquete: PackageRef;
-  handleDelete: (id: string) => void;
 }
 
-const CardManagePackage: React.FC<Props> = ({ paquete, handleDelete }) => {
+const CardManagePackage: React.FC<Props> = ({ paquete }) => {
   return (
     <Box sx={{ maxWidth: "auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0" }}>
       <Link href={`/deliveryMan/workingDay/${paquete._id}`}>
@@ -53,7 +52,7 @@ const CardManagePackage: React.FC<Props> = ({ paquete, handleDelete }) => {
             {paquete.client.address.street}
           </Typography>
 
-          <IconButton sx={{ textAlign: "right" }} aria-label="previous" onClick={(): void => handleDelete(paquete._id)}>
+          <IconButton sx={{ textAlign: "right" }} aria-label="previous">
             <Image alt="trash" src={trash} />
           </IconButton>
         </Box>
