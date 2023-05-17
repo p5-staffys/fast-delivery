@@ -94,9 +94,6 @@ const DeliveryMan = (): JSX.Element => {
           </Button>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
-          {/* <Link href="#" className="linkLogin">
-            Recuperar Contraseña
-          </Link> */}
           <Link href="#" className="linkLogin">
             <strong style={{ textUnderlineOffset: "off" }}>Registrarse</strong>
           </Link>

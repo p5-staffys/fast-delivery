@@ -22,6 +22,14 @@ const DeliveryDetail = (): JSX.Element => {
     });
   }, []);
 
+  const handleDelete = async (id: string): Promise<void> => {
+    try {
+      setPaquetes(paquetes.filter((pack) => pack._id !== id));
+    } catch (error: unknown) {
+      alert("Error al borrar el paquete");
+    }
+  };
+
   return (
     <AdminGuard>
       <>
@@ -77,7 +85,7 @@ const DeliveryDetail = (): JSX.Element => {
                   </AccordionSummary>
                   {paquetes.map((paquete, i) => (
                     <AccordionDetails key={i}>
-                      <Card paquete={paquete} />
+                      <Card paquete={paquete} handleDelete={handleDelete} />
                     </AccordionDetails>
                   ))}
                 </Accordion>
