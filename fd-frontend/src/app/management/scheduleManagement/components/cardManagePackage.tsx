@@ -17,7 +17,7 @@ const CardManagePackage: React.FC<Props> = ({ paquete, onDelete }) => {
     try {
       const deleted = await deletePackage(id);
       alert(`${deleted}`);
-      await onDelete();
+      onDelete();
     } catch (error: unknown) {
       alert("error al borrar el paquete");
     }

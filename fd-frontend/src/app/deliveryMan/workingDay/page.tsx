@@ -42,6 +42,15 @@ const WorkingDay = (): JSX.Element => {
     getUser();
   }, []);
 
+  const handleDelete = async (id: string): Promise<void> => {
+    try {
+      setPaquetes(paquetes.filter((pack) => pack._id !== id));
+      setPaquetesPending(paquetes.filter((pack) => pack._id !== id));
+    } catch (error: unknown) {
+      alert.fire("Error al borrar el paquete");
+    }
+  };
+
   return (
     <AuthGuard>
       <Container fixed>
@@ -60,7 +69,7 @@ const WorkingDay = (): JSX.Element => {
           {paquetesPending.length ? (
             paquetesPending.map((paquete, i) => (
               <AccordionDetails key={i}>
-                <CardManagePackage paquete={paquete} />
+                <CardManagePackage paquete={paquete} handleDelete={handleDelete} />
               </AccordionDetails>
             ))
           ) : (
@@ -75,7 +84,7 @@ const WorkingDay = (): JSX.Element => {
           </AccordionSummary>
           {paquetes.map((paquete, i) => (
             <AccordionDetails key={i}>
-              <CardManagePackage paquete={paquete} />
+              <CardManagePackage paquete={paquete} handleDelete={handleDelete} />
             </AccordionDetails>
           ))}
         </Accordion>
