@@ -3,7 +3,7 @@ import React, { ChangeEventHandler, useState } from "react";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/backBtn";
 import { createPackage } from "@/app/services/package.service";
-import AdminGuard from "../../adminGuard";
+import AdminGuard from "../../../../utils/guards/adminGuard";
 
 const addPackage = (): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(1);

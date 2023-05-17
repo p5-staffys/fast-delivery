@@ -10,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/backBtn";
 import Progress from "../components/progress";
-import AdminGuard from "../../adminGuard";
+import AdminGuard from "../../../../utils/guards/adminGuard";
 import { getAllUsers } from "../../services/admin.service";
 import { User } from "@/utils/interfaces/user.interfaces";
 

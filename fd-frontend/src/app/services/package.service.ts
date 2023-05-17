@@ -133,8 +133,6 @@ export const deliverPackage = async (
   }
 };
 
-//http://localhost:8000/package/pending/2023-05-05?page=1&limit=3
-
 export const getPendingPackages = async (date: string, page: number): Promise<IPackagesByClient[]> => {
   try {
     const idToken = localStorage.getItem("idToken");
@@ -143,6 +141,20 @@ export const getPendingPackages = async (date: string, page: number): Promise<IP
       headers: { Authorization: idToken },
     });
     return response.data;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const deletePackageFromHistory = async (_id: string): Promise<User> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.delete(`${path}/user/package/${_id}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const user: User = response.data.updatedUser;
+    return user;
   } catch (error: unknown) {
     throw error;
   }

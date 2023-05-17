@@ -23,7 +23,7 @@ import { deliverPackage, getPackageById } from "../../../services/package.servic
 import { useGlobalContext } from "@/context/store";
 
 import Map from "../components/map";
-import AuthGuard from "../../authGuard";
+import AuthGuard from "../../../../utils/guards/authGuard";
 import CardTypography from "./commons/cardTypography";
 import { alert, toast } from "@/utils/alerts/alerts";
 

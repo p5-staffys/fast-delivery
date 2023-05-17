@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { requestPackRefs } from "../../../../utils/seed";
 import Card from "../../../deliveryMan/workingDay/components/card";
 import { PackageRef } from "@/utils/interfaces/package.interfaces";
-import AdminGuard from "../../adminGuard";
+import AdminGuard from "../../../../utils/guards/adminGuard";
 
 const DeliveryDetail = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<PackageRef[]>([]);
