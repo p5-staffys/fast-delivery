@@ -11,7 +11,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { getCurrentUser } from "../services/user.services";
+import { getCurrentUser } from "../../services/user.services";
 import { alert, choice } from "@/utils/alerts/alerts";
 import CardManagePackage from "./components/card";
 import { deletePackageFromHistory } from "@/app/services/package.service";
@@ -56,9 +56,10 @@ const WorkingDay = (): JSX.Element => {
       });
 
     const deletePackage = async (): Promise<void> => {
+      setPaquetes(paquetes.filter((pack) => pack._id !== id));
+      setPaquetesPending(paquetesPending.filter((pack) => pack._id !== id));
+
       try {
-        setPaquetes(paquetes.filter((pack) => pack._id !== id));
-        setPaquetesPending(paquetes.filter((pack) => pack._id !== id));
         const updatedUser = await deletePackageFromHistory(id);
         const packs = updatedUser.packages;
         setPaquetes(packs);

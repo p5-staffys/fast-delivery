@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import avatar from "../../../../asset/logo.png";
 import { ReactElement } from "react";
-import { signOut } from "../../services/user.services";
+import { signOut } from "../../../services/user.services";
 import { styled } from "@mui/system";
 import { useRouter } from "next/navigation";
 
@@ -16,7 +16,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
-import { getCurrentUser } from "../../services/user.services";
+import { getCurrentUser } from "../../../services/user.services";
 import { User } from "@/utils/interfaces/user.interfaces";
 
 const StyledImage = styled(Image)({
@@ -55,7 +55,9 @@ const Header = (): ReactElement => {
     setAnchorEl(null);
   };
 
-  const handleProfile = (): void => {};
+  const handleProfile = (): void => {
+    router.push("/deliveryMan/profile");
+  };
 
   return (
     <Box sx={{ flexGrow: 1, mb: 8 }}>
