@@ -34,25 +34,18 @@ const DeliveryMan = (): JSX.Element => {
 
   return (
     <>
-      <main className="container-login">
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ mt: "104px", width: "100vw", mb: "100px" }}
-        >
-          <Link href="/">
-            <Image src={logo} alt="logo" width={149} height={94} />
-          </Link>
-        </Box>
-        <SignInForm />
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
-          <Link href="/register" className="linkLogin">
-            <strong style={{ textUnderlineOffset: "off" }}>Registrarse</strong>
-          </Link>
-          <GoogleButton />
-        </Box>
-      </main>
+      <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: "104px", width: "100vw", mb: "100px" }}>
+        <Link href="/">
+          <Image src={logo} alt="logo" width={160} />
+        </Link>
+      </Box>
+      <SignInForm />
+      <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
+        <Link href="/register" className="linkLogin">
+          <strong style={{ textUnderlineOffset: "off" }}>Registrarse</strong>
+        </Link>
+        <GoogleButton />
+      </Box>
     </>
   );
 };
