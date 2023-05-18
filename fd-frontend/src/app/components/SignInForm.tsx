@@ -67,6 +67,7 @@ const SignInForm = (): ReactElement => {
         type="email"
         color="primary"
         value={email}
+        required
         onChange={(e): void => {
           setEmail(e.target.value);
         }}
@@ -78,6 +79,7 @@ const SignInForm = (): ReactElement => {
         type={visibility ? "text" : "password"}
         fullWidth
         color="primary"
+        required
         onChange={(e): void => {
           setPassword(e.target.value);
         }}
