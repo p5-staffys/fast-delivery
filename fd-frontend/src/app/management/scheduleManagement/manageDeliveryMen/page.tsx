@@ -11,7 +11,7 @@ import Link from "next/link";
 import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/backBtn";
 import Progress from "../components/progress";
 import AdminGuard from "../../../../utils/guards/adminGuard";
-import { getAllUsers } from "../../services/admin.service";
+import { getAllUsers } from "../../../services/admin.service";
 import { User } from "@/utils/interfaces/user.interfaces";
 
 const Repartidores = (): JSX.Element => {

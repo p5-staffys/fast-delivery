@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEventHandler, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { signIn } from "./services/admin.service";
+import { signIn } from "../services/admin.service";
 import { IconButton, InputAdornment } from "@mui/material";
 
 const Home = (): JSX.Element => {

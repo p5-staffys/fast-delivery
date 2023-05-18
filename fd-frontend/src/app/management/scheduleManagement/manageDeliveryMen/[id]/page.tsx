@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import Card from "../../../../deliveryMan/workingDay/components/card";
 import AdminGuard from "../../../../../utils/guards/adminGuard";
 import { User } from "@/utils/interfaces/user.interfaces";
-import { deletePackageByUser, getStatus, getUserById } from "@/app/management/services/admin.service";
+import { deletePackageByUser, getStatus, getUserById } from "@/app/services/admin.service";
 import Swal from "sweetalert2";
 import { alert } from "@/utils/alerts/alerts";
 
