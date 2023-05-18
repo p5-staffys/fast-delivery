@@ -52,7 +52,13 @@ const SignInForm = (): ReactElement => {
   };
 
   return (
-    <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} sx={{ width: "90vw", m: "auto" }}>
+    <Box
+      component="form"
+      noValidate
+      autoComplete="off"
+      onSubmit={handleSubmit}
+      sx={{ width: "90vw", m: "auto", maxWidth: "640px" }}
+    >
       <TextField
         id="standard-basic"
         label="Usuario"
