@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getAuthorization } from "../../app/management/services/admin.service";
+import { getAuthorization } from "../../app/services/admin.service";
 
 const AdminGuard = ({ children }: { children: JSX.Element }): JSX.Element => {
   const [authenticated, setAuthenticated] = useState(false);
