@@ -118,7 +118,15 @@ export class AdminController {
   @Put('status/:_id')
   async changeUserStatus(@Param('_id') _id: string): Promise<UserDocument> {
     try {
-      const updatedUser = await this.userService.changeUserStatus(_id);
+      let updatedUser = await this.userService.changeUserStatus(_id);
+      if (!updatedUser.active) {
+        updatedUser.packages.forEach(async (pack) =>
+          this.packageService.unassignFromUser(pack._id),
+        );
+        updatedUser = await this.userService.deteleteAllFromHistory(
+          updatedUser,
+        );
+      }
       return updatedUser;
     } catch (error: unknown) {
       throw new GeneralError(error);
