@@ -3,7 +3,7 @@ import { Client, IPackagesByClient, Package, PackageCreate } from "../../utils/i
 import { User } from "@/utils/interfaces/user.interfaces";
 
 const googleMapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
-const path = "https://backend-buhubxjtrq-ue.a.run.app";
+const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "https://backend-buhubxjtrq-ue.a.run.app";
 
 export const getPackageById = async (_id: string): Promise<Package> => {
   try {

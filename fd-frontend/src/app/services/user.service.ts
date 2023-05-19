@@ -4,7 +4,7 @@ import { Form, User } from "@/utils/interfaces/user.interfaces";
 import { uploadAvatar } from "./storage.service";
 import { Package } from "@/utils/interfaces/package.interfaces";
 
-const path = "https://backend-buhubxjtrq-ue.a.run.app";
+const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "https://backend-buhubxjtrq-ue.a.run.app";
 
 export const signIn = async (email: string, password: string): Promise<User> => {
   try {
