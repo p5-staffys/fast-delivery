@@ -6,8 +6,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Link from "next/link";
 import DayList from "./components/carousel";
 import Progress from "./components/progress";
-import AdminGuard from "../adminGuard";
-import { getLogs } from "../services/admin.service";
+import AdminGuard from "../../../utils/guards/adminGuard";
+import { getLogs } from "../../services/admin.service";
 import { Logs } from "@/utils/interfaces/user.interfaces";
 import { useGlobalContext } from "@/context/store";
 

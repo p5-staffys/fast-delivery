@@ -52,7 +52,13 @@ const SignInForm = (): ReactElement => {
   };
 
   return (
-    <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} sx={{ width: "90vw", m: "auto" }}>
+    <Box
+      component="form"
+      noValidate
+      autoComplete="off"
+      onSubmit={handleSubmit}
+      sx={{ width: "90vw", m: "auto", maxWidth: "640px" }}
+    >
       <TextField
         id="standard-basic"
         label="Usuario"
@@ -61,6 +67,7 @@ const SignInForm = (): ReactElement => {
         type="email"
         color="primary"
         value={email}
+        required
         onChange={(e): void => {
           setEmail(e.target.value);
         }}
@@ -72,6 +79,7 @@ const SignInForm = (): ReactElement => {
         type={visibility ? "text" : "password"}
         fullWidth
         color="primary"
+        required
         onChange={(e): void => {
           setPassword(e.target.value);
         }}

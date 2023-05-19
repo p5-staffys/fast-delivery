@@ -1,56 +1,75 @@
 "use client";
-import React, { useEffect } from "react";
+
 import Image from "next/image";
 import Link from "next/link";
+import Box from "@mui/system/Box";
 import { useRouter } from "next/navigation";
 
 import logo from "../asset/logoMoto.png";
+import github from "../asset/github-mark.png";
+import { Button, Grid, Typography } from "@mui/material";
 
-import Box from "@mui/material/Box";
-import SignInForm from "./components/SignInForm";
-import GoogleButton from "./components/GoogleButton";
-
-import { getAuthorization } from "./services/auth.service";
-
-const DeliveryMan = (): JSX.Element => {
+const Main = (): JSX.Element => {
   const router = useRouter();
-
-  useEffect(() => {
-    const authorice = async (): Promise<void> => {
-      const auth = await getAuthorization();
-      if (!auth.authorice) return;
-      if (!auth.admin) {
-        router.push("/deliveryMan/workingDay");
-      } else {
-        router.push("/management/scheduleManagement");
-      }
-    };
-    authorice();
-  }, []);
 
   return (
     <>
-      <main className="container-login">
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ mt: "104px", width: "100vw", mb: "100px" }}
-        >
-          <Link href="/">
-            <Image src={logo} alt="logo" width={149} height={94} />
-          </Link>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ mt: 10, width: "100vw" }}
+      >
+        <Typography variant="h3" display="block" textAlign="center">
+          Bienvenid@!
+        </Typography>
+        <Link href="/">
+          <Image src={logo} alt="logo" width={160} />
+        </Link>
+        <Box sx={{ mb: 5, mt: 3 }} textAlign="center" maxWidth="480px">
+          <Typography variant="h5" display="inline">
+            {"Fast-Delivery "}
+          </Typography>
+          <Typography variant="h5" display="inline">
+            es una app de administración de servicios de mensajería y paquetería.
+          </Typography>
         </Box>
-        <SignInForm />
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mt: 2 }}>
-          <Link href="/register" className="linkLogin">
-            <strong style={{ textUnderlineOffset: "off" }}>Registrarse</strong>
-          </Link>
-          <GoogleButton />
+        <Box>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={(): void => {
+              router.push("/login");
+            }}
+            sx={{ mx: 4 }}
+          >
+            Ingresar
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={(): void => {
+              router.push("/register");
+            }}
+            sx={{ mx: 4 }}
+          >
+            Registrarse
+          </Button>
         </Box>
-      </main>
+      </Box>
+      <Grid position="absolute" bottom="0" container alignItems="center" justifyContent="center">
+        <Grid item marginX={2}>
+          <Typography variant="h6">© Staffys, 2023.</Typography>
+        </Grid>
+        <Grid item marginX={2}>
+          <Link href="https://github.com/p5-staffys/fast-delivery" target="_blank">
+            <Image src={github} alt="github" width="20" />
+          </Link>
+        </Grid>
+      </Grid>
     </>
   );
 };
 
-export default DeliveryMan;
+export default Main;

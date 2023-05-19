@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import { Container, IconButton, Typography } from "@mui/material";
 import ErrorRadios from "../components/radioGroup";
 import { SyntheticEvent, useState } from "react";
-import { inicial, questions } from "../../../../../utils/DeclarationUtil";
+import { inicial, questions } from "../../../../../utils/declaration";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";

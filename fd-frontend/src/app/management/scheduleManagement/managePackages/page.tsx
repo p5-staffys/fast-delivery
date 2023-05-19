@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CircularProgress } from "@mui/material";
-import AdminGuard from "../../adminGuard";
+import AdminGuard from "../../../../utils/guards/adminGuard";
 
 const ManagePackage = (): JSX.Element => {
   const router = useRouter();

@@ -10,7 +10,7 @@ import Image from "next/image";
 import CardManagePackage from "../../components/cardManagePackage";
 import { Package } from "@/utils/interfaces/package.interfaces";
 import { getAllPackages } from "@/app/services/package.service";
-import AdminGuard from "@/app/management/adminGuard";
+import AdminGuard from "@/utils/guards/adminGuard";
 
 const ManagePackage = ({ params }: { params: { date: string } }): JSX.Element => {
   const [packages, setPackages] = useState<Package[]>([]);

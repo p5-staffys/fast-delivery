@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
-import { firebaseSignIn, firebaseSignOut, IAuth } from "../../services/firebase.service";
-import { Logs, User } from "@/utils/interfaces/user.interfaces";
+import { firebaseSignIn, firebaseSignOut, IAuth } from "./firebase.service";
+import { Form, User } from "@/utils/interfaces/user.interfaces";
+import { uploadAvatar } from "./storage.service";
 
 const path = "https://backend-buhubxjtrq-ue.a.run.app";
 
@@ -9,7 +10,7 @@ export const signIn = async (email: string, password: string): Promise<User> => 
     const auth: IAuth = await firebaseSignIn(email, password);
     const idToken: string = auth.idToken;
     localStorage.setItem("idToken", idToken);
-    const response: AxiosResponse = await axios.get(`${path}/admin`, {
+    const response: AxiosResponse = await axios.get(`${path}/user`, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
@@ -33,7 +34,7 @@ export const signOut = async (): Promise<void> => {
 export const signUp = async (email: string, password: string, name: string, lastName: string): Promise<User> => {
   try {
     const response: AxiosResponse = await axios.post(
-      `${path}/admin`,
+      `${path}/user`,
       { email, name, lastName, password },
       { withCredentials: true },
     );
@@ -48,7 +49,7 @@ export const signUp = async (email: string, password: string, name: string, last
 export const getAuthorization = async (): Promise<boolean> => {
   try {
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.get(`${path}/admin/authenticate`, {
+    const response: AxiosResponse = await axios.get(`${path}/user/authenticate`, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
@@ -59,45 +60,10 @@ export const getAuthorization = async (): Promise<boolean> => {
   }
 };
 
-export const getLogs = async (date: string): Promise<Logs | undefined> => {
+export const getCurrentUser = async (): Promise<User> => {
   try {
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.get(`${path}/admin/getLogs/${date}`, {
-      withCredentials: true,
-      headers: { Authorization: idToken },
-    });
-
-    const logs = response.data;
-    return logs;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      const { response } = error;
-      if (response && response.status === 400) {
-        return undefined;
-      }
-    }
-    throw error;
-  }
-};
-
-export const getAllUsers = async (): Promise<User[]> => {
-  try {
-    const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.get(`${path}/admin/users`, {
-      withCredentials: true,
-      headers: { Authorization: idToken },
-    });
-    const users: User[] = response.data;
-    return users;
-  } catch (error: unknown) {
-    throw error;
-  }
-};
-
-export const getUserById = async (id: string): Promise<User> => {
-  try {
-    const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.get(`${path}/admin/user/${id}`, {
+    const response: AxiosResponse = await axios.get(`${path}/user`, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });
@@ -108,28 +74,38 @@ export const getUserById = async (id: string): Promise<User> => {
   }
 };
 
-export const getStatus = async (id: string): Promise<boolean> => {
+export const sendForm = async (
+  form: Form,
+): Promise<{
+  ok: boolean;
+  message: string;
+}> => {
   try {
+    const date = new Date().toDateString().split("T")[0];
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.put(
-      `${path}/admin/status/${id}`,
-      {},
+    const response: AxiosResponse = await axios.post(
+      `${path}/user/addForm`,
+      { date, form },
       {
         withCredentials: true,
         headers: { Authorization: idToken },
       },
     );
-    const status: boolean = response.data.active;
-    return status;
+    return response.data;
   } catch (error: unknown) {
     throw error;
   }
 };
 
-export const deletePackageByUser = async (idUser: string | undefined, idPackage: string): Promise<User> => {
+export const updateUser = async (_id: string, updatedInfo: Partial<User>, avatar: Blob | false): Promise<User> => {
+  if (avatar) {
+    const avatarURL = await uploadAvatar(avatar, _id);
+    updatedInfo.avatarURL = avatarURL;
+  }
+
   try {
     const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.delete(`${path}/admin/${idUser}/${idPackage}`, {
+    const response: AxiosResponse = await axios.patch(`${path}/user`, updatedInfo, {
       withCredentials: true,
       headers: { Authorization: idToken },
     });

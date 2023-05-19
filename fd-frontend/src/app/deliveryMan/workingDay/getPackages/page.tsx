@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import BackBtn from "./components/backBtn";
-import AuthGuard from "../../authGuard";
+import AuthGuard from "../../../../utils/guards/authGuard";
 import { assignPackages, getAllPackagesPending } from "@/app/services/package.service";
 import { format } from "date-fns";
 import { Package } from "../../../../utils/interfaces/package.interfaces";
