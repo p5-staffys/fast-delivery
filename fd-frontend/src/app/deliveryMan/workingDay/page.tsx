@@ -11,10 +11,10 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { getCurrentUser } from "../../services/user.services";
+import { getCurrentUser } from "../../services/user.service";
 import { alert, choice } from "@/utils/alerts/alerts";
 import CardManagePackage from "./components/card";
-import { deletePackageFromHistory } from "@/app/services/package.service";
+import { deletePackageFromHistory } from "@/app/services/user.service";
 
 const WorkingDay = (): JSX.Element => {
   const [paquetes, setPaquetes] = useState<PackageRef[]>([]);

@@ -18,7 +18,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Package } from "@/utils/interfaces/package.interfaces";
-import { deliverPackage, getPackageById } from "../../../services/package.service";
+import { getPackageById } from "@/app/services/package.service";
+import { deliverPackage } from "@/app/services/user.service";
 
 import { useGlobalContext } from "@/context/store";
 

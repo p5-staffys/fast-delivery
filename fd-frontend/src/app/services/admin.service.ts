@@ -139,3 +139,17 @@ export const deletePackageByUser = async (idUser: string | undefined, idPackage:
     throw error;
   }
 };
+
+export const deletePackage = async (_id: string): Promise<string> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.delete(`${path}/admin/${_id}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const packet: string = response.data;
+    return packet;
+  } catch (error: unknown) {
+    throw error;
+  }
+};

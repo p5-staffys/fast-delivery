@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import { User } from "@/utils/interfaces/user.interfaces";
 import { alert, toast } from "@/utils/alerts/alerts";
-import { getCurrentUser, updateUser } from "../../services/user.services";
+import { getCurrentUser, updateUser } from "../../services/user.service";
 import { Button, TextField } from "@mui/material";
 import { uploadAvatarTemp } from "@/app/services/storage.service";
 
