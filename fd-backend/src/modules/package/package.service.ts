@@ -188,8 +188,9 @@ export class PackageService {
     );
   }
 
-  async deletePackage(_id: Types.ObjectId): Promise<void> {
-    await this.packageRepository.deleteEntity(_id);
+  async deletePackage(_id: Types.ObjectId): Promise<boolean> {
+    return await this.packageRepository.hardDelete(_id);
+    // return await this.packageRepository.deleteEntity(_id);
   }
 
   async getPackage(

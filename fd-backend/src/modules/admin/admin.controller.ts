@@ -168,9 +168,8 @@ export class AdminController {
   @ApiBearerAuth('idToken')
   @Get('getLogs/:date')
   async getLogs(@Param('date') requestDate: string) {
+    const date = new Date(requestDate);
     try {
-      const date = new Date(requestDate);
-
       const userLogs = await this.userLogsService.getRecordByDate(date);
       const totalUsersCount = await this.userService.countUsers();
       const users = {
@@ -263,24 +262,43 @@ export class AdminController {
     }
   }
 
-  @ApiOperation({ description: 'Borra un paquete.' })
+  @ApiOperation({
+    description: 'Borra un paquete del historial de un usuario.',
+  })
   @ApiBearerAuth('idToken')
   @ApiParam({ name: 'user_id', required: true, type: String })
   @ApiParam({ name: 'package_id', required: true, type: String })
   @UseGuards(AdminGuard)
   @Delete(':user_id/:package_id')
-  async deletePackage(
+  async deletePackageByUser(
     @Param('package_id') package_id,
     @Param('user_id') user_id,
   ): Promise<UserDocument> {
     try {
-      // await this.packageService.deletePackage(package_id);
       const user = await this.userService.findById(user_id);
       const updatedUser = await this.userService.deteleteFromHistory(
         package_id,
         user,
       );
       return updatedUser;
+    } catch (error: unknown) {
+      throw new GeneralError(error);
+    }
+  }
+
+  @ApiOperation({ description: 'Borra un paquete.' })
+  @ApiBearerAuth('idToken')
+  @ApiParam({ name: 'package_id', required: true, type: String })
+  @UseGuards(AdminGuard)
+  @Delete(':package_id')
+  async deletePackage(@Param('package_id') package_id): Promise<boolean> {
+    try {
+      const pack = await this.packageService.getById(package_id);
+      const user_id = pack.deliveredBy._id;
+      const user = await this.userService.findById(user_id);
+      await this.userService.deteleteFromHistory(package_id, user);
+      const result = await this.packageService.deletePackage(package_id);
+      return result;
     } catch (error: unknown) {
       throw new GeneralError(error);
     }

@@ -166,4 +166,12 @@ export abstract class EntityRepository<T extends Document> {
     if (!data) throw new EntityNotFound(this.entityModel.modelName);
     return data;
   };
+
+  hardDelete = async (_id: Types.ObjectId): Promise<boolean> => {
+    const data = await this.entityModel.deleteOne({ _id });
+    if (!data) throw new EntityNotFound(this.entityModel.modelName);
+    const deleted = data.deletedCount;
+    if (deleted) return true;
+    return false;
+  };
 }
