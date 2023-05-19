@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getAuthorization } from "../../app/services/user.services";
+import { getAuthorization } from "../../app/services/user.service";
 
 const AuthGuard = ({ children }: { children: JSX.Element }): JSX.Element => {
   const [authenticated, setAuthenticated] = useState(false);

@@ -12,7 +12,7 @@ import { IPackagesByClient } from "@/utils/interfaces/package.interfaces";
 import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { inicial, questions } from "../../../../utils/declaration";
 import { alert, toast } from "@/utils/alerts/alerts";
-import { sendForm } from "../../../services/user.services";
+import { sendForm } from "../../../services/user.service";
 import { assignPackages } from "@/app/services/package.service";
 import ErrorRadios from "./components/radioGroup";
 

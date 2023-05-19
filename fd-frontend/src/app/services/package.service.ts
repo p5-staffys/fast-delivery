@@ -3,7 +3,7 @@ import { Client, IPackagesByClient, Package, PackageCreate } from "../../utils/i
 import { User } from "@/utils/interfaces/user.interfaces";
 
 const googleMapsApiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
-const path = "https://backend-buhubxjtrq-ue.a.run.app";
+const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "https://backend-buhubxjtrq-ue.a.run.app";
 
 export const getPackageById = async (_id: string): Promise<Package> => {
   try {
@@ -104,35 +104,6 @@ export const createPackage = async (
   }
 };
 
-export const deletePackage = async (_id: string): Promise<string> => {
-  try {
-    const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.delete(`${path}/package/${_id}`, {
-      withCredentials: true,
-      headers: { Authorization: idToken },
-    });
-    const packet: string = response.data;
-    return packet;
-  } catch (error: unknown) {
-    throw error;
-  }
-};
-
-export const deliverPackage = async (
-  pacakgesIds: string[],
-): Promise<{ updatedUser: User; updatedPackages: Package[] }> => {
-  try {
-    const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.put(`${path}/user/package/delivered`, pacakgesIds, {
-      withCredentials: true,
-      headers: { Authorization: idToken },
-    });
-    return response.data;
-  } catch (error: unknown) {
-    throw error;
-  }
-};
-
 export const getPendingPackages = async (date: string, page: number): Promise<IPackagesByClient[]> => {
   try {
     const idToken = localStorage.getItem("idToken");
@@ -141,20 +112,6 @@ export const getPendingPackages = async (date: string, page: number): Promise<IP
       headers: { Authorization: idToken },
     });
     return response.data;
-  } catch (error: unknown) {
-    throw error;
-  }
-};
-
-export const deletePackageFromHistory = async (_id: string): Promise<User> => {
-  try {
-    const idToken = localStorage.getItem("idToken");
-    const response: AxiosResponse = await axios.delete(`${path}/user/package/${_id}`, {
-      withCredentials: true,
-      headers: { Authorization: idToken },
-    });
-    const user: User = response.data.updatedUser;
-    return user;
   } catch (error: unknown) {
     throw error;
   }

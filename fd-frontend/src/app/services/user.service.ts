@@ -2,8 +2,9 @@ import axios, { AxiosResponse } from "axios";
 import { firebaseSignIn, firebaseSignOut, IAuth } from "./firebase.service";
 import { Form, User } from "@/utils/interfaces/user.interfaces";
 import { uploadAvatar } from "./storage.service";
+import { Package } from "@/utils/interfaces/package.interfaces";
 
-const path = "https://backend-buhubxjtrq-ue.a.run.app";
+const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "https://backend-buhubxjtrq-ue.a.run.app";
 
 export const signIn = async (email: string, password: string): Promise<User> => {
   try {
@@ -111,6 +112,35 @@ export const updateUser = async (_id: string, updatedInfo: Partial<User>, avatar
     });
     const user: User = response.data;
     return user;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const deletePackageFromHistory = async (_id: string): Promise<User> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.delete(`${path}/user/package/${_id}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const user: User = response.data.updatedUser;
+    return user;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const deliverPackage = async (
+  pacakgesIds: string[],
+): Promise<{ updatedUser: User; updatedPackages: Package[] }> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.put(`${path}/user/package/delivered`, pacakgesIds, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    return response.data;
   } catch (error: unknown) {
     throw error;
   }

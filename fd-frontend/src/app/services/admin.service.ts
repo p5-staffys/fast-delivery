@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { firebaseSignIn, firebaseSignOut, IAuth } from "./firebase.service";
 import { Logs, User } from "@/utils/interfaces/user.interfaces";
 
-const path = "https://backend-buhubxjtrq-ue.a.run.app";
+const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "https://backend-buhubxjtrq-ue.a.run.app";
 
 export const signIn = async (email: string, password: string): Promise<User> => {
   try {
@@ -135,6 +135,20 @@ export const deletePackageByUser = async (idUser: string | undefined, idPackage:
     });
     const user: User = response.data;
     return user;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const deletePackage = async (_id: string): Promise<string> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.delete(`${path}/admin/${_id}`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const packet: string = response.data;
+    return packet;
   } catch (error: unknown) {
     throw error;
   }

@@ -5,7 +5,7 @@ import imagePack from "../../../../asset/pack.svg";
 import trash from "../../../../asset/redTrash.svg";
 import { Package } from "@/utils/interfaces/package.interfaces";
 import Image from "next/image";
-import { deletePackage } from "@/app/services/package.service";
+import { deletePackage } from "@/app/services/admin.service";
 
 interface Props {
   paquete: Package;
