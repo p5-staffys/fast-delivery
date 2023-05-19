@@ -168,9 +168,8 @@ export class AdminController {
   @ApiBearerAuth('idToken')
   @Get('getLogs/:date')
   async getLogs(@Param('date') requestDate: string) {
+    const date = new Date(requestDate);
     try {
-      const date = new Date(requestDate);
-
       const userLogs = await this.userLogsService.getRecordByDate(date);
       const totalUsersCount = await this.userService.countUsers();
       const users = {
