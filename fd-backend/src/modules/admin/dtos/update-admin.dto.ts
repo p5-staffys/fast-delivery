@@ -1,9 +1,8 @@
-import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
-import { CreateUserDto } from './create-user.dto';
+import { IAdmin } from '../interfaces/admin.interface';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
+export class UpdateAdminDto implements Partial<IAdmin> {
   @IsOptional()
   @IsString()
   @ApiProperty({ example: 'admin' })
