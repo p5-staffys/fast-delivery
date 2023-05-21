@@ -3,15 +3,16 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Box from "@mui/material/Box";
-import { User } from "@/utils/interfaces/user.interfaces";
 import { alert, toast } from "@/utils/alerts/alerts";
-import { getCurrentUser, updateUser } from "../../services/user.service";
 import { Button, TextField } from "@mui/material";
 import { uploadAvatarTemp } from "@/app/services/storage.service";
 
+import { getCurrentAdmin, updateAdmin } from "../../../services/admin.service";
+import { Admin } from "@/utils/interfaces/admin.interfaces";
+
 const EditProfile = (): JSX.Element => {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Admin>();
   const [name, setName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [avatarURL, setAvatarURL] = useState<string>(
@@ -22,7 +23,7 @@ const EditProfile = (): JSX.Element => {
   useEffect(() => {
     const getUser = async (): Promise<void> => {
       try {
-        const currentUser = await getCurrentUser();
+        const currentUser = await getCurrentAdmin();
         setUser(currentUser);
         setName(currentUser.name);
         setLastName(currentUser.lastName);
@@ -46,14 +47,14 @@ const EditProfile = (): JSX.Element => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (user) {
-      const updatedInfo: Partial<User> = {};
+      const updatedInfo: Partial<Admin> = {};
       if (name != user.name) updatedInfo.name = name;
       if (lastName != user.lastName) updatedInfo.lastName = lastName;
       try {
-        const response = await updateUser(user._id, updatedInfo, avatar);
+        const response = await updateAdmin(user._id, updatedInfo, avatar);
         if (response) {
           toast.fire({ icon: "success", text: "Usuario actualizado con éxito." });
-          router.push("/deliveryMan/workingDay");
+          router.push("/management/scheduleManagement");
         }
       } catch {
         alert.fire({ icon: "error", title: "Error", text: "Hubo un problema. Por favor, vuelva a intentarlo." });

@@ -7,20 +7,24 @@ import Link from "next/link";
 import DayList from "./components/carousel";
 import Progress from "./components/progress";
 import AdminGuard from "../../../utils/guards/adminGuard";
-import { getLogs } from "../../services/admin.service";
+import { getCurrentAdmin, getLogs } from "../../services/admin.service";
 import { Logs } from "@/utils/interfaces/user.interfaces";
-import { useGlobalContext } from "@/context/store";
+import { Admin } from "@/utils/interfaces/admin.interfaces";
 
 const Agenda = (): JSX.Element => {
-  const { user } = useGlobalContext();
   const today = new Date();
   const formattedDate = today.toLocaleDateString("es-ES", { dateStyle: "short" });
+  const [admin, setAdmin] = useState<Admin>();
   const [date, setDate] = useState<string>("");
   const [logs, setLogs] = useState<Logs>();
 
-  const handleDate = (date: string): void => {
-    setDate(date);
-  };
+  useEffect(() => {
+    const getAdmin = async (): Promise<void> => {
+      const newAdmin = await getCurrentAdmin();
+      setAdmin(newAdmin);
+    };
+    getAdmin();
+  }, []);
 
   useEffect(() => {
     const getAllLogsAsync = async (): Promise<void> => {
@@ -32,6 +36,9 @@ const Agenda = (): JSX.Element => {
     getAllLogsAsync();
   }, [date]);
 
+  const handleDate = (date: string): void => {
+    setDate(date);
+  };
   const progressPackages: number = logs?.packages.activePackages
     ? Math.round((logs.packages.activePackages * 100) / logs.packages.totalPackages)
     : 0;
@@ -46,8 +53,8 @@ const Agenda = (): JSX.Element => {
         <Box sx={{ mt: 0, display: "flex", flexDirection: "inherit", alignItems: "center" }}>
           <img
             src={
-              user.avatarURL
-                ? user.avatarURL
+              admin?.avatarURL
+                ? admin.avatarURL
                 : "https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png"
             }
             alt="logo"
@@ -55,7 +62,6 @@ const Agenda = (): JSX.Element => {
             style={{ borderRadius: "50%" }}
           />
           <Box sx={{ paddingX: 2, mb: 3, flexGrow: 1, marginTop: "10px" }}>
-            <Typography sx={{ fontSize: "14px" }}>Hola Admin!</Typography>
             <Typography sx={{ fontFamily: "Roboto", fontSize: "18px", fontWeight: 700 }}>Gestionar pedidos</Typography>
           </Box>
         </Box>

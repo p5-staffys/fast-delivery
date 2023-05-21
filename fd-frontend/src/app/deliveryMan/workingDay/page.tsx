@@ -92,7 +92,7 @@ const WorkingDay = (): JSX.Element => {
             <Typography>Repartos pendientes</Typography>
           </AccordionSummary>
 
-          {paquetesPending.length ? (
+          {paquetesPending?.length ? (
             paquetesPending.map((paquete, i) => (
               <AccordionDetails key={i}>
                 <CardManagePackage paquete={paquete} handleDelete={handleDelete} />
@@ -108,7 +108,7 @@ const WorkingDay = (): JSX.Element => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id="panel2a-header">
             <Typography>Historial de repartos</Typography>
           </AccordionSummary>
-          {paquetes.length
+          {paquetes?.length
             ? paquetes.map((paquete, i) => (
                 <AccordionDetails key={i}>
                   <CardManagePackage paquete={paquete} handleDelete={handleDelete} />
