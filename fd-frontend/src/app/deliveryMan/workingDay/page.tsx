@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-import { PackageRef } from "@/utils/interfaces/package.interfaces";
+import { PackageRef, PackageStatus } from "@/utils/interfaces/package.interfaces";
 import AuthGuard from "../../../utils/guards/authGuard";
 
 import Button from "@mui/material/Button";
@@ -29,7 +29,7 @@ const WorkingDay = (): JSX.Element => {
         setPaquetes(packs);
 
         const packFiltrados = packs.filter((paquete: PackageRef) => {
-          return paquete.status === "delivering" ? paquete : null;
+          return paquete.status === PackageStatus.Delivering ? paquete : null;
         });
         setPaquetesPending(packFiltrados);
       } catch {
@@ -65,7 +65,7 @@ const WorkingDay = (): JSX.Element => {
         setPaquetes(packs);
 
         const packFiltrados = packs.filter((paquete: PackageRef) => {
-          return paquete.status === "delivering" ? paquete : null;
+          return paquete.status === PackageStatus.Delivering ? paquete : null;
         });
         setPaquetesPending(packFiltrados);
       } catch (error: unknown) {
@@ -80,14 +80,14 @@ const WorkingDay = (): JSX.Element => {
 
   return (
     <AuthGuard>
-      <Container fixed>
+      <Container fixed maxWidth="md">
         <Link style={{ textDecoration: "none" }} href="/deliveryMan/workingDay/pending">
           <Button sx={{ marginY: "15px" }} variant="contained" fullWidth={true}>
             Obtener paquetes
           </Button>
         </Link>
 
-        <Accordion sx={{ marginY: "15px" }}>
+        <Accordion sx={{ marginY: "15px" }} defaultExpanded={paquetesPending?.length ? true : false}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id="panel2a-header">
             <Typography>Repartos pendientes</Typography>
           </AccordionSummary>
