@@ -64,7 +64,9 @@ const Header = (): ReactElement => {
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <StyledImage alt="logo" src={logo} />
           <Box>
-            <Typography variant="h6" textAlign="center">{`${user?.name} ${user?.lastName}`}</Typography>
+            <Typography variant="h6" textAlign="center">
+              {user?.name ? `${user?.name} ${user?.lastName}` : ``}
+            </Typography>
           </Box>
           <>
             <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
