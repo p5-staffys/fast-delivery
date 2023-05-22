@@ -1,8 +1,8 @@
 export interface PackageRef {
   _id: string;
-  status: string;
+  status: PackageStatus;
   client: ClientRef;
-  deliveryDate: Date;
+  deliveryDate: string;
 }
 
 export interface Package {
@@ -50,4 +50,11 @@ export interface PackageLogs {
 export interface IPackagesByClient {
   _id: Client;
   packages: Package[];
+}
+
+export enum PackageStatus {
+  Pending = "Pendiente",
+  Delivering = "En viaje",
+  Delivered = "Entregado",
+  Failed = "Cancelado",
 }
