@@ -213,7 +213,7 @@ export class PackageService {
   }
 
   async getRecordByDate(
-    dateFilter: Date,
+    deliveryDate: Date,
   ): Promise<{ deliveredPackages: number; totalPackages: number }> {
     /*const packages = await this.packageRepository.aggregate([
       { $match: { deliveryDate: { $gte: dateFilter, $lte: dateFilter } } },
@@ -232,17 +232,9 @@ export class PackageService {
     const deliveredPackages = packages.find(
       (pack) => pack._id == 'delivered',
     ) || { total: 0 };
-
-
     */
 
-    const packageFilterQuery: IPackageQuery = {
-      deliveryDate: { $gte: dateFilter, $lte: dateFilter },
-    };
-
-    const packages = await this.packageRepository.find({
-      ...packageFilterQuery,
-    });
+    const packages = await this.packageRepository.find({ deliveryDate });
 
     const deliveredPackages = packages.map(
       (pack) => pack.status == PackageStatus.Delivered,
