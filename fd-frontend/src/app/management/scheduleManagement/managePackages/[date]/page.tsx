@@ -11,6 +11,7 @@ import CardManagePackage from "../../components/cardManagePackage";
 import { Package } from "@/utils/interfaces/package.interfaces";
 import { getAllPackages } from "@/app/services/package.service";
 import AdminGuard from "@/utils/guards/adminGuard";
+import { toast } from "@/utils/alerts/alerts";
 
 const ManagePackage = ({ params }: { params: { date: string } }): JSX.Element => {
   const [packages, setPackages] = useState<Package[]>([]);
@@ -28,7 +29,7 @@ const ManagePackage = ({ params }: { params: { date: string } }): JSX.Element =>
     try {
       setPackages(packages.filter((pack) => pack._id !== id));
     } catch (error: unknown) {
-      alert("Error al borrar el paquete");
+      toast.fire({ icon: "error", text: "Error al borrar el paquete." });
     }
   };
 

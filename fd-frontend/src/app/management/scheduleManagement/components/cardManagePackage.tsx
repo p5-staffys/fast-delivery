@@ -6,6 +6,7 @@ import trash from "../../../../asset/redTrash.svg";
 import { Package } from "@/utils/interfaces/package.interfaces";
 import Image from "next/image";
 import { deletePackage } from "@/app/services/admin.service";
+import { toast } from "@/utils/alerts/alerts";
 
 interface Props {
   paquete: Package;
@@ -16,10 +17,10 @@ const CardManagePackage: React.FC<Props> = ({ paquete, onDelete }) => {
   const handleDelete = async (id: string): Promise<void> => {
     try {
       const deleted = await deletePackage(id);
-      alert(`${deleted}`);
+      toast.fire({ icon: "success", text: `${deleted}` });
       onDelete();
     } catch (error: unknown) {
-      alert("error al borrar el paquete");
+      toast.fire({ icon: "success", text: "Error al borrar el paquete." });
     }
   };
 
