@@ -5,6 +5,8 @@ import { alert } from "@/utils/alerts/alerts";
 
 import { useGlobalContext } from "@/context/store";
 import { GoogleSignIn } from "../services/auth.service";
+import Image from "next/image";
+import googleLogo from "../../asset/btn_google_signin_dark_pressed_web.png";
 
 const GoogleButton = (): JSX.Element => {
   const router = useRouter();
@@ -28,7 +30,7 @@ const GoogleButton = (): JSX.Element => {
 
   return (
     <Button onClick={handleProviderSignIn}>
-      <strong style={{ textUnderlineOffset: "off" }}>Google SignIn</strong>
+      <Image src={googleLogo} alt="logoGoogle"></Image>
     </Button>
   );
 };

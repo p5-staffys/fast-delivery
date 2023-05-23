@@ -23,9 +23,18 @@ const SignInForm = (): ReactElement => {
 
   const { setUser } = useGlobalContext();
   const router = useRouter();
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [passwordError, setPasswordError] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+
+    if (!email || !password) {
+      setEmailError(!email);
+      setPasswordError(!password);
+      return;
+    }
+
     setDisabled(false);
     try {
       const response = await signIn(email, password);
@@ -80,9 +89,11 @@ const SignInForm = (): ReactElement => {
         type="email"
         color="primary"
         value={email}
-        required
+        error={emailError}
+        helperText={emailError && "Usuario requerido"}
         onChange={(e): void => {
           setEmail(e.target.value);
+          setEmailError(false);
         }}
       />
       <TextField
@@ -92,9 +103,11 @@ const SignInForm = (): ReactElement => {
         type={visibility ? "text" : "password"}
         fullWidth
         color="primary"
-        required
+        error={passwordError}
+        helperText={passwordError && "Contraseña requerida"}
         onChange={(e): void => {
           setPassword(e.target.value);
+          setPasswordError(false);
         }}
         sx={{
           mt: 2,
