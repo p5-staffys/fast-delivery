@@ -215,12 +215,12 @@ export class PackageService {
   async getRecordByDate(
     deliveryDate: Date,
   ): Promise<{ deliveredPackages: number; totalPackages: number }> {
-    const packages = await this.packageRepository.aggregate([
-      { $match: { deliveryDate } },
+    /*const packages = await this.packageRepository.aggregate([
+      { $match: { deliveryDate: { $gte: dateFilter, $lte: dateFilter } } },
       { $group: { _id: '$status', total: { $sum: 1 } } },
     ]);
 
-    const pendingPackages = packages.find((pack) => pack._id == 'pending') || {
+        const pendingPackages = packages.find((pack) => pack._id == 'pending') || {
       total: 0,
     };
     const deliveringPackages = packages.find(
@@ -232,13 +232,31 @@ export class PackageService {
     const deliveredPackages = packages.find(
       (pack) => pack._id == 'delivered',
     ) || { total: 0 };
+    */
+
+    const packages = await this.packageRepository.find({ deliveryDate });
+
+    const deliveredPackages = packages.map(
+      (pack) => pack.status == PackageStatus.Delivered,
+    );
+    const pendingPackages = packages.map(
+      (pack) => pack.status == PackageStatus.Pending,
+    );
+    const deliveringPackages = packages.map(
+      (pack) => pack.status == PackageStatus.Delivering,
+    );
+    const failedPackages = packages.map(
+      (pack) => pack.status == PackageStatus.Failed,
+    );
 
     const activePackages =
-      pendingPackages.total + deliveringPackages.total + failedPackages.total;
+      pendingPackages.length +
+      deliveringPackages.length +
+      failedPackages.length;
 
     const response = {
-      deliveredPackages: deliveredPackages.total,
-      totalPackages: activePackages + deliveredPackages.total,
+      deliveredPackages: deliveredPackages.length,
+      totalPackages: activePackages + deliveredPackages.length,
     };
     return response;
   }
