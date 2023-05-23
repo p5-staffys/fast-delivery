@@ -107,10 +107,10 @@ const Paquetes = (): JSX.Element => {
         <Button variant="contained" fullWidth sx={{ m: "0 2.5vw", mt: 2 }} onClick={handleSubmit}>
           Iniciar jornada
         </Button>
-        <Dialog open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
+        <Dialog open={open} onClose={handleClose} sx={{ marginTop: "33px", zIndex: "1000" }}>
           <DialogTitle>
-            <Typography fontWeight={400} fontSize="18px" lineHeight={"21,78px"}>
-              Declaración jurada
+            <Typography variant="h4" textAlign="center">
+              Declaración Jurada
             </Typography>
           </DialogTitle>
           <DialogContent>

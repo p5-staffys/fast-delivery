@@ -14,6 +14,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { signUp } from "../services/auth.service";
 import { uploadAvatarTemp } from "../services/storage.service";
 import { toast } from "@/utils/alerts/alerts";
+import { FormControl } from "@mui/material";
 
 const RegisterForm = (): ReactElement => {
   const [email, setEmail] = useState<string>("");
@@ -26,6 +27,7 @@ const RegisterForm = (): ReactElement => {
   );
   const [avatar, setAvatar] = useState<Blob | false>(false);
   const [visibility, setVisibility] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(false);
   const router = useRouter();
 
   const handleUpload = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
@@ -39,6 +41,7 @@ const RegisterForm = (): ReactElement => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setDisabled(true);
     if (password != cpassword) {
       toast.fire({
         icon: "error",
@@ -46,24 +49,27 @@ const RegisterForm = (): ReactElement => {
       });
       setPassword("");
       setCPassword("");
+      setDisabled(false);
       return;
     }
     try {
       const response = await signUp(email, password, name, lastName, avatar);
       if (response) {
-        toast.fire({ icon: "error", text: "Usuario creado con éxito." });
+        toast.fire({ icon: "success", text: "Usuario creado con éxito." });
         router.push("/");
       }
     } catch (error: unknown) {
       toast.fire({ icon: "error", text: "Datos inválidos." });
+      setDisabled(false);
     }
   };
 
   return (
-    <Box
+    <FormControl
       component="form"
       autoComplete="off"
       onSubmit={handleSubmit}
+      disabled={disabled}
       sx={{
         width: "90vw",
         maxWidth: "640px",
@@ -179,7 +185,7 @@ const RegisterForm = (): ReactElement => {
       <Button variant="contained" fullWidth type="submit" sx={{ mt: 3 }}>
         <strong>Registrarse</strong>
       </Button>
-    </Box>
+    </FormControl>
   );
 };
 

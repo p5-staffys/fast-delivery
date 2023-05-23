@@ -27,6 +27,7 @@ import { alert, toast } from "@/utils/alerts/alerts";
 
 const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
   const [paquete, setPaquete] = useState<Package>();
+  const [disabled, setDisabled] = useState<boolean>(false);
   const router = useRouter();
   const { setUser } = useGlobalContext();
 
@@ -37,6 +38,7 @@ const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
   }, []);
 
   const handleDeliver = async (_id: string): Promise<void> => {
+    setDisabled(true);
     try {
       const delivered = await deliverPackage([_id]);
       setUser(delivered.updatedUser);
@@ -51,6 +53,7 @@ const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
         title: "Error",
         text: "Hubo un problema con la confirmación de la entrega. Por favor, intentelo de nuevo.",
       });
+      setDisabled(false);
     }
   };
 
@@ -82,6 +85,7 @@ const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
             </CardContent>
             <CardActions sx={{ flexDirection: "row-reverse", alignItems: "flex-end" }}>
               <Button
+                disabled={disabled}
                 variant="contained"
                 size="medium"
                 onClick={(): void => {

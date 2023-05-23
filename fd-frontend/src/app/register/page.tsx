@@ -13,12 +13,16 @@ const Register = (): JSX.Element => {
 
   useEffect(() => {
     const authorice = async (): Promise<void> => {
-      const auth = await getAuthorization();
-      if (!auth.authorice) return;
-      if (!auth.admin) {
-        router.push("/deliveryMan/workingDay");
-      } else {
-        router.push("/management/scheduleManagement");
+      try {
+        const auth = await getAuthorization();
+        if (!auth.authorice) return;
+        if (!auth.admin) {
+          router.push("/deliveryMan/workingDay");
+        } else {
+          router.push("/management/scheduleManagement");
+        }
+      } catch {
+        return;
       }
     };
     authorice();
