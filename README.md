@@ -70,4 +70,4 @@ Bugfix -> Corrección de errores
 
 Fast Delivery usa sistema de versionado SemVer 2.0
 
-v1.5.7 - Boilerplate incial sin funcionalidad - 27/04/2023
+v2.2.10 - MVP - 23/05/2023

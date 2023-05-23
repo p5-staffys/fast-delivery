@@ -82,7 +82,7 @@ export const sendForm = async (
   message: string;
 }> => {
   try {
-    const date = new Date().toDateString().split("T")[0];
+    const date = new Date().toJSON().split("T")[0];
     const idToken = localStorage.getItem("idToken");
     const response: AxiosResponse = await axios.post(
       `${path}/user/addForm`,

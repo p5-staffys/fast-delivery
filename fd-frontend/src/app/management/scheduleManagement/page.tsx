@@ -11,16 +11,26 @@ import { getLogs } from "../../services/admin.service";
 import { Logs } from "@/utils/interfaces/user.interfaces";
 
 const Agenda = (): JSX.Element => {
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString("es-ES", { dateStyle: "short" });
   const [date, setDate] = useState<string>("");
   const [logs, setLogs] = useState<Logs>();
+  const [packagesProgress, setPackagesProgress] = useState<number>(0);
+  const [usersProgress, setUsersProgress] = useState<number>(0);
 
   useEffect(() => {
     const getAllLogsAsync = async (): Promise<void> => {
       if (date !== "") {
         const getAllLogs = await getLogs(date);
         setLogs(getAllLogs);
+
+        const progressPackages: number = getAllLogs?.packages.deliveredPackages
+          ? Math.round((getAllLogs.packages.deliveredPackages * 100) / getAllLogs.packages.totalPackages)
+          : 0;
+        setPackagesProgress(progressPackages);
+
+        const progressUsers: number = getAllLogs
+          ? Math.round((getAllLogs.users.activeUsers.length * 100) / getAllLogs.users.totalUsersCount)
+          : 0;
+        setUsersProgress(progressUsers);
       }
     };
     getAllLogsAsync();
@@ -29,24 +39,17 @@ const Agenda = (): JSX.Element => {
   const handleDate = (date: string): void => {
     setDate(date);
   };
-  const progressPackages: number = logs?.packages.activePackages
-    ? Math.round((logs.packages.activePackages * 100) / logs.packages.totalPackages)
-    : 0;
-
-  const progressUsers: number = logs
-    ? Math.round((logs.users.activeUsers.length * 100) / logs.users.totalUsersCount)
-    : 0;
 
   return (
     <AdminGuard>
       <Container fixed maxWidth="md">
-        <Box sx={{ mb: 3, mt: 10 }}>
-          <Typography variant="h5">Gestionar Pedidos</Typography>
+        <Box sx={{ mb: 2, mt: 10 }}>
+          <Typography variant="h5">Gestionar</Typography>
         </Box>
 
         <DayList handleDate={handleDate} />
 
-        <Typography sx={{ fontWeight: 700, fontSize: "16px" }}>{formattedDate} - Detalles</Typography>
+        <Typography variant="h5">Detalles</Typography>
         <Accordion sx={{ mt: 2 }} defaultExpanded={true}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Grid container spacing={2} direction="row" justifyContent="space-between" alignItems="center">
@@ -63,29 +66,32 @@ const Agenda = (): JSX.Element => {
             </Grid>
           </AccordionSummary>
 
-          <Box sx={{ width: "90vw", m: "auto" }}>
+          <Box>
             <AccordionDetails>
-              <Box display="flex" justifyContent="space-between">
-                <Box>
-                  <Progress value={progressUsers} />
-                </Box>
-                <Box>
-                  <Box sx={{ mr: 3 }}>
-                    {logs?.users?.activeUsers.map((user) => (
-                      <img
-                        key={user._id}
-                        style={{ position: "absolute", right: 59, width: "60px", borderRadius: "50%" }}
-                        alt="avatar"
-                        src={
-                          user.avatarURL
-                            ? user.avatarURL
-                            : "https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png"
-                        }
-                      />
+              <Grid container justifyContent="space-between">
+                <Grid item mx={3}>
+                  <Progress value={usersProgress} />
+                </Grid>
+                <Grid item mx={3}>
+                  <Grid container flex={2}>
+                    {logs?.users?.activeUsers.map((user, i) => (
+                      <Grid item key={i}>
+                        <img
+                          width={50}
+                          height={50}
+                          style={{ borderRadius: "50%", objectFit: "cover" }}
+                          alt="avatar"
+                          src={
+                            user.avatarURL
+                              ? user.avatarURL
+                              : "https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png"
+                          }
+                        />
+                      </Grid>
                     ))}
-                  </Box>
-                </Box>
-              </Box>
+                  </Grid>
+                </Grid>
+              </Grid>
             </AccordionDetails>
           </Box>
           <Link href="/management/scheduleManagement/manageDeliveryMen">
@@ -107,7 +113,7 @@ const Agenda = (): JSX.Element => {
               </Grid>
               <Grid item>
                 <Typography variant="subtitle1">
-                  {`${logs?.packages?.activePackages ?? 0}/${logs?.packages?.totalPackages ?? 0} repartidos`}
+                  {`${logs?.packages?.deliveredPackages ?? 0}/${logs?.packages?.totalPackages ?? 0} repartidos`}
                 </Typography>
               </Grid>
             </Grid>
@@ -117,7 +123,7 @@ const Agenda = (): JSX.Element => {
             <AccordionDetails>
               <Box display="flex" justifyContent="space-between">
                 <Box>
-                  <Progress value={progressPackages} />
+                  <Progress value={packagesProgress} />
                 </Box>
               </Box>
             </AccordionDetails>

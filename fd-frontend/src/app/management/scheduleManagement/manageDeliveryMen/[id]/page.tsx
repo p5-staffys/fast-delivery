@@ -3,7 +3,6 @@ import { Container } from "@mui/system";
 import { Accordion, AccordionDetails, AccordionSummary, Box, IconButton, Switch, Typography } from "@mui/material";
 import Link from "next/link";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
 import Card from "../../../../deliveryMan/workingDay/components/card";
@@ -59,86 +58,83 @@ const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => 
 
   return (
     <AdminGuard>
-      <>
-        <Container fixed>
-          <Link href={`/management/scheduleManagement/manageDeliveryMen`}>
-            <IconButton aria-label="Example" sx={{ my: 1 }}>
-              <ArrowBackIosIcon sx={{ color: "black" }} />
-            </IconButton>
-          </Link>
-          <Box>
-            <Box boxShadow={"0px 2px 6px rgba(0, 0, 0, 0.14)"}>
-              <Box>
-                <Box sx={{ width: "100%" }} display="flex" justifyContent="space-between">
-                  <Box>
-                    <Image
-                      alt={user?.name || ""}
-                      src={user?.avatarURL || ""}
-                      width={50}
-                      height={50}
-                      style={{ borderRadius: "25px", objectPosition: "center right" }}
-                    />
-                  </Box>
-                  <Box sx={{ ml: 1, mt: 1 }}>
-                    <Typography sx={{ fontWeight: 700, fontSize: "16px", lineHeight: "18.75px" }}>
-                      {user?.name}
-                    </Typography>
-                    <Typography sx={{ fontWeight: 500, fontSize: "14px", color: colorStatus }}>
-                      • {statusUser ? "Activo" : "Inactivo"}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ ml: 15 }}>
-                    <Switch
-                      inputProps={{ "aria-label": "controlled" }}
-                      checked={statusUser}
-                      onChange={async (): Promise<void> => handleStatus(params.id)}
-                    />
-                  </Box>
-                  <Box></Box>
+      <Container fixed maxWidth="md">
+        <Link href={`/management/scheduleManagement/manageDeliveryMen`}>
+          <IconButton aria-label="Example" sx={{ my: 1 }}>
+            <ArrowBackIosIcon sx={{ color: "black" }} />
+          </IconButton>
+        </Link>
+        <Box>
+          <Box boxShadow={"0px 2px 6px rgba(0, 0, 0, 0.14)"} pb={2}>
+            <Box>
+              <Box mx={3} display="flex" justifyContent="space-between" alignContent="center" alignItems="center">
+                <Box mt={2}>
+                  <img
+                    alt={user?.name || ""}
+                    src={user?.avatarURL || ""}
+                    width={50}
+                    height={50}
+                    style={{ objectPosition: "center center", objectFit: "cover", borderRadius: "25px" }}
+                  />
+                </Box>
+                <Box>
+                  <Typography variant="h6" textAlign="center">
+                    {user?.name}
+                  </Typography>
+                  <Typography variant="subtitle1" textAlign="center" color={colorStatus}>
+                    • {statusUser ? "Activo" : "Inactivo"}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Switch
+                    inputProps={{ "aria-label": "controlled" }}
+                    checked={statusUser}
+                    onChange={async (): Promise<void> => handleStatus(params.id)}
+                  />
                 </Box>
               </Box>
-              <Container sx={{ mt: 2 }}>
-                <Accordion>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Box flexDirection={"column"}>
-                      <Typography fontWeight={700} fontSize="16px" lineHeight={"20px"}>
-                        Repartos pendientes
-                      </Typography>
-                      <Typography sx={{ fontWeight: 400, fontSize: "12px", lineHeight: "20px" }}>
-                        {`Le faltan repartir ${deliveringPackages?.length} paquetes`}
-                      </Typography>
-                    </Box>
-                  </AccordionSummary>
-                  {deliveringPackages?.map((pack) => (
-                    <AccordionDetails key={pack._id}>
-                      <Card paquete={pack} handleDelete={handleDelete} />
-                    </AccordionDetails>
-                  ))}
-                </Accordion>
-              </Container>
-              <Container sx={{ mt: 4 }}>
-                <Accordion defaultExpanded={true}>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Box flexDirection={"column"}>
-                      <Typography fontWeight={700} fontSize="16px" lineHeight={"20px"}>
-                        Historial de repartos
-                      </Typography>
-                      <Typography sx={{ fontWeight: 400, fontSize: "12px", lineHeight: "20px" }}>
-                        {`Ya repartió ${deliveredPackages?.length} paquetes`}
-                      </Typography>
-                    </Box>
-                  </AccordionSummary>
-                  {deliveredPackages?.map((pack) => (
-                    <AccordionDetails key={pack._id}>
-                      <Card paquete={pack} handleDelete={handleDelete} />
-                    </AccordionDetails>
-                  ))}
-                </Accordion>
-              </Container>
             </Box>
+            <Container sx={{ mt: 2 }}>
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Box flexDirection={"column"}>
+                    <Typography fontWeight={700} fontSize="16px" lineHeight={"20px"}>
+                      Repartos pendientes
+                    </Typography>
+                    <Typography sx={{ fontWeight: 400, fontSize: "12px", lineHeight: "20px" }}>
+                      {`Le faltan repartir ${deliveringPackages?.length} paquetes`}
+                    </Typography>
+                  </Box>
+                </AccordionSummary>
+                {deliveringPackages?.map((pack) => (
+                  <AccordionDetails key={pack._id}>
+                    <Card paquete={pack} handleDelete={handleDelete} />
+                  </AccordionDetails>
+                ))}
+              </Accordion>
+            </Container>
+            <Container sx={{ mt: 4 }}>
+              <Accordion defaultExpanded={true}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Box flexDirection={"column"}>
+                    <Typography fontWeight={700} fontSize="16px" lineHeight={"20px"}>
+                      Historial de repartos
+                    </Typography>
+                    <Typography sx={{ fontWeight: 400, fontSize: "12px", lineHeight: "20px" }}>
+                      {`Ya repartió ${deliveredPackages?.length} paquetes`}
+                    </Typography>
+                  </Box>
+                </AccordionSummary>
+                {deliveredPackages?.map((pack) => (
+                  <AccordionDetails key={pack._id}>
+                    <Card paquete={pack} handleDelete={handleDelete} />
+                  </AccordionDetails>
+                ))}
+              </Accordion>
+            </Container>
           </Box>
-        </Container>
-      </>
+        </Box>
+      </Container>
     </AdminGuard>
   );
 };

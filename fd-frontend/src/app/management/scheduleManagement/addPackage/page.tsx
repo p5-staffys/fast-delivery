@@ -3,9 +3,12 @@ import React, { ChangeEventHandler, useState } from "react";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import BackBtn from "../../../deliveryMan/workingDay/pending/components/backBtn";
 import { createPackage } from "@/app/services/package.service";
+import { useRouter } from "next/navigation";
 import AdminGuard from "../../../../utils/guards/adminGuard";
+import { toast } from "@/utils/alerts/alerts";
 
 const addPackage = (): JSX.Element => {
+  const router = useRouter();
   const [quantity, setQuantity] = useState<number>(1);
   const [weight, setWeight] = useState<number>(0);
   const [deliveryDate, setDeliveryDate] = useState<string>("");
@@ -71,10 +74,11 @@ const addPackage = (): JSX.Element => {
         quantity,
       );
       if (response) {
-        alert("se creó el paquete con exito");
+        toast.fire({ icon: "success", text: "Paquete creado con éxito." });
+        router.push("/management/scheduleManagement/managePackages");
       }
     } catch (error: unknown) {
-      alert("falló la creacion del paquete");
+      toast.fire({ icon: "error", text: "Falló la creacion del paquete." });
     }
   };
 

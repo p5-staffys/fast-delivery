@@ -33,12 +33,17 @@ describe('Package Routes', () => {
       client: {
         fullName: 'client client',
         address: {
+          number: '132',
           street: 'artigas',
+          city: 'Lezama',
+          state: 'Buenos Aires',
+          country: 'Argentina',
         },
+        latlng: { lat: 1, lng: 1 },
       },
       deliveryDate: date,
       deliveredOn: date,
-      status: PackageStatus.New,
+      status: PackageStatus.Pending,
     };
   });
 

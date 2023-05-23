@@ -2,6 +2,7 @@
 import { Box } from "@mui/material";
 import { useLoadScript, GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 import { useState, useEffect, ReactElement } from "react";
+import { alert, toast } from "@/utils/alerts/alerts";
 
 const mapOptions = {
   disableDefaultUI: true,
@@ -29,11 +30,11 @@ const Map = ({ destination }: { destination: google.maps.LatLngLiteral }): React
           setOrigin({ lat, lng });
         },
         () => {
-          alert("Necesita habilitar la geolocaclización en su dispositivo.");
+          alert.fire({ icon: "warning", text: "Necesita habilitar la geolocaclización en su dispositivo." });
         },
       );
     } else {
-      alert("La geolocalización no está disponible.");
+      toast.fire({ icon: "error", text: "La geolocalización no está disponible." });
     }
   }, []);
 
@@ -55,7 +56,7 @@ const Map = ({ destination }: { destination: google.maps.LatLngLiteral }): React
         if (status === google.maps.DirectionsStatus.OK) {
           setDirections(result);
         } else {
-          alert("No pudo planificarse la ruta.");
+          toast.fire({ icon: "error", text: "No pudo planificarse la ruta." });
         }
       },
     );

@@ -51,11 +51,11 @@ const RegisterForm = (): ReactElement => {
     try {
       const response = await signUp(email, password, name, lastName, avatar);
       if (response) {
-        alert("Usuario creado con éxito.");
+        toast.fire({ icon: "error", text: "Usuario creado con éxito." });
         router.push("/");
       }
     } catch (error: unknown) {
-      alert(error);
+      toast.fire({ icon: "error", text: "Datos inválidos." });
     }
   };
 

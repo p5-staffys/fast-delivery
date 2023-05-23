@@ -11,6 +11,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { signIn } from "../services/admin.service";
 import { IconButton, InputAdornment } from "@mui/material";
+import { toast } from "@/utils/alerts/alerts";
 
 const Home = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
@@ -39,7 +40,7 @@ const Home = (): JSX.Element => {
         router.push("/management/scheduleManagement");
       }
     } catch (error: unknown) {
-      alert("Logueo erroneo");
+      toast.fire({ icon: "error", text: "Logueo erroneo" });
     }
   };
 

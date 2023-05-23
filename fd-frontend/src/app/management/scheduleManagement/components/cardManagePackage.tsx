@@ -1,11 +1,13 @@
 import React from "react";
 import CardMedia from "@mui/material/CardMedia";
 import { Box, IconButton, Typography } from "@mui/material";
-import imagePack from "../../../../asset/pack.svg";
 import trash from "../../../../asset/redTrash.svg";
 import { Package } from "@/utils/interfaces/package.interfaces";
 import Image from "next/image";
 import { deletePackage } from "@/app/services/admin.service";
+import { toast } from "@/utils/alerts/alerts";
+import getColorText from "@/utils/statusStyle/getColorText";
+import getColorPackage from "@/utils/statusStyle/getColorPackage";
 
 interface Props {
   paquete: Package;
@@ -16,52 +18,76 @@ const CardManagePackage: React.FC<Props> = ({ paquete, onDelete }) => {
   const handleDelete = async (id: string): Promise<void> => {
     try {
       const deleted = await deletePackage(id);
-      alert(`${deleted}`);
+      toast.fire({ icon: "success", text: `${deleted}` });
       onDelete();
     } catch (error: unknown) {
-      alert("error al borrar el paquete");
+      toast.fire({ icon: "success", text: "Error al borrar el paquete." });
     }
   };
 
   return (
     <Box sx={{ maxWidth: "auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0" }}>
-      <CardMedia sx={{ height: "100%", width: "70px", flexShrink: 0 }} image={imagePack.src} title="paquete" />
+      <CardMedia sx={{ height: "70px", width: "70px", flexShrink: 0 }} title="paquete">
+        <Image src={getColorPackage(paquete.status)} alt="paquete" width={70} />
+      </CardMedia>
       <Box
         sx={{
           display: "flex",
-          width: "100%",
-          justifyContent: "center",
-          ml: 2,
+          flexDirection: "row",
+          justifyContent: "space-between",
           alignItems: "center",
+          width: "100%",
+          maxWidth: "100%",
         }}
       >
-        <Typography
-          sx={{
-            flexGrow: 1,
-            maxHeight: "1em",
-            overflow: "none",
-            font: "Open Sans",
-            fontWeight: 400,
-            fontSize: { xs: "12px", sm: "14px", md: "16px", lg: "18px", xl: "20px" },
-            lineHeight: "20px",
-          }}
-          component="div"
-          variant="subtitle1"
-        >
-          {`${paquete.client.address.street} ${paquete.client.address.number}`}
-        </Typography>
         <Box
-          sx={{ width: { xs: "24px", sm: "28px", md: "32px", lg: "36px", xl: "40px" } }}
-          onClick={(): void => {
-            handleDelete(paquete._id);
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            pl: 1,
+            pb: 1,
+          }}
+        >
+          <Typography display="block" variant="subtitle1">
+            {`${paquete.client.address.street} ${paquete.client.address.number}, ${paquete.client.address.city}`}
+          </Typography>
+          <Typography display="block" variant="subtitle1">
+            {`${paquete.deliveryDate.split("T")[0].split("-")[2]}/${paquete.deliveryDate.split("T")[0].split("-")[1]}/${
+              paquete.deliveryDate.split("T")[0].split("-")[0]
+            }
+              `}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+            pl: 1,
+            pb: 1,
           }}
         >
           <IconButton
-            sx={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
-            aria-label="previous"
+            sx={{ textAlign: "right", mb: 1 }}
+            onClick={(e: React.MouseEvent<HTMLElement>): void => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleDelete(paquete._id);
+            }}
           >
             <Image alt="trash" src={trash} />
           </IconButton>
+          <Typography
+            variant="subtitle2"
+            color={getColorText(paquete.status)}
+            component="div"
+            align="right"
+            sx={{ mr: 1 }}
+            fontWeight="700"
+          >
+            {paquete.status}
+          </Typography>
         </Box>
       </Box>
     </Box>
