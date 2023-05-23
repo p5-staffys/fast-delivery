@@ -4,7 +4,6 @@ import { ReactElement, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -14,16 +13,20 @@ import { alert, toast } from "@/utils/alerts/alerts";
 
 import { useGlobalContext } from "@/context/store";
 import { signIn } from "../services/auth.service";
+import { FormControl } from "@mui/material";
 
 const SignInForm = (): ReactElement => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(false);
+
   const { setUser } = useGlobalContext();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setDisabled(false);
     try {
       const response = await signIn(email, password);
       setUser(response.user);
@@ -37,8 +40,9 @@ const SignInForm = (): ReactElement => {
       alert.fire({
         icon: "error",
         title: "Error",
-        text: "Hubo un error de valicadión. Por favor, intentelo de nuevo.",
+        text: "Hubo un error de validación. Por favor, intentelo de nuevo.",
       });
+      setDisabled(true);
     }
   };
 
@@ -52,12 +56,21 @@ const SignInForm = (): ReactElement => {
   };
 
   return (
-    <Box
+    <FormControl
+      disabled={disabled}
       component="form"
       noValidate
       autoComplete="off"
       onSubmit={handleSubmit}
-      sx={{ width: "90vw", m: "auto", maxWidth: "640px" }}
+      sx={{
+        width: "90vw",
+        maxWidth: "640px",
+        m: "auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <TextField
         id="standard-basic"
@@ -100,7 +113,7 @@ const SignInForm = (): ReactElement => {
       <Button variant="contained" fullWidth type="submit" sx={{ mt: 5 }}>
         <strong>Ingresar</strong>
       </Button>
-    </Box>
+    </FormControl>
   );
 };
 
