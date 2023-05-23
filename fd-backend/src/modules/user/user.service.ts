@@ -158,6 +158,12 @@ export class UserService {
     return user;
   }
 
+  async deteleteAllFromHistory(user: UserDocument): Promise<UserDocument> {
+    user.packages = [];
+    await user.save();
+    return user;
+  }
+
   async changePackageRefStatus(
     user: UserDocument,
     packagesIds: Types.ObjectId[],

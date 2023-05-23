@@ -11,6 +11,7 @@ import {
   UseGuards,
   Headers,
   Delete,
+  Patch,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import {
@@ -40,6 +41,8 @@ import { PackageService } from '../package/package.service';
 import { CreatePackageDto } from '../package/dto/create-package.dto';
 import { Package } from '../package/entities/package.entity';
 import { UserDocument } from '../user/entities/user.entity';
+import { UpdateAdminDto } from './dtos/update-admin.dto';
+import { Admin } from './entities/admin.entity';
 
 @ApiTags('Admin')
 @UseGuards(AdminGuard)
@@ -53,7 +56,7 @@ export class AdminController {
     private readonly packageService: PackageService,
   ) {}
 
-  @ApiOperation({ description: 'Creater un admin.' })
+  @ApiOperation({ description: 'Crear un admin.' })
   @ApiBody({ type: CreateAdminDto })
   @ApiResponse({
     status: 201,
@@ -109,6 +112,28 @@ export class AdminController {
     }
   }
 
+  @ApiOperation({ description: 'Atualizar los datos del usuario logueado.' })
+  @ApiBearerAuth('idToken')
+  @ApiBody({ type: UpdateAdminDto })
+  @ApiResponse({
+    status: 200,
+    type: Admin,
+  })
+  @UseInterceptors(CurrentAdminInterceptor)
+  @Patch()
+  async update(
+    @Body() updateData: UpdateAdminDto,
+    @Req() request: CurrentAdminRequest,
+  ): Promise<Admin> {
+    try {
+      const _id = request.currentAdmin._id;
+      const user = await this.adminService.update(_id, updateData);
+      return user;
+    } catch {
+      throw new GeneralError('No se pudo actualizar el usuario');
+    }
+  }
+
   @ApiOperation({
     description:
       'Cambia el estado del usuario. Modifica la propiedad "active" y funciona como un "toggle", cambiando de estado de true a false y de false a true',
@@ -118,7 +143,15 @@ export class AdminController {
   @Put('status/:_id')
   async changeUserStatus(@Param('_id') _id: string): Promise<UserDocument> {
     try {
-      const updatedUser = await this.userService.changeUserStatus(_id);
+      let updatedUser = await this.userService.changeUserStatus(_id);
+      if (!updatedUser.active) {
+        updatedUser.packages.forEach(async (pack) =>
+          this.packageService.unassignFromUser(pack._id),
+        );
+        updatedUser = await this.userService.deteleteAllFromHistory(
+          updatedUser,
+        );
+      }
       return updatedUser;
     } catch (error: unknown) {
       throw new GeneralError(error);

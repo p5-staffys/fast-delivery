@@ -3,11 +3,12 @@
 import React from "react";
 import CardMedia from "@mui/material/CardMedia";
 import { Box, IconButton, Typography } from "@mui/material";
-import imagePack from "../../../../asset/pack.svg";
+import getColorPackage from "../../../../utils/statusStyle/getColorPackage";
 import trash from "../../../../asset/redTrash.svg";
 import Link from "next/link";
 import Image from "next/image";
 import { PackageRef } from "@/utils/interfaces/package.interfaces";
+import getColorText from "@/utils/statusStyle/getColorText";
 
 interface Props {
   paquete: PackageRef;
@@ -16,60 +17,72 @@ interface Props {
 
 const CardManagePackage: React.FC<Props> = ({ paquete, handleDelete }) => {
   return (
-    <Box sx={{ maxWidth: "auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0" }}>
-      <Link href={`/deliveryMan/workingDay/${paquete._id}`}>
-        <CardMedia sx={{ height: "70px", width: "70px", flexShrink: 0 }} image={imagePack.src} title="paquete" />
-      </Link>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          maxWidth: "100%",
-        }}
-      >
+    <Link href={`/deliveryMan/workingDay/${paquete._id}`} style={{ textDecoration: "none", color: "black" }}>
+      <Box sx={{ maxWidth: "auto", height: "80px", display: "flex", borderBottom: "2px solid #e0e0e0" }}>
+        <CardMedia sx={{ height: "70px", width: "70px", flexShrink: 0 }} title="paquete">
+          <Image src={getColorPackage(paquete.status)} alt="paquete" width={70} />
+        </CardMedia>
         <Box
           sx={{
-            width: "100%",
             display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
             alignItems: "center",
-            pl: 1,
-            pb: 2,
+            width: "100%",
+            maxWidth: "100%",
           }}
         >
-          <Typography
+          <Box
             sx={{
-              flexGrow: 1,
-              maxHeight: "1em",
-              overflow: "none",
-              font: "Open Sans",
-              fontWeight: 400,
-              fontSize: "12px",
-              lineHeight: "20px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              pl: 1,
+              pb: 1,
             }}
-            component="div"
-            variant="subtitle1"
           >
-            {`${paquete.client.address}`}
-          </Typography>
-
-          <IconButton sx={{ textAlign: "right" }} aria-label="previous" onClick={(): void => handleDelete(paquete._id)}>
-            <Image alt="trash" src={trash} />
-          </IconButton>
+            <Typography display="block" variant="subtitle1">
+              {`${paquete.client.address.split(",")[0]}`}
+            </Typography>
+            <Typography display="block" variant="subtitle1">
+              {`${paquete.deliveryDate.split("T")[0].split("-")[2]}/${
+                paquete.deliveryDate.split("T")[0].split("-")[1]
+              }`}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              pl: 1,
+              pb: 1,
+            }}
+          >
+            <IconButton
+              sx={{ textAlign: "right", mb: 1 }}
+              onClick={(e: React.MouseEvent<HTMLElement>): void => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleDelete(paquete._id);
+              }}
+            >
+              <Image alt="trash" src={trash} />
+            </IconButton>
+            <Typography
+              variant="subtitle2"
+              color={getColorText(paquete.status)}
+              component="div"
+              align="right"
+              sx={{ mr: 1 }}
+              fontWeight="700"
+            >
+              {paquete.status}
+            </Typography>
+          </Box>
         </Box>
-        <Typography
-          variant="subtitle1"
-          color="black"
-          component="div"
-          align="right"
-          sx={{ mr: 1, fontSize: "12px", lineHeight: "20px" }}
-          fontFamily="Open Sans"
-          fontWeight="700"
-        >
-          {paquete.status}
-        </Typography>
       </Box>
-    </Box>
+    </Link>
   );
 };
 

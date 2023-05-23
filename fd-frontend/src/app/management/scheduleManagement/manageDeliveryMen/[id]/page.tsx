@@ -12,6 +12,7 @@ import { User } from "@/utils/interfaces/user.interfaces";
 import { deletePackageByUser, getStatus, getUserById } from "@/app/services/admin.service";
 import Swal from "sweetalert2";
 import { alert } from "@/utils/alerts/alerts";
+import { PackageStatus } from "@/utils/interfaces/package.interfaces";
 
 const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => {
   const [user, setUser] = useState<User>();
@@ -28,8 +29,8 @@ const DeliveryDetail = ({ params }: { params: { id: string } }): JSX.Element => 
   }, [params.id]);
 
   const colorStatus = statusUser ? "#96DB76" : "#FF6B6B";
-  const deliveredPackages = user?.packages.filter((pack) => pack.status === "delivered");
-  const deliveringPackages = user?.packages.filter((pack) => pack.status === "delivering");
+  const deliveredPackages = user?.packages.filter((pack) => pack.status === PackageStatus.Delivered);
+  const deliveringPackages = user?.packages.filter((pack) => pack.status === PackageStatus.Delivering);
 
   const handleStatus = async (id: string): Promise<void> => {
     const status = await getStatus(id);

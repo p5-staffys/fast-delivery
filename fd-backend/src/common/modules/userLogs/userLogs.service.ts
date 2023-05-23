@@ -16,6 +16,9 @@ export class UserLogsService {
   }
 
   async getRecordByDate(date: Date): Promise<UserLogsDocument> {
-    return await this.userLogsRepository.findOrCreate({ date });
+    const userLogs = await this.userLogsRepository.findOrCreate({
+      date: date.toJSON().split('Z')[0],
+    });
+    return userLogs;
   }
 }

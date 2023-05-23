@@ -9,7 +9,7 @@ import AuthGuard from "../../../../utils/guards/authGuard";
 import PackageCard from "./components/packageCard";
 import { getPendingPackages } from "@/app/services/package.service";
 import { IPackagesByClient } from "@/utils/interfaces/package.interfaces";
-import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Container, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { inicial, questions } from "../../../../utils/declaration";
 import { alert, toast } from "@/utils/alerts/alerts";
 import { sendForm } from "../../../services/user.service";
@@ -86,9 +86,9 @@ const Paquetes = (): JSX.Element => {
 
   return (
     <AuthGuard>
-      <>
+      <Container fixed maxWidth="md">
         <Box
-          sx={{ maxWidth: "100vw", height: "12vh", ml: 2, mt: 2 }}
+          sx={{ height: "12vh", ml: 2, mt: 2 }}
           display="flex"
           justifyContent="center"
           alignItems="start"
@@ -96,15 +96,15 @@ const Paquetes = (): JSX.Element => {
         >
           <BackBtn back="deliveryMan/workingDay" />
           <h2>Obtener paquetes</h2>
-          <Typography sx={{ fontSize: "0.9em" }}>¿Cuántos paquetes más vas a repartir hoy?</Typography>
+          <Typography sx={{ fontSize: "0.9em" }}>¿Cuántos paquetes vas a repartir hoy?</Typography>
         </Box>
         {packages?.map((client, i) => (
           <PackageCard client={client} key={i} packagesIds={packagesIds} setPackagesIds={setPackagesIds} />
         ))}
-        <Button variant="contained" sx={{ m: "0 2.5vw", mt: 5, width: "95vw" }} onClick={handleLoadMore}>
+        <Button variant="contained" fullWidth sx={{ m: "0 2.5vw", mt: 5 }} onClick={handleLoadMore}>
           cargar más
         </Button>
-        <Button variant="contained" sx={{ m: "0 2.5vw", mt: 2, width: "95vw" }} onClick={handleSubmit}>
+        <Button variant="contained" fullWidth sx={{ m: "0 2.5vw", mt: 2 }} onClick={handleSubmit}>
           Iniciar jornada
         </Button>
         <Dialog open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
@@ -126,7 +126,7 @@ const Paquetes = (): JSX.Element => {
             </Button>
           </DialogActions>
         </Dialog>
-      </>
+      </Container>
     </AuthGuard>
   );
 };

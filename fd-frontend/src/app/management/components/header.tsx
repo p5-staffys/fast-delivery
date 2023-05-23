@@ -1,13 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import avatar from "../../../../asset/logo.png";
 import { ReactElement } from "react";
-import { signOut } from "../../../services/user.service";
 import { styled } from "@mui/system";
 import { useRouter } from "next/navigation";
+import logo from "../../../asset/fd.png";
 
-import { AppBar, Toolbar } from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -16,8 +15,8 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
-import { getCurrentUser } from "../../../services/user.service";
-import { User } from "@/utils/interfaces/user.interfaces";
+import { signOut, getCurrentAdmin } from "../../services/admin.service";
+import { Admin } from "@/utils/interfaces/admin.interfaces";
 
 const StyledImage = styled(Image)({
   height: "3rem",
@@ -27,12 +26,12 @@ const StyledImage = styled(Image)({
 
 const Header = (): ReactElement => {
   const router = useRouter();
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<Admin>();
 
   useEffect(() => {
     const getUser = async (): Promise<void> => {
       try {
-        const currentUser = await getCurrentUser();
+        const currentUser = await getCurrentAdmin();
         setUser(currentUser);
       } catch {
         return;
@@ -56,14 +55,19 @@ const Header = (): ReactElement => {
   };
 
   const handleProfile = (): void => {
-    router.push("/deliveryMan/profile");
+    router.push("/management/scheduleManagement/profile");
   };
 
   return (
     <Box sx={{ flexGrow: 1, mb: 8 }}>
       <AppBar color="inherit">
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <StyledImage alt="logo" src={avatar} />
+          <StyledImage alt="logo" src={logo} />
+          <Box>
+            <Typography variant="h6" textAlign="center">
+              {user?.name ? `${user?.name} ${user?.lastName}` : ``}
+            </Typography>
+          </Box>
           <>
             <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
               <Tooltip title="Account settings">

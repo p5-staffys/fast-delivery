@@ -24,11 +24,18 @@ export class Admin implements Partial<IAdmin> {
   })
   readonly email: string;
 
-  @Prop({ type: String, default: 'admin' })
+  @Prop({ type: String, default: AdminType.Admin })
   type: AdminType;
 
   @Prop({ type: [], default: [] })
   packages: IPackageRef[];
+
+  @Prop({
+    type: URL,
+    default:
+      'https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png',
+  })
+  avatarURL: string;
 }
 
 export const AdminSchema = SchemaFactory.createForClass(Admin);

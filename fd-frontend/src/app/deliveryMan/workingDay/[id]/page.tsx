@@ -1,7 +1,5 @@
 "use client";
 import {
-  Accordion,
-  AccordionSummary,
   Box,
   Button,
   Card,
@@ -12,7 +10,6 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -59,45 +56,43 @@ const Packet = ({ params }: { params: { id: string } }): JSX.Element => {
 
   return (
     <AuthGuard>
-      <Container>
+      <Container fixed maxWidth="md">
         <Link href={`deliveryMan/workingDay`}>
           <IconButton aria-label="Example">
             <ArrowBackIosIcon sx={{ color: "black", mb: 2 }} />
           </IconButton>
         </Link>
-        <Accordion sx={{ marginY: "15px" }} defaultExpanded={true}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id="panel2a-header">
-            <Typography variant="h5">Reparto en curso</Typography>
-          </AccordionSummary>
-          {paquete ? (
-            <Card>
-              <CardMedia>
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Map destination={paquete.client.latlng} />
-                </Box>
-              </CardMedia>
-              <CardContent>
-                <CardTypography
-                  title={"Destino"}
-                  content={`${paquete.client.address.street} ${paquete.client.address.number}`}
-                />
-                <CardTypography title={"Cliente"} content={paquete.client.fullName} />
-                <CardTypography title={"Fecha de entrega"} content={paquete.deliveryDate.toString().split("T")[0]} />
-              </CardContent>
-              <CardActions sx={{ flexDirection: "row-reverse", alignItems: "flex-end" }}>
-                <Button
-                  variant="contained"
-                  size="medium"
-                  onClick={(): void => {
-                    handleDeliver(paquete._id);
-                  }}
-                >
-                  Paquete Entregado
-                </Button>
-              </CardActions>
-            </Card>
-          ) : null}
-        </Accordion>
+        <Typography variant="h5" sx={{ mb: 2 }}>
+          Reparto en curso
+        </Typography>
+        {paquete ? (
+          <Card>
+            <CardMedia>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <Map destination={paquete.client.latlng} />
+              </Box>
+            </CardMedia>
+            <CardContent>
+              <CardTypography
+                title={"Destino"}
+                content={`${paquete.client.address.street} ${paquete.client.address.number}`}
+              />
+              <CardTypography title={"Cliente"} content={paquete.client.fullName} />
+              <CardTypography title={"Fecha de entrega"} content={paquete.deliveryDate.toString().split("T")[0]} />
+            </CardContent>
+            <CardActions sx={{ flexDirection: "row-reverse", alignItems: "flex-end" }}>
+              <Button
+                variant="contained"
+                size="medium"
+                onClick={(): void => {
+                  handleDeliver(paquete._id);
+                }}
+              >
+                Paquete Entregado
+              </Button>
+            </CardActions>
+          </Card>
+        ) : null}
       </Container>
     </AuthGuard>
   );

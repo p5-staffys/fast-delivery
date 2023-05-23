@@ -6,6 +6,8 @@ export interface IAdmin {
   lastName: string;
   email: string;
   packages: IPackageRef[];
+  avatarURL: string;
+  type: AdminType;
 }
 
 export enum AdminType {

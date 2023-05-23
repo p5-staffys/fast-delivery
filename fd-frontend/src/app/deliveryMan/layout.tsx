@@ -1,4 +1,4 @@
-import Header from "./workingDay/components/header";
+import Header from "./components/header";
 
 interface Props {
   children: React.ReactNode;

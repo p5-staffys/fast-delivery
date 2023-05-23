@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { firebaseSignIn, firebaseSignOut, IAuth } from "./firebase.service";
 import { Logs, User } from "@/utils/interfaces/user.interfaces";
+import { uploadAvatar } from "./storage.service";
+import { Admin } from "@/utils/interfaces/admin.interfaces";
 
 const path = process.env.NEXT_PUBLIC_PATH_TO_BACK || "https://backend-buhubxjtrq-ue.a.run.app";
 
@@ -25,6 +27,20 @@ export const signOut = async (): Promise<void> => {
     firebaseSignOut();
     localStorage.removeItem("idToken");
     localStorage.removeItem("user");
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const getCurrentAdmin = async (): Promise<Admin> => {
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.get(`${path}/admin`, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const admin: Admin = response.data;
+    return admin;
   } catch (error: unknown) {
     throw error;
   }
@@ -149,6 +165,25 @@ export const deletePackage = async (_id: string): Promise<string> => {
     });
     const packet: string = response.data;
     return packet;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
+
+export const updateAdmin = async (_id: string, updatedInfo: Partial<User>, avatar: Blob | false): Promise<User> => {
+  if (avatar) {
+    const avatarURL = await uploadAvatar(avatar, _id);
+    updatedInfo.avatarURL = avatarURL;
+  }
+
+  try {
+    const idToken = localStorage.getItem("idToken");
+    const response: AxiosResponse = await axios.patch(`${path}/admin`, updatedInfo, {
+      withCredentials: true,
+      headers: { Authorization: idToken },
+    });
+    const user: User = response.data;
+    return user;
   } catch (error: unknown) {
     throw error;
   }

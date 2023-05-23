@@ -8,11 +8,12 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Image from "next/image";
 import Link from "next/link";
-import BackBtn from "../../../deliveryMan/workingDay/getPackages/components/backBtn";
+import BackBtn from "../../../deliveryMan/workingDay/pending/components/backBtn";
 import Progress from "../components/progress";
 import AdminGuard from "../../../../utils/guards/adminGuard";
 import { getAllUsers } from "../../../services/admin.service";
 import { User } from "@/utils/interfaces/user.interfaces";
+import { PackageStatus } from "@/utils/interfaces/package.interfaces";
 
 const Repartidores = (): JSX.Element => {
   const [users, setUsers] = useState<User[]>([]);
@@ -39,7 +40,7 @@ const Repartidores = (): JSX.Element => {
             </AccordionSummary>
             {users.map((user) => {
               const colorStatus = user.active ? "#96DB76" : "#FF6B6B";
-              const deliveredPackages = user.packages.filter((pack) => pack.status === "delivered");
+              const deliveredPackages = user.packages.filter((pack) => pack.status === PackageStatus.Delivered);
               const progressDelivered =
                 deliveredPackages.length > 0 ? Math.round((deliveredPackages.length / user.packages.length) * 100) : 0;
               return (

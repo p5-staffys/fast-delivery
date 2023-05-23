@@ -36,14 +36,7 @@ const settings = {
   initialSlide: days.findIndex((day) => day.number === format(today, "d", { weekStartsOn: 0 })),
   responsive: [
     {
-      breakpoint: 1280,
-      settings: {
-        slidesToShow: 7,
-        slidesToScroll: 1,
-      },
-    },
-    {
-      breakpoint: 960,
+      breakpoint: 900,
       settings: {
         slidesToShow: 5,
         slidesToScroll: 1,

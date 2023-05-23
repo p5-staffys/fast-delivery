@@ -56,7 +56,7 @@ export class UserController {
     private readonly packageService: PackageService,
   ) {}
 
-  @ApiOperation({ description: 'Crear nuevo usuario en la DB' })
+  @ApiOperation({ description: 'Crear nuevo usuario.' })
   @ApiBody({ type: CreateUserDto })
   @ApiResponse({
     status: 201,
@@ -75,7 +75,7 @@ export class UserController {
     }
   }
 
-  @ApiOperation({ description: 'Crear nuevo usuario en la DB' })
+  @ApiOperation({ description: 'Crear nuevo usuario en la DB.' })
   @ApiBody({ type: CreateUserDto })
   @ApiResponse({
     status: 201,

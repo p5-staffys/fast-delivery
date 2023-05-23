@@ -23,10 +23,10 @@ export interface IPackageRef {
 }
 
 export enum PackageStatus {
-  Pending = 'pending',
-  Delivering = 'delivering',
-  Delivered = 'delivered',
-  Failed = 'failed',
+  Pending = 'Pendiente',
+  Delivering = 'En viaje',
+  Delivered = 'Entregado',
+  Failed = 'Cancelado',
 }
 
 export interface IPackageQuery {
