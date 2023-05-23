@@ -36,7 +36,7 @@ const ManagePackage = ({ params }: { params: { date: string } }): JSX.Element =>
   return (
     <AdminGuard>
       <>
-        <Container fixed>
+        <Container fixed maxWidth="md">
           <Link href={`management/scheduleManagement`}>
             <IconButton aria-label="Example" sx={{ my: 2 }}>
               <ArrowBackIosIcon sx={{ color: "black" }} />

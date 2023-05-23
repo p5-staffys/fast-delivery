@@ -43,7 +43,7 @@ export interface Address {
 }
 
 export interface PackageLogs {
-  activePackages: number;
+  deliveredPackages: number;
   totalPackages: number;
 }
 
